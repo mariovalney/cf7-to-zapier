@@ -91,11 +91,11 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          */
         private function add_modules() {
             // Require module files:
-            // require_once plugin_dir_path( __FILE__ ) . 'modules/cf7/class-module-cf7.php';
+            require_once plugin_dir_path( __FILE__ ) . 'modules/cf7/class-module-cf7.php';
             require_once plugin_dir_path( __FILE__ ) . 'modules/zapier/class-module-zapier.php';
 
             // Instantiate the Module's classes:
-            // $this->modules['cf7'] = new VZ_Module_CF7( $this );
+            $this->modules['cf7'] = new VZ_Module_CF7( $this );
             $this->modules['zapier'] = new VZ_Module_Zapier( $this );
         }
 
