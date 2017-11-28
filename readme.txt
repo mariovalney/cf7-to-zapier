@@ -3,8 +3,8 @@ Contributors: vizir, mariovalney
 Donate link: https://github.com/Vizir/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
 Requires at least: 4.7
-Tested up to: 4.8.2
-Stable tag: 1.0.0
+Tested up to: 4.9
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,12 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Changelog ==
 
+= 1.1 =
+
+* Added the 'application/json' header by default to POST request
+* Added 'ctz_post_request_args' filter to POST request args
+* Tested against WP 4.9
+
 = 1.0 =
 
 * It's alive!
@@ -98,6 +104,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 1.1 =
 
-* It's alive! :D
+Added the 'application/json' header by default to POST request and 'ctz_post_request_args' filter to POST args.
+This way developers can modify the request args if any service demands a particular header or body.

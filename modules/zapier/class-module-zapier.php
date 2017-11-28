@@ -69,6 +69,14 @@ if ( ! class_exists( 'VZ_Module_Zapier' ) ) {
                 ),
             );
 
+            /**
+             * Filter: ctz_post_request_args
+             *
+             * The 'ctz_post_request_args' filter POST args so developers
+             * can modify the request args if any service demands a particular header or body.
+             *
+             * @since    1.1.0
+             */
             wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
         }
 
