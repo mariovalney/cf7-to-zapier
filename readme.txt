@@ -1,5 +1,5 @@
 === CF7 to Zapier ===
-Contributors: vizir, mariovalney
+Contributors: mariovalney, vizir
 Donate link: https://github.com/Vizir/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
 Requires at least: 4.7

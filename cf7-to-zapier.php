@@ -7,7 +7,7 @@
  * Plugin Name:       CF7 to Zapier
  * Plugin URI:        https://github.com/Vizir/cf7-to-zapier
  * Description:       Use Contact Form 7 as a trigger to Zapier!
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Vizir Software Studio
  * Author URI:        http://vizir.com.br/en
  * Text Domain:       cf7-to-zapier
