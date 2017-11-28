@@ -56,9 +56,17 @@ if ( ! class_exists( 'VZ_Module_Zapier' ) ) {
          * @access   private
          */
         public function pull_the_trigger( array $data, $hook_url ) {
+            $content_type = 'application/json';
+            if ( ! empty( get_option( 'blog_charset' ) ) ) {
+                $content_type .= '; charset=' . get_option( 'blog_charset' );
+            }
+
             $args = array(
                 'method'    => 'POST',
                 'body'      => json_encode( $data ),
+                'headers'   => array(
+                    'Content-Type'  => $content_type,
+                ),
             );
 
             wp_remote_post( $hook_url, $args );
