@@ -69,7 +69,7 @@ if ( ! class_exists( 'VZ_Module_Zapier' ) ) {
                 ),
             );
 
-            wp_remote_post( $hook_url, $args );
+            wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
         }
 
         /**
