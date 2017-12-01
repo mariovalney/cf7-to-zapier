@@ -57,7 +57,9 @@ if ( ! class_exists( 'VZ_Module_Zapier' ) ) {
          */
         public function pull_the_trigger( array $data, $hook_url ) {
             $content_type = 'application/json';
-            if ( ! empty( get_option( 'blog_charset' ) ) ) {
+
+            $blog_charset = get_option( 'blog_charset' );
+            if ( ! empty( $blog_charset ) ) {
                 $content_type .= '; charset=' . get_option( 'blog_charset' );
             }
 
