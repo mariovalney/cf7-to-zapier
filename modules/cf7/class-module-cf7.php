@@ -219,12 +219,26 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $tags = $contact_form->scan_form_tags();
 
             foreach ( $tags as $tag ) {
-                if ( empty( $tag->name ) ) {
-                    continue;
+                if ( empty( $tag->name ) ) continue;
+
+                $pipes = $tag->pipes;
+
+                $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
+                if ( WPCF7_USE_PIPE && $pipes instanceof WPCF7_Pipes && ! $pipes->zero() ) {
+                    if ( is_array( $value) ) {
+                        $new_value = array();
+
+                        foreach ( $value as $v ) {
+                            $new_value[] = $pipes->do_pipe( wp_unslash( $v ) );
+                        }
+
+                        $value = $new_value;
+                    } else {
+                        $value = $pipes->do_pipe( wp_unslash( $value ) );
+                    }
                 }
 
-                $data[$tag->name] = ! empty( $_POST[$tag->name] ) ? $_POST[$tag->name] : '';
-
+                $data[ $tag->name ] = $value;
             }
 
             /**

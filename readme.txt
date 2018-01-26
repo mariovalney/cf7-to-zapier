@@ -91,7 +91,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 = 1.2 =
 
-* Added support to PIPE on CF7
+* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes/) on CF7
 * Tested against WP 4.9.2
 
 = 1.1.1 =
