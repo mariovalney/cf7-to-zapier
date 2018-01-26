@@ -113,7 +113,6 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 1.1 =
+= 1.2 =
 
-Added the 'application/json' header by default to POST request and 'ctz_post_request_args' filter to POST args.
-This way developers can modify the request args if any service demands a particular header or body.
+Added support to use [PIPE](https://contactform7.com/selectable-recipient-with-pipes/) on Contact Form 7 and tested against 4.9.2.
