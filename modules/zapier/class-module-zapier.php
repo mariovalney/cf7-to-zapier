@@ -1,9 +1,9 @@
 <?php
 /**
- * VZ_Module_Zapier
+ * CFTZ_Module_Zapier
  *
  * @package         Cf7_To_Zapier
- * @subpackage      VZ_Module_Zapier
+ * @subpackage      CFTZ_Module_Zapier
  * @since           1.0.0
  *
  */
@@ -11,8 +11,8 @@
 // If this file is called directly, call the cops.
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if ( ! class_exists( 'VZ_Module_Zapier' ) ) {
-    class VZ_Module_Zapier {
+if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
+    class CFTZ_Module_Zapier {
 
         /**
          * The Core object

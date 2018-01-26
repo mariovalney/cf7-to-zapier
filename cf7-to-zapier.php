@@ -7,7 +7,7 @@
  * Plugin Name:       CF7 to Zapier
  * Plugin URI:        https://github.com/Vizir/cf7-to-zapier
  * Description:       Use Contact Form 7 as a trigger to Zapier!
- * Version:           1.1.1
+ * Version:           1.2
  * Author:            Vizir Software Studio
  * Author URI:        http://vizir.com.br/en
  * Text Domain:       cf7-to-zapier
@@ -95,8 +95,8 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
             require_once plugin_dir_path( __FILE__ ) . 'modules/zapier/class-module-zapier.php';
 
             // Instantiate the Module's classes:
-            $this->modules['cf7'] = new VZ_Module_CF7( $this );
-            $this->modules['zapier'] = new VZ_Module_Zapier( $this );
+            $this->modules['cf7'] = new CFTZ_Module_CF7( $this );
+            $this->modules['zapier'] = new CFTZ_Module_Zapier( $this );
         }
 
         /**
@@ -167,7 +167,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @access   private
          */
         public function load_plugin_textdomain() {
-            load_plugin_textdomain( VZ_TEXTDOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
+            load_plugin_textdomain( CFTZ_TEXTDOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
         }
 
         /**
@@ -177,16 +177,16 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'VZ_VERSION', '1.0.0' );
-            define( 'VZ_PLUGIN_FILE', __FILE__ );
-            define( 'VZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-            define( 'VZ_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( VZ_PLUGIN_BASENAME ) );
-            define( 'VZ_PLUGIN_DIR', dirname( VZ_PLUGIN_BASENAME ) );
-            define( 'VZ_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+            define( 'CFTZ_VERSION', '1.2' );
+            define( 'CFTZ_PLUGIN_FILE', __FILE__ );
+            define( 'CFTZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+            define( 'CFTZ_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CFTZ_PLUGIN_BASENAME ) );
+            define( 'CFTZ_PLUGIN_DIR', dirname( CFTZ_PLUGIN_BASENAME ) );
+            define( 'CFTZ_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 
             // Definition of text domain
-            if ( ! defined( 'VZ_TEXTDOMAIN' ) ) {
-                define( 'VZ_TEXTDOMAIN', 'cf7-to-zapier' );
+            if ( ! defined( 'CFTZ_TEXTDOMAIN' ) ) {
+                define( 'CFTZ_TEXTDOMAIN', 'cf7-to-zapier' );
             }
 
             // Running Modules (first of all)
