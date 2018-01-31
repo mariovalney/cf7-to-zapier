@@ -4,7 +4,7 @@ Donate link: https://github.com/Vizir/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
 Requires at least: 4.7
 Tested up to: 4.9.2
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,10 @@ You can [translate CF7 to Zapier](https://translate.wordpress.org/projects/wp-pl
 
 We would be grateful for a [review here](https://wordpress.org/support/plugin/cf7-to-zapier/reviews/).
 
+= Support =
+
+* Contact Form 7 - 5.0
+
 == Installation ==
 
 `Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.`
@@ -65,16 +69,16 @@ You will find 'Zapier' tab into form configuration.
 
 = Does it works for forms sent out of CF7? =
 
-Nope. The intention here is to integrate CF7 to Zapier.
+Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
 
-= Can I use it without Zapier =
+= Can I use it without Zapier? =
 
 Yep. We are creating a integration to Zapier webhook, but you can insert any URL to receive a JSON formated data.
 
-= Who are the developers =
+= Who are the developers? =
 
-[Vizir](http://vizir.com.br/en) is a Brazilian software studio.
-[Mário Valney](https://mariovalney.com/me) is a Brazilian developer who works at Vizir Software Studio and integrates the [WordPress community](https://profiles.wordpress.org/mariovalney).
+* [Vizir](http://vizir.com.br/en) is a Brazilian software studio.
+* [Mário Valney](https://mariovalney.com/me) is a Brazilian developer who works at Vizir Software Studio and integrates the [WordPress community](https://profiles.wordpress.org/mariovalney).
 
 = Can I help you? =
 
@@ -82,12 +86,16 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Screenshots ==
 
-1. Cf7 to Zapier configuration
+1. CF7 to Zapier configuration
 2. Zapier Step 1 - Choosing you app trigger
 3. Zapier Step 2 - Choosing Catch Hook option
 4. Zapier Step 3 - Webhook URL (waiting for first data)
 
 == Changelog ==
+
+= 1.2.1 =
+
+* Tested against Contact Form 7 version 5.0
 
 = 1.2 =
 
@@ -113,6 +121,6 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 1.2 =
+= 1.2.1 =
 
-Added support to use [PIPE](https://contactform7.com/selectable-recipient-with-pipes/) on Contact Form 7 and tested against 4.9.2.
+* Tested against Contact Form 7 version 5.0
