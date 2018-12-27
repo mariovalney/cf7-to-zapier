@@ -47,7 +47,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.0
+* Contact Form 7 - 5.1
 
 == Installation ==
 
@@ -67,6 +67,10 @@ You will find 'Zapier' tab into form configuration.
 
 == Frequently Asked Questions ==
 
+= Does it works with Gutenberg? =
+
+Yes. We support WordPress 5+ and CF7 too.
+
 = Does it works for forms sent out of CF7? =
 
 Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
@@ -74,6 +78,10 @@ Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
 = Can I use it without Zapier? =
 
 Yep. We are creating a integration to Zapier webhook, but you can insert any URL to receive a JSON formated data.
+
+= My sent data is empty =
+
+Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
 
 = Who are the developers? =
 
@@ -95,6 +103,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 = 1.3.0 =
 
+* Added support to [Special Mail Tags] (https://contactform7.com/special-mail-tags) on CF7
 * Tested against WP 5.0.2 and CF7 version 5.1
 
 = 1.2.1 =
@@ -103,7 +112,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 = 1.2 =
 
-* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes/) on CF7
+* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes) on CF7
 * Tested against WP 4.9.2
 
 = 1.1.1 =
@@ -125,6 +134,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 1.2.1 =
+= 1.3.0 =
 
-* Tested against Contact Form 7 version 5.0
+* Added support to Special Mail Tags.
+* Tested up to new WordPress and Contact Form 7!
