@@ -10,6 +10,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 $activate = '0';
 $hook_url = '';
 $send_mail = '0';
+$special_mail_tags = '';
 
 if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     $properties = $contactform->prop( CFTZ_Module_CF7::METADATA );
@@ -24,6 +25,10 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
     if ( isset( $properties['send_mail'] ) ) {
         $send_mail = $properties['send_mail'];
+    }
+
+    if ( isset( $properties['special_mail_tags'] ) ) {
+        $special_mail_tags = $properties['special_mail_tags'];
     }
 }
 
@@ -96,6 +101,40 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 </fieldset>
 
 <h2>
+    <?php _e( 'Special Mail Tags', CFTZ_TEXTDOMAIN ) ?>
+</h2>
+
+<fieldset>
+    <legend>
+        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> to the data sent to webhook.', 'The URL shoul point to CF7 documentation (someday it can be translated).', CFTZ_TEXTDOMAIN ); ?>
+    </legend>
+
+    <div style="margin: 20px 0;">
+        <label for="ctz-special-mail-tags">
+            <?php
+                $special_mail_tags = esc_textarea( $special_mail_tags );
+                $rows = ( (int) substr_count( $special_mail_tags, "\n" ) ) + 2;
+                $rows = max( $rows, 4 );
+            ?>
+            <textarea id="ctz-special-mail-tags" name="ctz-special-mail-tags" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $special_mail_tags; ?></textarea>
+        </label>
+        <p class="description"><?php
+            printf(
+                __( 'Insert Special Tags like in mail body: %s', CFTZ_TEXTDOMAIN ),
+                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title]</span>'
+            );
+
+            echo '<br>';
+
+            printf(
+                __( 'Or add a second word to pass as key to Zapier: %s', CFTZ_TEXTDOMAIN ),
+                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title title]</span>'
+            );
+        ?></p>
+    </div>
+</fieldset>
+
+<h2>
     <?php _e( 'Data sended to Zapier', CFTZ_TEXTDOMAIN ) ?>
 </h2>
 
@@ -104,16 +143,38 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 <?php
     $sended_data = array();
 
-    $tags = $contactform->scan_form_tags();
-    foreach ( $tags as $tag ) {
-        if ( empty( $tag->name ) ) {
-            continue;
-        }
+    // Special Tags
+    $special_tags = array();
+    preg_match_all( '/\[[^\]]*]/', $special_mail_tags, $special_tags );
+    $special_tags = $special_tags[0] ?? [];
 
-        $sended_data[$tag->name] = '??????';
+    foreach ( $special_tags as $special_tag ) {
+        $special_tag = substr( $special_tag, 1, -1 );
+        $special_tag = explode( ' ', $special_tag );
+
+        $tags[] = $special_tag[1] ?? ( $special_tag[0] ?? '' );
+    }
+
+    // Form Tags
+    $form_tags = $contactform->scan_form_tags();
+    foreach ( $form_tags as $tag ) {
+        $tags[] = $tag->name;
+    }
+
+    foreach ( $tags as $tag ) {
+        if ( empty( $tag ) ) continue;
+
+        $sended_data[ $tag ] = '??????';
     }
 ?>
 
-<pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php echo json_encode( $sended_data, JSON_PRETTY_PRINT ); ?></pre>
+<pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
+    echo json_encode( $sended_data, JSON_PRETTY_PRINT );
+?></pre>
 
-<p class="description"><?php printf( __( 'You can add URL parameters into form using this shortcode: %s.', CFTZ_TEXTDOMAIN ), '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[hidden example_get default:get]</span>' ); ?></p>
+<p class="description"><?php
+    printf(
+        __( 'You can add URL parameters into form using this shortcode: %s.', CFTZ_TEXTDOMAIN ),
+        '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[hidden example_get default:get]</span>'
+    );
+?></p>

@@ -148,6 +148,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 $new_properties[ 'send_mail' ] = '0';
             }
 
+            if ( isset( $_POST['ctz-special-mail-tags'] ) ) {
+                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['ctz-special-mail-tags'] );
+            }
+
             $properties = $contact_form->get_properties();
             $old_properties = $properties[ self::METADATA ];
             $properties[ self::METADATA ] = array_merge( $old_properties, $new_properties );
@@ -164,9 +168,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         public function wpcf7_contact_form_properties( $properties, $instance ) {
             if ( ! isset( $properties[ self::METADATA ] ) ) {
                 $properties[ self::METADATA ] = array(
-                    'activate'  => '0',
-                    'hook_url'  => '',
-                    'send_mail' => '0',
+                    'activate'          => '0',
+                    'hook_url'          => '',
+                    'send_mail'         => '0',
+                    'special_mail_tags' => '',
                 );
             }
 
@@ -203,12 +208,16 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 return;
             }
 
-            $data = $this->get_data_from_contact_form( $contact_form );
+            $smt_data = $this->get_data_from_special_mail_tags( $contact_form );
+            $cf_data = $this->get_data_from_contact_form( $contact_form );
+
+            $data = array_merge( $smt_data, $cf_data );
+
             do_action( 'ctz_trigger_webhook', $data, $properties['hook_url'] );
         }
 
         /**
-         * Retrieve a array with data to pull the trigger
+         * Retrieve a array with data from Contact Form data
          *
          * @since    1.0.0
          * @param    obj                $contact_form   ContactForm Obj
@@ -244,12 +253,53 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             /**
-             * You can filter data passed to Zapier with 'ctz_field_data'
+             * You can filter data retrieved from Contact Form tags with 'ctz_get_data_from_contact_form'
              *
-             * @param $data         Array 'tag->name => data' with all form values
-             * @param $contact_form ContactForm obj from 'wpcf7_mail_sent' action
+             * @param $data             Array 'field => data'
+             * @param $contact_form     ContactForm obj from 'wpcf7_mail_sent' action
              */
             return apply_filters( 'ctz_get_data_from_contact_form', $data, $contact_form );
+        }
+
+        /**
+         * Retrieve a array with data from Special Mail Tags
+         *
+         * @link https://contactform7.com/special-mail-tags
+         *
+         * @since    1.3.0
+         * @param    obj                $contact_form   ContactForm Obj
+         */
+        private function get_data_from_special_mail_tags( $contact_form ) {
+            $data = array();
+            $tags = array();
+
+            $properties = $contact_form->prop( self::METADATA );
+            $special_mail_tags = $properties['special_mail_tags'] ?? '';
+
+            preg_match_all( '/\[[^\]]*]/', $special_mail_tags, $tags );
+
+            $tags = $tags[0] ?? [];
+
+            foreach ( $tags as $tag_data ) {
+                $tag_data = substr( $tag_data, 1, -1 );
+                $tag_data = explode( ' ', $tag_data );
+
+                $tag = $tag_data[0] ?? '';
+                $key = $tag_data[1] ?? $tag;
+
+                if ( empty( $key ) ) continue;
+
+                $value = apply_filters( 'wpcf7_special_mail_tags', '', $tag, false );
+                $data[ $key ] = $value;
+            }
+
+            /**
+             * You can filter data retrieved from Special Mail Tags with 'ctz_get_data_from_special_mail_tags'
+             *
+             * @param $data             Array 'field => data'
+             * @param $contact_form     ContactForm obj from 'wpcf7_mail_sent' action
+             */
+            return apply_filters( 'ctz_get_data_from_special_mail_tags', $data, $contact_form );
         }
 
         /**
