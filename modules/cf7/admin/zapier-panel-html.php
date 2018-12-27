@@ -145,15 +145,8 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
     // Special Tags
     $special_tags = array();
-    preg_match_all( '/\[[^\]]*]/', $special_mail_tags, $special_tags );
-    $special_tags = $special_tags[0] ?? [];
-
-    foreach ( $special_tags as $special_tag ) {
-        $special_tag = substr( $special_tag, 1, -1 );
-        $special_tag = explode( ' ', $special_tag );
-
-        $tags[] = $special_tag[1] ?? ( $special_tag[0] ?? '' );
-    }
+    $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
+    $tags = array_keys( $special_tags );
 
     // Form Tags
     $form_tags = $contactform->scan_form_tags();

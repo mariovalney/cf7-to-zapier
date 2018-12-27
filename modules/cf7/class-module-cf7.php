@@ -270,25 +270,15 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    obj                $contact_form   ContactForm Obj
          */
         private function get_data_from_special_mail_tags( $contact_form ) {
-            $data = array();
-            $tags = array();
+            $tags = [];
+            $data = [];
 
             $properties = $contact_form->prop( self::METADATA );
-            $special_mail_tags = $properties['special_mail_tags'] ?? '';
+            if ( ! empty( $properties['special_mail_tags'] ) ) {
+                $tags = self::get_special_mail_tags_from_string( $properties['special_mail_tags'] );
+            }
 
-            preg_match_all( '/\[[^\]]*]/', $special_mail_tags, $tags );
-
-            $tags = $tags[0] ?? [];
-
-            foreach ( $tags as $tag_data ) {
-                $tag_data = substr( $tag_data, 1, -1 );
-                $tag_data = explode( ' ', $tag_data );
-
-                $tag = $tag_data[0] ?? '';
-                $key = $tag_data[1] ?? $tag;
-
-                if ( empty( $key ) ) continue;
-
+            foreach ( $tags as $key => $tag ) {
                 $value = apply_filters( 'wpcf7_special_mail_tags', '', $tag, false );
                 $data[ $key ] = $value;
             }
@@ -316,6 +306,39 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             return true;
+        }
+
+        /**
+         * Special Mail Tags from a configuration string
+         *
+         * @since    1.3.1
+         * @param    string     $string
+         * @return   array      $data       Array { key => tag }
+         */
+        public static function get_special_mail_tags_from_string( $string ) {
+            $data = [];
+            $tags = [];
+
+            preg_match_all( '/\[[^\]]*]/', $string, $tags );
+            $tags = ( ! empty( $tags[0] ) ) ? $tags[0] : $tags;
+
+            foreach ( $tags as $tag_data ) {
+                if ( ! is_string( $tag_data ) || empty( $tag_data ) ) continue;
+
+                $tag_data = substr( $tag_data, 1, -1 );
+                $tag_data = explode( ' ', $tag_data );
+
+                if ( empty( $tag_data[0] ) ) continue;
+
+                $tag = $tag_data[0];
+                $key = ( ! empty( $tag_data[1] ) ) ? $tag_data[1] : $tag;
+
+                if ( empty( $key ) ) continue;
+
+                $data[ $key ] = $tag;
+            }
+
+            return $data;
         }
 
         /**
