@@ -221,9 +221,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             foreach ( $tags as $tag ) {
                 if ( empty( $tag->name ) ) continue;
 
-                $pipes = $tag->pipes;
-
+                // Regular Tags
                 $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
+
+                // Support to Pipes
+                $pipes = $tag->pipes;
                 if ( WPCF7_USE_PIPE && $pipes instanceof WPCF7_Pipes && ! $pipes->zero() ) {
                     if ( is_array( $value) ) {
                         $new_value = array();
