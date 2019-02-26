@@ -79,7 +79,22 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    1.1.0
              */
-            wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
+            $result = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
+
+            // If result is a WP Error, throw a Exception woth the message.
+            if ( is_wp_error( $result ) ) {
+                throw new Exception( $result->get_error_message() );
+            }
+
+            /**
+             * Action: ctz_post_request_result
+             *
+             * You can perform a action with the result of the request.
+             * By default we do nothing but you can throw a Exception in webhook errors.
+             *
+             * @since    1.4.0
+             */
+            do_action( 'ctz_post_request_result', $result, $hook_url );
         }
 
         /**

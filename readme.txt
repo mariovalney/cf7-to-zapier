@@ -3,8 +3,8 @@ Contributors: mariovalney, vizir
 Donate link: https://github.com/Vizir/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
 Requires at least: 4.7
-Tested up to: 5.0.2
-Stable tag: 1.3.1
+Tested up to: 5.1.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,7 +47,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.1
+* Contact Form 7 - 5.1.1
 
 == Installation ==
 
@@ -88,6 +88,14 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 * [Vizir](http://vizir.com.br/en) is a Brazilian software studio.
 * [Mário Valney](https://mariovalney.com/me) is a Brazilian developer who works at Vizir Software Studio and integrates the [WordPress community](https://profiles.wordpress.org/mariovalney).
 
+= How can I show webhook errors on form submit? =
+
+We already show WordPress request errors. If you want to add theatment to webhook errors, please [check this post](https://wordpress.org/support/topic/form-sent-to-zapier-randomly/#post-11249864).
+
+= How can I upload files and send link to webhook? =
+
+Check [this issue](https://github.com/Vizir/cf7-to-zapier/issues/3#issuecomment-363265133).
+
 = Can I help you? =
 
 Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
@@ -101,9 +109,16 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Changelog ==
 
+= 1.4.0 =
+
+* Show form error when WordPress request fails and added support to throw or own exceptions.
+* Added 'ctz_post_request_result' action after submit.
+* Added 'ctz_trigger_webhook_error_message' filter to change form message error.
+
 = 1.3.1 =
 
 * Remove PHP 7+ dependency
+* It's sad... I know.
 
 = 1.3.0 =
 
@@ -138,7 +153,8 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 1.3.0 =
+= 1.4.0 =
 
-* Added support to Special Mail Tags.
-* Tested up to new WordPress and Contact Form 7!
+* Show form error when WordPress request fails and added support to throw or own exceptions.
+* Added 'ctz_post_request_result' action after submit.
+* Added 'ctz_trigger_webhook_error_message' filter to change form message error.
