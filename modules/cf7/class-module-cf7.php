@@ -53,14 +53,14 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @access   private
          */
         private function define_hooks() {
-            $this->core->add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
-            $this->core->add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ) );
-            $this->core->add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
-            $this->core->add_filter( 'wpcf7_skip_mail', array( $this, 'wpcf7_skip_mail' ), 10, 2 );
-            $this->core->add_action( 'wpcf7_mail_sent', array( $this, 'wpcf7_mail_sent' ), 10, 1 );
+            $this->core->add_filter( 'wpcf7_editor_panels', [ $this, 'wpcf7_editor_panels' ] );
+            $this->core->add_action( 'wpcf7_save_contact_form', [ $this, 'wpcf7_save_contact_form' ] );
+            $this->core->add_filter( 'wpcf7_contact_form_properties', [ $this, 'wpcf7_contact_form_properties' ], 10, 2 );
+            $this->core->add_filter( 'wpcf7_skip_mail', [ $this, 'wpcf7_skip_mail' ], 10, 2 );
+            $this->core->add_action( 'wpcf7_mail_sent', [ $this, 'wpcf7_mail_sent' ], 10, 1 );
 
             // Admin Hooks
-            $this->core->add_action( 'admin_notices', array( $this, 'check_cf7_plugin' ) );
+            $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
         }
 
         /**
@@ -107,7 +107,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         public function wpcf7_editor_panels( $panels ) {
             $panels['zapier-panel'] = array(
                 'title'     => __( 'Zapier', CFTZ_TEXTDOMAIN ),
-                'callback'  => array( $this, 'zapier_panel_html' ),
+                'callback'  => [ $this, 'zapier_panel_html' ],
             );
 
             return $panels;
@@ -130,7 +130,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    WPCF7_ContactForm  $contactform    Current ContactForm Obj
          */
         public function wpcf7_save_contact_form( $contact_form ) {
-            $new_properties = array();
+            $new_properties = [];
 
             if ( isset( $_POST['ctz-zapier-activate'] ) && $_POST['ctz-zapier-activate'] == '1' ) {
                 $new_properties[ 'activate' ] = '1';
@@ -255,21 +255,46 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    obj                $contact_form   ContactForm Obj
          */
         private function get_data_from_contact_form( $contact_form ) {
-            $data = array();
+            $data = [];
+
+            // Submission
+            $submission = WPCF7_Submission::get_instance();
+            $files = ( ! empty( $submission ) ) ? $submission->uploaded_files() : [];
+
+            // Upload Info
+            $wp_upload_dir = wp_get_upload_dir();
+            $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . uniqid();
+            $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
+            $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;
 
             $tags = $contact_form->scan_form_tags();
-
             foreach ( $tags as $tag ) {
                 if ( empty( $tag->name ) ) continue;
 
                 // Regular Tags
                 $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
 
+                // Files
+                if ( $tag->basetype === 'file' && ! empty( $files[ $tag->name ] ) ) {
+                    $file = $files[ $tag->name ];
+
+                    wp_mkdir_p( $upload_dir );
+                    if ( ! copy( $file, $upload_dir . '/' . basename( $file ) ) ) {
+                        $submission = WPCF7_Submission::get_instance();
+                        $submission->set_status( 'mail_failed' );
+                        $submission->set_response( $contact_form->message( 'upload_failed' ) );
+
+                        continue;
+                    }
+
+                    $value = $upload_url . '/' . basename( $file );
+                }
+
                 // Support to Pipes
                 $pipes = $tag->pipes;
                 if ( WPCF7_USE_PIPE && $pipes instanceof WPCF7_Pipes && ! $pipes->zero() ) {
                     if ( is_array( $value) ) {
-                        $new_value = array();
+                        $new_value = [];
 
                         foreach ( $value as $v ) {
                             $new_value[] = $pipes->do_pipe( wp_unslash( $v ) );
