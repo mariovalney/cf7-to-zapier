@@ -80,7 +80,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             echo '<div class="notice notice-error is-dismissible">';
-            echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to use %s CF7 To Zapier %s", CFTZ_TEXTDOMAIN ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+            echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to use %s CF7 to Webhook %s", CFTZ_TEXTDOMAIN ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
 
             $screen = get_current_screen();
             if ( $screen->id == 'plugins' ) {

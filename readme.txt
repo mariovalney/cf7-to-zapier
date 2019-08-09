@@ -1,32 +1,38 @@
-=== CF7 to Zapier ===
+=== CF7 to Webhook ===
 Contributors: mariovalney, vizir
 Donate link: https://github.com/Vizir/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
 Requires at least: 4.7
 Tested up to: 5.2.2
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Use Contact Form 7 as a trigger to Zapier!
+Use Contact Form 7 as a trigger to any webhook like Zapier!
 
 == Description ==
 
 [Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/ "Install it first, of course") is a awesome plugin used by 1+ million WordPress websites.
 
+Webhooks are endpoint (urls) you can send data!
+
+Now you can join both: the best contact form plugin to WordPress and any webhook which receive JSON!
+
+And Zapier?
+
 [Zapier (Zapier)](https://zapier.com) is a awesome service to connect your apps and automate workflows!
 
-Now you can join both: the best contact form plugin to WordPress and Zapier! Just activate and configure Zapier to receive data!
+Just activate and configure Zapier to receive data!
 
-This plugin was created without any encouragement from Zapier or CF7 developers.
+Disclaimer: this plugin was created without any encouragement from Zapier or CF7 developers and any webhook/API service.
 
 = How to Use =
 
-Easily and quickly! Just activate "Contact Form 7" and "CF7 to Zapier" and go to Zapier to create your Zap!
+Easily and quickly! Just activate "Contact Form 7" and "CF7 to Webhook" and configure a URL to send data (or go to Zapier to create your Zap).
 
 = Configuration =
 
-To integrate your form to Zapier you should:
+This is a example to integrate with Zapier:
 
 1. Create a Zap.
 1. Choose your trigger as "Webhooks" app (Screenshot 2).
@@ -39,7 +45,7 @@ After configuration you can send one form to create a example data into Zapier d
 
 = Translations =
 
-You can [translate CF7 to Zapier](https://translate.wordpress.org/projects/wp-plugins/cf7-to-zapier) to your language.
+You can [translate CF7 to Webhook](https://translate.wordpress.org/projects/wp-plugins/cf7-to-zapier) to your language.
 
 = Review =
 
@@ -53,7 +59,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 `Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.`
 
-* Install "CF7 to Zapier" by plugins dashboard.
+* Install "CF7 to Webhook" by plugins dashboard.
 
 Or
 
@@ -67,13 +73,17 @@ You will find 'Zapier' tab into form configuration.
 
 == Frequently Asked Questions ==
 
+= Did you renamed the plugin? =
+
+Yes. Due to [this](https://make.wordpress.org/plugins/2019/08/08/trademark-enforcement/).
+
 = Does it works with Gutenberg? =
 
 Yes. We support WordPress 5+ and CF7 too.
 
 = Does it works for forms sent out of CF7? =
 
-Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
+Nope. The intention here is to integrate CF7 to Webhook (and another webhooks).
 
 = Can I use it without Zapier? =
 
@@ -81,7 +91,7 @@ Yep. We are creating a integration to Zapier webhook, but you can insert any URL
 
 = My sent data is empty =
 
-Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
+Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-webhook/) to get help.
 
 = Who are the developers? =
 
@@ -94,7 +104,7 @@ We already show WordPress request errors. If you want to add theatment to webhoo
 
 = How can I upload files and send link to webhook? =
 
-Check [this issue](https://github.com/Vizir/cf7-to-zapier/issues/3#issuecomment-363265133).
+If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.
 
 = Can I help you? =
 
@@ -102,7 +112,7 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Screenshots ==
 
-1. CF7 to Zapier configuration
+1. CF7 to Webhook configuration
 2. Zapier Step 1 - Choosing you app trigger
 3. Zapier Step 2 - Choosing Catch Hook option
 4. Zapier Step 3 - Webhook URL (waiting for first data)
@@ -157,8 +167,6 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 2.0.0 =
+= 2.0.1 =
 
-* Support to submit files
-
-We will copy your file (before CF7 remove it) to our upload dir and send the link to Zapier.
+* Renamed

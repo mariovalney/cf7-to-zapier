@@ -35,14 +35,14 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 ?>
 
 <h2>
-    <?php _e( 'Zapier', CFTZ_TEXTDOMAIN ) ?>
+    <?php _e( 'Webhook', CFTZ_TEXTDOMAIN ) ?>
 </h2>
 
 <fieldset>
     <legend>
-        <?php _e( 'In these options you can activate or deactivate Zapier integration.', CFTZ_TEXTDOMAIN ); ?>
+        <?php _e( 'In these options you can activate or deactivate Webhook integration.', CFTZ_TEXTDOMAIN ); ?>
         <br>
-        <?php _e( 'To integrate you should create a trigger into Zapier using "Webhooks" app and choose "Catch Hook" option. Then insert webhook URL below.', CFTZ_TEXTDOMAIN ); ?>
+        <?php _e( 'To integrate you should insert your webhook URL below. For example, into Zapier you can create a trigger using "Webhooks" app and choose "Catch Hook" option.', CFTZ_TEXTDOMAIN ); ?>
     </legend>
 
     <table class="form-table">
@@ -57,7 +57,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                     <p>
                         <label for="ctz-zapier-activate">
                             <input type="checkbox" id="ctz-zapier-activate" name="ctz-zapier-activate" value="1" <?php checked( $activate, "1" ) ?>>
-                            <?php _e( 'Send to Zapier', CFTZ_TEXTDOMAIN ) ?>
+                            <?php _e( 'Send to Webhook', CFTZ_TEXTDOMAIN ) ?>
                         </label>
                     </p>
                 </td>
@@ -76,7 +76,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                     </p>
                     <?php if ( $activate && empty( $hook_url ) ): ?>
                         <p class="description" style="color: #D00;">
-                            <?php _e( 'You should insert webhook URL from Zapier here to finish configuration.' ); ?>
+                            <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
                         </p>
                     <?php endif; ?>
                 </td>
@@ -127,7 +127,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
             echo '<br>';
 
             printf(
-                __( 'Or add a second word to pass as key to Zapier: %s', CFTZ_TEXTDOMAIN ),
+                __( 'Or add a second word to pass as key to Webhook: %s', CFTZ_TEXTDOMAIN ),
                 '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title title]</span>'
             );
         ?></p>
@@ -135,7 +135,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 </fieldset>
 
 <h2>
-    <?php _e( 'Data sended to Zapier', CFTZ_TEXTDOMAIN ) ?>
+    <?php _e( 'Data sended to Webhook', CFTZ_TEXTDOMAIN ) ?>
 </h2>
 
 <p><?php _e( 'We will send your form data as below:', CFTZ_TEXTDOMAIN ) ?></p>
