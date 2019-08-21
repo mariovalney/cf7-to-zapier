@@ -105,9 +105,9 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    array              $panels     Panels in CF7 Administration
          */
         public function wpcf7_editor_panels( $panels ) {
-            $panels['zapier-panel'] = array(
-                'title'     => __( 'Zapier', CFTZ_TEXTDOMAIN ),
-                'callback'  => [ $this, 'zapier_panel_html' ],
+            $panels['webhook-panel'] = array(
+                'title'     => __( 'Webhook', CFTZ_TEXTDOMAIN ),
+                'callback'  => [ $this, 'webhook_panel_html' ],
             );
 
             return $panels;
@@ -119,8 +119,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @since    1.0.0
          * @param    WPCF7_ContactForm  $contactform    Current ContactForm Obj
          */
-        public function zapier_panel_html( WPCF7_ContactForm $contactform ) {
-            require plugin_dir_path( __FILE__ ) . 'admin/zapier-panel-html.php';
+        public function webhook_panel_html( WPCF7_ContactForm $contactform ) {
+            require plugin_dir_path( __FILE__ ) . 'admin/webhook-panel-html.php';
         }
 
         /**
@@ -132,17 +132,17 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         public function wpcf7_save_contact_form( $contact_form ) {
             $new_properties = [];
 
-            if ( isset( $_POST['ctz-zapier-activate'] ) && $_POST['ctz-zapier-activate'] == '1' ) {
+            if ( isset( $_POST['ctz-webhook-activate'] ) && $_POST['ctz-webhook-activate'] == '1' ) {
                 $new_properties[ 'activate' ] = '1';
             } else {
                 $new_properties[ 'activate' ] = '0';
             }
 
-            if ( isset( $_POST['ctz-zapier-hook-url'] ) ) {
-                $new_properties[ 'hook_url' ] = esc_url_raw( $_POST['ctz-zapier-hook-url'] );
+            if ( isset( $_POST['ctz-webhook-hook-url'] ) ) {
+                $new_properties[ 'hook_url' ] = esc_url_raw( $_POST['ctz-webhook-hook-url'] );
             }
 
-            if ( isset( $_POST['ctz-zapier-send-mail'] ) && $_POST['ctz-zapier-send-mail'] == '1' ) {
+            if ( isset( $_POST['ctz-webhook-send-mail'] ) && $_POST['ctz-webhook-send-mail'] == '1' ) {
                 $new_properties[ 'send_mail' ] = '1';
             } else {
                 $new_properties[ 'send_mail' ] = '0';

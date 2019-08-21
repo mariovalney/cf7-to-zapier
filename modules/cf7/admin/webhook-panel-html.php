@@ -55,8 +55,8 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 </th>
                 <td>
                     <p>
-                        <label for="ctz-zapier-activate">
-                            <input type="checkbox" id="ctz-zapier-activate" name="ctz-zapier-activate" value="1" <?php checked( $activate, "1" ) ?>>
+                        <label for="ctz-webhook-activate">
+                            <input type="checkbox" id="ctz-webhook-activate" name="ctz-webhook-activate" value="1" <?php checked( $activate, "1" ) ?>>
                             <?php _e( 'Send to Webhook', CFTZ_TEXTDOMAIN ) ?>
                         </label>
                     </p>
@@ -70,8 +70,8 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 </th>
                 <td>
                     <p>
-                        <label for="ctz-zapier-hook-url">
-                            <input type="url" id="ctz-zapier-hook-url" name="ctz-zapier-hook-url" value="<?php echo $hook_url; ?>" style="width: 100%;">
+                        <label for="ctz-webhook-hook-url">
+                            <input type="url" id="ctz-webhook-hook-url" name="ctz-webhook-hook-url" value="<?php echo $hook_url; ?>" style="width: 100%;">
                         </label>
                     </p>
                     <?php if ( $activate && empty( $hook_url ) ): ?>
@@ -89,8 +89,8 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 </th>
                 <td>
                     <p>
-                        <label for="ctz-zapier-send-mail">
-                            <input type="checkbox" id="ctz-zapier-send-mail" name="ctz-zapier-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
+                        <label for="ctz-webhook-send-mail">
+                            <input type="checkbox" id="ctz-webhook-send-mail" name="ctz-webhook-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
                             <?php _e( 'Send CF7 mail as usually', CFTZ_TEXTDOMAIN ) ?>
                         </label>
                     </p>
