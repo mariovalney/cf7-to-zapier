@@ -106,7 +106,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
 <fieldset>
     <legend>
-        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> to the data sent to webhook.', 'The URL shoul point to CF7 documentation (someday it can be translated).', CFTZ_TEXTDOMAIN ); ?>
+        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', CFTZ_TEXTDOMAIN ); ?>
     </legend>
 
     <div style="margin: 20px 0;">
@@ -151,6 +151,12 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     // Form Tags
     $form_tags = $contactform->scan_form_tags();
     foreach ( $form_tags as $tag ) {
+        $key = $tag->get_option('webhook');
+        if (! empty($key) && ! empty($key[0])) {
+            $tags[] = $key[0];
+            continue;
+        }
+
         $tags[] = $tag->name;
     }
 

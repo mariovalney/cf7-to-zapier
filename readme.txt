@@ -5,6 +5,7 @@ Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, ma
 Requires at least: 4.7
 Tested up to: 5.2.2
 Stable tag: trunk
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +107,14 @@ We already show WordPress request errors. If you want to add theatment to webhoo
 
 If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.
 
+= How can I rename a field to webhook? =
+
+You can add a "webhook" option to your field on form edit tab.
+
+It's like the "class" option: `[text your-field class:form-control id:field-id webhook:webhook-key]`.
+
+This will create a text field with name "your-field", class "form-control", id "field-id" and will be sent to webhook with key "webhook-key".
+
 = Can I help you? =
 
 Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
@@ -118,6 +127,14 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 4. Zapier Step 3 - Webhook URL (waiting for first data)
 
 == Changelog ==
+
+= 2.1.0 =
+
+* Support to rename fields.
+
+= 2.0.2 =
+
+* Plugin renamed.
 
 = 2.0.0 =
 
@@ -167,6 +184,6 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Upgrade Notice ==
 
-= 2.0.2 =
+= 2.1 =
 
-* Renamed
+Support to rename fields. Check "How can I rename a field to webhook?" on readme.

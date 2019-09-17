@@ -306,7 +306,15 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     }
                 }
 
-                $data[ $tag->name ] = $value;
+                // Support to option
+                $key = $tag->name;
+                $webhook_key = $tag->get_option('webhook');
+
+                if (! empty($webhook_key) && ! empty($webhook_key[0])) {
+                    $key = $webhook_key[0];
+                }
+
+                $data[ $key ] = $value;
             }
 
             /**
