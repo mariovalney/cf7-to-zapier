@@ -128,6 +128,10 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Changelog ==
 
+= 2.1.1 =
+
+* Fix slashes on POST data.
+
 = 2.1.0 =
 
 * Support to rename fields.
@@ -148,42 +152,42 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 = 1.3.1 =
 
-* Remove PHP 7+ dependency
+* Remove PHP 7+ dependency.
 * It's sad... I know.
 
 = 1.3.0 =
 
-* Added support to [Special Mail Tags] (https://contactform7.com/special-mail-tags) on CF7
-* Tested against WP 5.0.2 and CF7 version 5.1
+* Added support to [Special Mail Tags] (https://contactform7.com/special-mail-tags) on CF7.
+* Tested against WP 5.0.2 and CF7 version 5.1.
 
 = 1.2.1 =
 
-* Tested against Contact Form 7 version 5.0
+* Tested against Contact Form 7 version 5.0.
 
 = 1.2 =
 
-* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes) on CF7
-* Tested against WP 4.9.2
+* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes) on CF7.
+* Tested against WP 4.9.2.
 
 = 1.1.1 =
 
-* Fixed problem with a function inside empty() prior PHP 5.5
+* Fixed problem with a function inside empty() prior PHP 5.5.
 
 = 1.1 =
 
-* Added the 'application/json' header by default to POST request
-* Added 'ctz_post_request_args' filter to POST request args
-* Tested against WP 4.9
+* Added the 'application/json' header by default to POST request.
+* Added 'ctz_post_request_args' filter to POST request args.
+* Tested against WP 4.9.
 
 = 1.0 =
 
 * It's alive!
-* Form configuration
-* Integration to Zapier webhook
-* Ignore or not CF7 mail sent
+* Form configuration.
+* Integration to Zapier webhook.
+* Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
 
-= 2.1 =
+= 2.1.1 =
 
-Support to rename fields. Check "How can I rename a field to webhook?" on readme.
+Minor fixes.
