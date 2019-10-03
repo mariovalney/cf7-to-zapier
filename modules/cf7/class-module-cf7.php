@@ -273,6 +273,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
                 // Regular Tags
                 $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
+                $value = stripslashes( $value );
 
                 // Files
                 if ( $tag->basetype === 'file' && ! empty( $files[ $tag->name ] ) ) {
