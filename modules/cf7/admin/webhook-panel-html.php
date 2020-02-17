@@ -135,13 +135,13 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 </fieldset>
 
 <h2>
-    <?php _e( 'Data sended to Webhook', CFTZ_TEXTDOMAIN ) ?>
+    <?php _e( 'Data sent to Webhook', CFTZ_TEXTDOMAIN ) ?>
 </h2>
 
 <p><?php _e( 'We will send your form data as below:', CFTZ_TEXTDOMAIN ) ?></p>
 
 <?php
-    $sended_data = array();
+    $sent_data = array();
 
     // Special Tags
     $special_tags = array();
@@ -163,12 +163,12 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     foreach ( $tags as $tag ) {
         if ( empty( $tag ) ) continue;
 
-        $sended_data[ $tag ] = '??????';
+        $sent_data[ $tag ] = '??????';
     }
 ?>
 
 <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
-    echo json_encode( $sended_data, JSON_PRETTY_PRINT );
+    echo json_encode( $sent_data, JSON_PRETTY_PRINT );
 ?></pre>
 
 <p class="description"><?php
