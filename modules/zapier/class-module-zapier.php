@@ -75,7 +75,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              * Filter: ctz_hook_url
              *
              * The 'ctz_hook_url' filter webhook URL so developers can use form
-             * data or other information to change webhook URL
+             * data or other information to change webhook URL.
              *
              * @since    2.1.4
              */
