@@ -54,7 +54,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 5.1.6
+* Contact Form 7 - 5.1
 
 ## Installation ##
 
@@ -140,6 +140,8 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 * Added 'ctz_hook_url' filter to change webhook URL
 
+Props to @shoreline-chrism
+
 ### 2.1.2 ###
 
 * Fix checkboxes.
@@ -204,6 +206,6 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 ## Upgrade Notice ##
 
-### 2.1.2 ###
+### 2.1.4 ###
 
-Fix checkboxes.
+Added some cool stuff to developers.
