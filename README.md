@@ -84,7 +84,7 @@ Yes. We support WordPress 5+ and CF7 too.
 
 ### Does it works for forms sent out of CF7? ###
 
-Nope. The intention here is to integrate CF7 to Webhook (and another webhooks).
+Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
 
 ### Can I use it without Zapier? ###
 
@@ -92,7 +92,7 @@ Yep. We are creating a integration to Zapier webhook, but you can insert any URL
 
 ### My sent data is empty ###
 
-Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-webhook/) to get help.
+Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
 
 ### Who are the developers? ###
 
