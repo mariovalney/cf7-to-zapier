@@ -115,6 +115,12 @@ It's like the "class" option: `[text your-field class:form-control id:field-id w
 
 This will create a text field with name "your-field", class "form-control", id "field-id" and will be sent to webhook with key "webhook-key".
 
+### How I can get the free text value? ###
+
+We will replace the value for last option (which is the free_text input) with the value.
+
+This way your webhook will receive the free text value and other options if you allow it (like in checkbox).
+
 ### Can I help you? ###
 
 Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
@@ -135,6 +141,10 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 
 ## Changelog ##
+
+### 2.2.0 ###
+
+* Support to free_text option on radio and checkboxes.
 
 ### 2.1.4 ###
 
@@ -206,6 +216,9 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 2.1.4 ###
+### 2.2.0 ###
 
-Added some cool stuff to developers.
+Support to free_text option on radio and checkboxes.
+
+Now we will replace the value for last option with the "free_text" value.
+So we can support the radio "others" and still receive other selected options for checkboxes.

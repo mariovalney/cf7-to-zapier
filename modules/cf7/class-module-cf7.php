@@ -316,11 +316,32 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     }
                 }
 
-                // Support to option
-                $key = $tag->name;
-                $webhook_key = $tag->get_option('webhook');
+                // Support to Free Text on checkbox and radio
+                if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
+                    $free_text_label = end( $tag->values );
+                    $free_text_name  = sprintf( '_wpcf7_%1$s_free_text_%2$s', $tag->basetype, $tag->name );
+                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? $_POST[ $free_text_name ] : '';
 
-                if (! empty($webhook_key) && ! empty($webhook_key[0])) {
+                    if ( is_array( $value ) ) {
+                        foreach ( $value as $key => $v ) {
+                            if ( $v !== $free_text_label ) {
+                                continue;
+                            }
+
+                            $value[ $key ] = stripslashes( $free_text_value );
+                        }
+                    }
+
+                    if ( is_string( $value ) && $value === $free_text_label ) {
+                        $value = stripslashes( $free_text_value );
+                    }
+                }
+
+                // Support to "webhook" option (rename field value)
+                $key = $tag->name;
+                $webhook_key = $tag->get_option( 'webhook' );
+
+                if ( ! empty( $webhook_key ) && ! empty( $webhook_key[0] ) ) {
                     $key = $webhook_key[0];
                 }
 
