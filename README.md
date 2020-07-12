@@ -3,7 +3,7 @@
 **Donate link:** https://github.com/Vizir/cf7-to-zapier  
 **Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney  
 **Requires at least:** 4.7  
-**Tested up to:** 5.3.2  
+**Tested up to:** 5.4.2  
 **Stable tag:** trunk  
 **Requires PHP:** 7.0  
 **License:** GPLv2 or later  
