@@ -319,7 +319,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 // Support to Free Text on checkbox and radio
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
                     $free_text_label = end( $tag->values );
-                    $free_text_name  = sprintf( '_wpcf7_%1$s_free_text_%2$s', $tag->basetype, $tag->name );
+                    $free_text_name  = $tag->name . '_free_text';
                     $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? $_POST[ $free_text_name ] : '';
 
                     if ( is_array( $value ) ) {
