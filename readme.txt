@@ -138,6 +138,8 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 * Support to CF7 5.2 changing free_text input name.
 
+Props to @brunojlt
+
 = 2.2.0 =
 
 * Support to free_text option on radio and checkboxes.
