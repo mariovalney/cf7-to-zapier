@@ -54,7 +54,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.2
+* Contact Form 7 - 5.2.1
 
 == Installation ==
 
@@ -134,9 +134,13 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 == Changelog ==
 
+= 2.2.2 =
+
+* Support to CF7 5.2.1 changing 'wpcf7_special_mail_tags' filter.
+
 = 2.2.1 =
 
-* Support to CF7 5.2 changing free_text input name.
+* Support to CF7 5.2 changing 'free_text' input name.
 
 Props to @brunojlt
 
@@ -214,11 +218,12 @@ Props to @shoreline-chrism
 
 == Upgrade Notice ==
 
-= 2.2.1 =
+= 2.2.2 =
 
 Support to free_text option on radio and checkboxes.
 
 Now we will replace the value for last option with the "free_text" value.
 So we can support the radio "others" and still receive other selected options for checkboxes.
 
-On 2.2.1: support to CF7 5.2 changing free_text input name.
+On 2.2.1: support to CF7 5.2 changing 'free_text' input name.
+On 2.2.2: Support to CF7 5.2.1 changing 'wpcf7_special_mail_tags' filter.
