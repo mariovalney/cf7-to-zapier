@@ -375,7 +375,9 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             foreach ( $tags as $key => $tag ) {
-                $value = apply_filters( 'wpcf7_special_mail_tags', '', $tag, false );
+                $mail_tag = new WPCF7_MailTag( sprintf( '[%s]', $tag ), $tag, '' );
+                $value = apply_filters( 'wpcf7_special_mail_tags', '', $tag, false, $mail_tag );
+
                 $data[ $key ] = $value;
             }
 
