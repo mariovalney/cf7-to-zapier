@@ -259,7 +259,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             // Submission
             $submission = WPCF7_Submission::get_instance();
-            $files = ( ! empty( $submission ) ) ? $submission->uploaded_files() : [];
+            $uploaded_files = ( ! empty( $submission ) ) ? $submission->uploaded_files() : [];
 
             // Upload Info
             $wp_upload_dir = wp_get_upload_dir();
@@ -285,19 +285,31 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 }
 
                 // Files
-                if ( $tag->basetype === 'file' && ! empty( $files[ $tag->name ] ) ) {
-                    $file = $files[ $tag->name ];
+                if ( $tag->basetype === 'file' && ! empty( $uploaded_files[ $tag->name ] ) ) {
+                    $files = $uploaded_files[ $tag->name ];
 
-                    wp_mkdir_p( $upload_dir );
-                    if ( ! copy( $file, $upload_dir . '/' . basename( $file ) ) ) {
-                        $submission = WPCF7_Submission::get_instance();
-                        $submission->set_status( 'mail_failed' );
-                        $submission->set_response( $contact_form->message( 'upload_failed' ) );
+                    $copied_files = [];
+                    foreach ( (array) $files as $file ) {
+                        wp_mkdir_p( $upload_dir );
 
-                        continue;
+                        $filename = wp_unique_filename( $upload_dir, basename( $file ) );
+
+                        if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
+                            $submission = WPCF7_Submission::get_instance();
+                            $submission->set_status( 'mail_failed' );
+                            $submission->set_response( $contact_form->message( 'upload_failed' ) );
+
+                            continue;
+                        }
+
+                        $copied_files[] = $upload_url . '/' . $filename;
                     }
 
-                    $value = $upload_url . '/' . basename( $file );
+                    $value = $copied_files;
+
+                    if (count($value) === 1) {
+                        $value = $value[0];
+                    }
                 }
 
                 // Support to Pipes
