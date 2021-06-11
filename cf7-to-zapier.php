@@ -106,7 +106,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @access   private
          */
         private function include_functions_file() {
-            require_once plugin_dir_path( __FILE__ ) . 'includes/functions-core.php';
+            require_once plugin_dir_path( __FILE__ ) . 'includes/functions-debug.php';
         }
 
         /**
