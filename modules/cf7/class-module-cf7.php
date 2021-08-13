@@ -264,6 +264,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             // Upload Info
             $wp_upload_dir = wp_get_upload_dir();
             $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . uniqid();
+
             $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
             $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;
 
@@ -292,7 +293,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     foreach ( (array) $files as $file ) {
                         wp_mkdir_p( $upload_dir );
 
-                        $filename = wp_unique_filename( $upload_dir, basename( $file ) );
+                        $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
 
                         if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
                             $submission = WPCF7_Submission::get_instance();
