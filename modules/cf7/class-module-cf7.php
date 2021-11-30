@@ -55,9 +55,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         private function define_hooks() {
             $this->core->add_filter( 'wpcf7_editor_panels', [ $this, 'wpcf7_editor_panels' ] );
             $this->core->add_action( 'wpcf7_save_contact_form', [ $this, 'wpcf7_save_contact_form' ] );
-            $this->core->add_filter( 'wpcf7_contact_form_properties', [ $this, 'wpcf7_contact_form_properties' ], 10, 2 );
             $this->core->add_filter( 'wpcf7_skip_mail', [ $this, 'wpcf7_skip_mail' ], 10, 2 );
             $this->core->add_action( 'wpcf7_mail_sent', [ $this, 'wpcf7_mail_sent' ], 10, 1 );
+
+            $this->core->add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
+            $this->core->add_filter( 'wpcf7_pre_construct_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
 
             // Admin Hooks
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );

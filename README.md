@@ -3,8 +3,8 @@
 **Donate link:** https://github.com/Vizir/cf7-to-zapier  
 **Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney  
 **Requires at least:** 4.7  
-**Tested up to:** 5.7  
-**Stable tag:** 2.2.3  
+**Tested up to:** 5.8  
+**Stable tag:** trunk  
 **Requires PHP:** 7.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -54,7 +54,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 5.2.1
+* Contact Form 7 - 5.5.3
 
 ## Installation ##
 
@@ -141,6 +141,10 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 
 
 ## Changelog ##
+
+### 2.2.4 ###
+
+* Support to CF7 new way to load properties.
 
 ### 2.2.3 ###
 
