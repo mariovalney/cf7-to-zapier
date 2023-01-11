@@ -1,9 +1,10 @@
 === CF7 to Webhook ===
-Contributors: mariovalney, vizir
-Donate link: https://github.com/Vizir/cf7-to-zapier
-Tags: cf7, contact form, zapier, integration, contact form 7, webhook, vizir, mariovalney
+
+Contributors: mariovalneys
+Donate link: https://github.com/mariovalney/cf7-to-zapier
+Tags: cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney
 Requires at least: 4.7
-Tested up to: 5.8
+Tested up to: 6.1
 Stable tag: trunk
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -54,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.5.3
+* Contact Form 7 - 5.7.2
 
 == Installation ==
 
@@ -96,8 +97,9 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 
 = Who are the developers? =
 
-* [Vizir](http://vizir.com.br/en) is a Brazilian software studio.
-* [Mário Valney](https://mariovalney.com/me) is a Brazilian developer who works at Vizir Software Studio and integrates the [WordPress community](https://profiles.wordpress.org/mariovalney).
+[Mário Valney](https://mariovalney.com/me)
+
+Brazilian developer who is part of [WordPress community](https://profiles.wordpress.org/mariovalney).
 
 = How can I show webhook errors on form submit? =
 
@@ -123,7 +125,7 @@ This way your webhook will receive the free text value and other options if you 
 
 = Can I help you? =
 
-Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
+Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 
 == Screenshots ==
 
@@ -133,6 +135,11 @@ Yes! Visit [GitHub repository](https://github.com/Vizir/cf7-to-zapier).
 4. Zapier Step 3 - Webhook URL (waiting for first data)
 
 == Changelog ==
+
+= 2.2.5 =
+
+* Some minor adjustments.
+* Tested against new CF7 and WP versions.
 
 = 2.2.4 =
 

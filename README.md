@@ -1,9 +1,10 @@
 # CF7 to Webhook #
-**Contributors:** mariovalney
-**Donate link:** https://github.com/mariovalney/cf7-to-zapier
-**Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney
+
+**Contributors:** mariovalneys  
+**Donate link:** https://github.com/mariovalney/cf7-to-zapier  
+**Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney  
 **Requires at least:** 4.7  
-**Tested up to:** 6.1
+**Tested up to:** 6.1  
 **Stable tag:** trunk  
 **Requires PHP:** 7.0  
 **License:** GPLv2 or later  
@@ -94,7 +95,7 @@ Yep. We are creating a integration to Zapier webhook, but you can insert any URL
 
 Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
 
-### Who is the developer? ###
+### Who are the developers? ###
 
 [Mário Valney](https://mariovalney.com/me)
 
