@@ -10,6 +10,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 $activate = '0';
 $hook_url = '';
 $send_mail = '0';
+$base64_encode_files = '0'; //in seconds
 $special_mail_tags = '';
 
 if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
@@ -27,6 +28,9 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         $send_mail = $properties['send_mail'];
     }
 
+    if ( isset( $properties['base64_encode_files'] ) ) {
+        $base64_encode_files = $properties['base64_encode_files'];
+    }
     if ( isset( $properties['special_mail_tags'] ) ) {
         $special_mail_tags = $properties['special_mail_tags'];
     }
@@ -92,6 +96,21 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                         <label for="ctz-webhook-send-mail">
                             <input type="checkbox" id="ctz-webhook-send-mail" name="ctz-webhook-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
                             <?php _e( 'Send CF7 mail as usually', CFTZ_TEXTDOMAIN ) ?>
+                        </label>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label>
+                        <?php _e( 'Base64Encode Files', CFTZ_TEXTDOMAIN ) ?>
+                    </label>
+                </th>
+                <td>
+                    <p>
+                        <label for="ctz-webhook-base64encode-files">
+                            <input type="checkbox" id="ctz-webhook-base64encode-files" name="ctz-webhook-base64encode-files" value="1" <?php checked( $base64_encode_files, "1" ) ?>>
+                            <?php _e( 'Sends file inputs as base64encoded urls rather than uploading into wordpress and generating fileurl', CFTZ_TEXTDOMAIN ) ?>
                         </label>
                     </p>
                 </td>
