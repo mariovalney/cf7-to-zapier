@@ -150,6 +150,12 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 $new_properties[ 'send_mail' ] = '0';
             }
 
+            if ( isset( $_POST['ctz-webhook-base64encode-files'] ) && $_POST['ctz-webhook-base64encode-files'] == '1' ) {
+                $new_properties[ 'base64_encode_files' ] = '1';
+            } else {
+                $new_properties[ 'base64_encode_files' ] = '0';
+            }
+
             if ( isset( $_POST['ctz-special-mail-tags'] ) ) {
                 $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['ctz-special-mail-tags'] );
             }
@@ -173,6 +179,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'activate'          => '0',
                     'hook_url'          => '',
                     'send_mail'         => '0',
+                    'base64_encode_files' => '0',
                     'special_mail_tags' => '',
                 );
             }
@@ -257,6 +264,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    obj                $contact_form   ContactForm Obj
          */
         private function get_data_from_contact_form( $contact_form ) {
+            $properties = $contact_form->prop( self::METADATA );
             $data = [];
 
             // Submission
@@ -296,16 +304,29 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                         wp_mkdir_p( $upload_dir );
 
                         $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
+                        
+                        if($properties['base64_encode_files'] === '1') {
+                            
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $file_content_type = finfo_file($finfo, $file);
+                            finfo_close($finfo);
+                            
+                            $file_content = file_get_contents($file);
+                            $file__base64_content = base64_encode($file_content);
+                            $file_content = $file_content_type . ';base64,' . $file__base64_content;
 
-                        if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
-                            $submission = WPCF7_Submission::get_instance();
-                            $submission->set_status( 'mail_failed' );
-                            $submission->set_response( $contact_form->message( 'upload_failed' ) );
+                            $copied_files[] = $file_content;
 
-                            continue;
+                        } else{
+                                if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
+                                $submission = WPCF7_Submission::get_instance();
+                                $submission->set_status( 'mail_failed' );
+                                $submission->set_response( $contact_form->message( 'upload_failed' ) );
+                                
+                                continue;
+                            }
+                            $copied_files[] = $upload_url . '/' . $filename;
                         }
-
-                        $copied_files[] = $upload_url . '/' . $filename;
                     }
 
                     $value = $copied_files;
@@ -362,6 +383,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
                 $data[ $key ] = $value;
             }
+            //add contact form id to data
+            $data['contact_form_id'] = $contact_form->id();
 
             /**
              * You can filter data retrieved from Contact Form tags with 'ctz_get_data_from_contact_form'
