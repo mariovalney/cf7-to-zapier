@@ -306,9 +306,17 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                         $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
                         
                         if($properties['base64_encode_files'] === '1') {
+                            
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $file_content_type = finfo_file($finfo, $file);
+                            finfo_close($finfo);
+                            
                             $file_content = file_get_contents($file);
-                            $file_content = base64_encode($file_content);
-                            $copied_files[] = json_encode(array('data' => $file_content, 'filename' => $filename));
+                            $file__base64_content = base64_encode($file_content);
+                            $file_content = $file_content_type . ';base64,' . $file__base64_content;
+
+                            $copied_files[] = $file_content;
+
                         } else{
                                 if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
                                 $submission = WPCF7_Submission::get_instance();
