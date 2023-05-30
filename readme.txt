@@ -1,10 +1,10 @@
 === CF7 to Webhook ===
 
-Contributors: mariovalneys
+Contributors: mariovalney
 Donate link: https://github.com/mariovalney/cf7-to-zapier
 Tags: cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney
 Requires at least: 4.7
-Tested up to: 6.1
+Tested up to: 6.2
 Stable tag: trunk
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -55,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.7.2
+* Contact Form 7 - 5.7.6
 
 == Installation ==
 
@@ -135,6 +135,13 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 4. Zapier Step 3 - Webhook URL (waiting for first data)
 
 == Changelog ==
+
+= 2.3.0 =
+
+* Added Custom Header option.
+* Added 'ctz_ignore_default_webhook' to allow ignore core submit.
+* Added more parameters to 'ctz_trigger_webhook' action.
+* Added more parameters to 'ctz_post_request_args' action.
 
 = 2.2.5 =
 

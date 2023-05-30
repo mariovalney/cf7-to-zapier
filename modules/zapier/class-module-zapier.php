@@ -46,7 +46,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          * @access   private
          */
         private function define_hooks() {
-            $this->core->add_action( 'ctz_trigger_webhook', array( $this, 'pull_the_trigger' ), 10, 2 );
+            $this->core->add_action( 'ctz_trigger_webhook', array( $this, 'pull_the_trigger' ), 10, 5 );
         }
 
         /**
@@ -55,20 +55,25 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          * @since    1.0.0
          * @access   private
          */
-        public function pull_the_trigger( array $data, $hook_url ) {
-            $content_type = 'application/json';
-
-            $blog_charset = get_option( 'blog_charset' );
-            if ( ! empty( $blog_charset ) ) {
-                $content_type .= '; charset=' . get_option( 'blog_charset' );
+        public function pull_the_trigger( array $data, $hook_url, $properties, $contact_form ) {
+            /**
+             * Filter: ctz_ignore_default_webhook
+             *
+             * The 'ctz_ignore_default_webhook' filter can be used to ignore
+             * core request, if you want to trigger your own request.
+             *
+             * add_filter( 'ctz_ignore_default_webhook', '__return_true' );
+             *
+             * @since    2.3.0
+             */
+            if (apply_filters( 'ctz_ignore_default_webhook', false )) {
+                return;
             }
 
             $args = array(
                 'method'    => 'POST',
                 'body'      => json_encode( $data ),
-                'headers'   => array(
-                    'Content-Type'  => $content_type,
-                ),
+                'headers'   => $this->create_headers($properties['custom_headers'] ?? ''),
             );
 
             /**
@@ -89,7 +94,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    1.1.0
              */
-            $result = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
+            $result = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form ) );
 
             // If result is a WP Error, throw a Exception woth the message.
             if ( is_wp_error( $result ) ) {
@@ -114,6 +119,31 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          */
         public function run() {
             $this->define_hooks();
+        }
+
+        /**
+         * Get headers to request.
+         *
+         * @since    2.3.0
+         */
+        public function create_headers($custom) {
+            $headers = array( 'Content-Type'  => 'application/json' );
+            $blog_charset = get_option( 'blog_charset' );
+            if ( ! empty( $blog_charset ) ) {
+                $headers['Content-Type'] .= '; charset=' . get_option( 'blog_charset' );
+            }
+
+            $custom = explode("\n", $custom);
+            foreach ($custom as $header) {
+                $header = explode(':', $header, 2);
+                $header = array_map('trim', $header);
+
+                if (count($header) === 2) {
+                    $headers[ $header[0] ] = $header[1];
+                }
+            }
+
+            return $headers;
         }
     }
 }

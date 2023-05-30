@@ -11,6 +11,7 @@ $activate = '0';
 $hook_url = '';
 $send_mail = '0';
 $special_mail_tags = '';
+$custom_headers = '';
 
 if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     $properties = $contactform->prop( CFTZ_Module_CF7::METADATA );
@@ -29,6 +30,10 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
     if ( isset( $properties['special_mail_tags'] ) ) {
         $special_mail_tags = $properties['special_mail_tags'];
+    }
+
+    if ( isset( $properties['custom_headers'] ) ) {
+        $custom_headers = $properties['custom_headers'];
     }
 }
 
@@ -129,6 +134,33 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
             printf(
                 __( 'Or add a second word to pass as key to Webhook: %s', CFTZ_TEXTDOMAIN ),
                 '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title title]</span>'
+            );
+        ?></p>
+    </div>
+</fieldset>
+
+<h2>
+    <?php _e( 'Custom Headers', CFTZ_TEXTDOMAIN ) ?>
+</h2>
+
+<fieldset>
+    <legend>
+        <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request.', 'The URL should point to HTTP Headers documentation in your language.', CFTZ_TEXTDOMAIN ); ?>
+    </legend>
+
+    <div style="margin: 20px 0;">
+        <label for="ctz-custom-headers">
+            <?php
+                $custom_headers = esc_textarea( $custom_headers );
+                $rows = ( (int) substr_count( $custom_headers, "\n" ) ) + 2;
+                $rows = max( $rows, 4 );
+            ?>
+            <textarea id="ctz-custom-headers" name="ctz-custom-headers" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $custom_headers; ?></textarea>
+        </label>
+        <p class="description"><?php
+            printf(
+                __( 'One header by line, separated by colon. Example: %s', CFTZ_TEXTDOMAIN ),
+                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
             );
         ?></p>
     </div>

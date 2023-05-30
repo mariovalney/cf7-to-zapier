@@ -154,6 +154,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['ctz-special-mail-tags'] );
             }
 
+            if ( isset( $_POST['ctz-custom-headers'] ) ) {
+                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( $_POST['ctz-custom-headers'] );
+            }
+
             $properties = $contact_form->get_properties();
             $old_properties = $properties[ self::METADATA ];
             $properties[ self::METADATA ] = array_merge( $old_properties, $new_properties );
@@ -174,6 +178,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'hook_url'          => '',
                     'send_mail'         => '0',
                     'special_mail_tags' => '',
+                    'custom_headers'    => '',
                 );
             }
 
@@ -225,7 +230,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                  *
                  * @since  1.0.0
                  */
-                do_action( 'ctz_trigger_webhook', $data, $properties['hook_url'] );
+                do_action( 'ctz_trigger_webhook', $data, $properties['hook_url'], $properties, $contact_form );
             } catch (Exception $exception) {
                 /**
                  * Filter: ctz_trigger_webhook_error_message
