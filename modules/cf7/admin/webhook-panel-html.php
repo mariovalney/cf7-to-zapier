@@ -83,6 +83,10 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                         <p class="description" style="color: #D00;">
                             <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
                         </p>
+                    <?php else: ?>
+                        <p class="description">
+                            <?php _e( 'You can add multiple webhook: one per line.' ); ?>
+                        </p>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -111,7 +115,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
 <fieldset>
     <legend>
-        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', CFTZ_TEXTDOMAIN ); ?>
+        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> or <a href="https://contactform7.com/selectable-recipient-with-pipes/" target="_blank">labels from selectable with pipes</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', CFTZ_TEXTDOMAIN ); ?>
     </legend>
 
     <div style="margin: 20px 0;">
@@ -166,46 +170,62 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     </div>
 </fieldset>
 
+<hr style="margin: 10px 0 30px 0;">
+
+<h2>
+    <?php _e( 'URL Params', CFTZ_TEXTDOMAIN ) ?>
+</h2>
+
+<fieldset>
+    <legend>
+        <?php echo _x( 'You can add URL parameters using <a href="https://contactform7.com/hidden-field/" target="_blank">Hidden Fields</a> with <a href="https://contactform7.com/getting-default-values-from-the-context/" target="_blank">default values</a> in your form.', 'The URL should point to CF7 documentation.', CFTZ_TEXTDOMAIN ); ?>
+    </legend>
+
+    <div style="margin: 20px 0;">
+        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;">To get utm_source: https://example.com/?utm_source=example
+Use this shortcode: [hidden utm_source default:get]</pre>
+    </div>
+</fieldset>
+
 <h2>
     <?php _e( 'Data sent to Webhook', CFTZ_TEXTDOMAIN ) ?>
 </h2>
 
-<p><?php _e( 'We will send your form data as below:', CFTZ_TEXTDOMAIN ) ?></p>
+<fieldset>
+    <legend>
+        <?php _e( 'We will send your form data as below:', CFTZ_TEXTDOMAIN ) ?>
+    </legend>
 
-<?php
-    $sent_data = array();
+    <div style="margin: 20px 0;">
+        <?php
+            $sent_data = array();
 
-    // Special Tags
-    $special_tags = array();
-    $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
-    $tags = array_keys( $special_tags );
+            // Special Tags
+            $special_tags = array();
+            $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
+            $tags = array_keys( $special_tags );
 
-    // Form Tags
-    $form_tags = $contactform->scan_form_tags();
-    foreach ( $form_tags as $tag ) {
-        $key = $tag->get_option('webhook');
-        if (! empty($key) && ! empty($key[0])) {
-            $tags[] = $key[0];
-            continue;
-        }
+            // Form Tags
+            $form_tags = $contactform->scan_form_tags();
+            foreach ( $form_tags as $tag ) {
+                $key = $tag->get_option('webhook');
+                if (! empty($key) && ! empty($key[0])) {
+                    $tags[] = $key[0];
+                    continue;
+                }
 
-        $tags[] = $tag->name;
-    }
+                $tags[] = $tag->name;
+            }
 
-    foreach ( $tags as $tag ) {
-        if ( empty( $tag ) ) continue;
+            foreach ( $tags as $tag ) {
+                if ( empty( $tag ) ) continue;
 
-        $sent_data[ $tag ] = '??????';
-    }
-?>
+                $sent_data[ $tag ] = '??????';
+            }
+        ?>
 
-<pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
-    echo json_encode( $sent_data, JSON_PRETTY_PRINT );
-?></pre>
-
-<p class="description"><?php
-    printf(
-        __( 'You can add URL parameters into form using this shortcode: %s.', CFTZ_TEXTDOMAIN ),
-        '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[hidden example_get default:get]</span>'
-    );
-?></p>
+        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
+            echo json_encode( $sent_data, JSON_PRETTY_PRINT );
+        ?></pre>
+    </div>
+</fieldset>
