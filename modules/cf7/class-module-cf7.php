@@ -419,8 +419,15 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             foreach ( $tags as $key => $tag ) {
                 $mail_tag = new WPCF7_MailTag( sprintf( '[%s]', $tag ), $tag, '' );
-                $value = apply_filters( 'wpcf7_special_mail_tags', '', $tag, false, $mail_tag );
+                $value = '';
 
+                // Support to "_raw_" values. @see WPCF7_MailTag::__construct()
+                if ( $mail_tag->get_option( 'do_not_heat' ) ) {
+                    $value = apply_filters( 'wpcf7_special_mail_tags', '', $mail_tag->tag_name(), false, $mail_tag );
+                    $value = $_POST[ $mail_tag->field_name() ] ?? '';
+                }
+
+                $value = apply_filters( 'wpcf7_special_mail_tags', $value, $mail_tag->tag_name(), false, $mail_tag );
                 $data[ $key ] = $value;
             }
 

@@ -4,9 +4,9 @@
 **Donate link:** https://github.com/mariovalney/cf7-to-zapier  
 **Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney  
 **Requires at least:** 4.7  
-**Tested up to:** 6.4
+**Tested up to:** 6.4  
 **Stable tag:** trunk  
-**Requires PHP:** 7.4
+**Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -152,6 +152,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 
 ### 2.4.0 ###
 
+* Added support to "_raw_" values (label value in [PIPES](https://contactform7.com/selectable-recipient-with-pipes/)).
 * Added support to multiple webhook URLs.
 * Added 'ctz_trigger_webhook_errors' action to allow trigger submission error after ignoring them.
 * Tested against new CF7 and WP versions.
@@ -261,12 +262,13 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 2.2.2 ###
+### 2.4.0 ###
 
-Support to free_text option on radio and checkboxes.
+Added support to multiple webhook URLs!
+You can check details [in this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/).
 
-Now we will replace the value for last option with the "free_text" value.
-So we can support the radio "others" and still receive other selected options for checkboxes.
+More changes:
 
-On 2.2.1: support to CF7 5.2 changing 'free_text' input name.
-On 2.2.2: Support to CF7 5.2.1 changing 'wpcf7_special_mail_tags' filter.
+* Support to "_raw_" values (label value in [PIPES](https://contactform7.com/selectable-recipient-with-pipes/)).
+* Added 'ctz_trigger_webhook_errors' action to allow trigger submission error after ignoring them.
+* Tested against new CF7 and WP versions.
