@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
  */
 
 $activate = '0';
-$hook_url = '';
+$hook_url = [];
 $send_mail = '0';
 $special_mail_tags = '';
 $custom_headers = '';
@@ -21,7 +21,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     }
 
     if ( isset( $properties['hook_url'] ) ) {
-        $hook_url = $properties['hook_url'];
+        $hook_url = (array) $properties['hook_url'];
     }
 
     if ( isset( $properties['send_mail'] ) ) {
@@ -76,7 +76,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 <td>
                     <p>
                         <label for="ctz-webhook-hook-url">
-                            <input type="url" id="ctz-webhook-hook-url" name="ctz-webhook-hook-url" value="<?php echo $hook_url; ?>" style="width: 100%;">
+                            <textarea id="ctz-webhook-hook-url" name="ctz-webhook-hook-url" rows="4" style="width: 100%;"><?php echo esc_textarea( implode( PHP_EOL, $hook_url ) ) ?></textarea>
                         </label>
                     </p>
                     <?php if ( $activate && empty( $hook_url ) ): ?>

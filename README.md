@@ -4,13 +4,13 @@
 **Donate link:** https://github.com/mariovalney/cf7-to-zapier  
 **Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney  
 **Requires at least:** 4.7  
-**Tested up to:** 6.2  
+**Tested up to:** 6.4
 **Stable tag:** trunk  
-**Requires PHP:** 7.0  
+**Requires PHP:** 7.4
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
-Use Contact Form 7 as a trigger to any webhook like Zapier!
+Use Contact Form 7 as a trigger to any webhook!
 
 ## Description ##
 
@@ -55,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 5.7.6
+* Contact Form 7 - 5.8.1
 
 ## Installation ##
 
@@ -95,11 +95,11 @@ Yep. We are creating a integration to Zapier webhook, but you can insert any URL
 
 Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
 
-### Who are the developers? ###
+### How can I submit one form to multiple webhooks? ###
 
-[Mário Valney](https://mariovalney.com/me)
+Just add one webhook per line in "Webhook URL" settings.
 
-Brazilian developer who is part of [WordPress community](https://profiles.wordpress.org/mariovalney).
+Please, read [this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/) for more information.
 
 ### How can I show webhook errors on form submit? ###
 
@@ -123,6 +123,12 @@ We will replace the value for last option (which is the free_text input) with th
 
 This way your webhook will receive the free text value and other options if you allow it (like in checkbox).
 
+### Who is the developer? ###
+
+[Mário Valney](https://mariovalney.com/me)
+
+Brazilian developer who is part of [WordPress community](https://profiles.wordpress.org/mariovalney).
+
 ### Can I help you? ###
 
 Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
@@ -143,6 +149,12 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 
 
 ## Changelog ##
+
+### 2.4.0 ###
+
+* Added support to multiple webhook URLs.
+* Added 'ctz_trigger_webhook_errors' action to allow trigger submission error after ignoring them.
+* Tested against new CF7 and WP versions.
 
 ### 2.3.0 ###
 

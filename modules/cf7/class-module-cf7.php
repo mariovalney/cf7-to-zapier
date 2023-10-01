@@ -141,7 +141,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             if ( isset( $_POST['ctz-webhook-hook-url'] ) ) {
-                $new_properties[ 'hook_url' ] = esc_url_raw( $_POST['ctz-webhook-hook-url'] );
+                $hook_urls = array_map( 'esc_url_raw', explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) );
+                $new_properties[ 'hook_url' ] = $hook_urls;
             }
 
             if ( isset( $_POST['ctz-webhook-send-mail'] ) && $_POST['ctz-webhook-send-mail'] == '1' ) {
@@ -175,7 +176,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             if ( ! isset( $properties[ self::METADATA ] ) ) {
                 $properties[ self::METADATA ] = array(
                     'activate'          => '0',
-                    'hook_url'          => '',
+                    'hook_url'          => [],
                     'send_mail'         => '0',
                     'special_mail_tags' => '',
                     'custom_headers'    => '',
@@ -219,40 +220,62 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $cf_data = $this->get_data_from_contact_form( $contact_form );
 
             $data = array_merge( $smt_data, $cf_data );
+            $errors = [];
 
-            // Try/Catch to support exception on request
-            try {
-                /**
-                 * Action: ctz_trigger_webhook
-                 *
-                 * You can add your own actions to process the hook.
-                 * We send it using CFTZ_Module_Zapier::pull_the_trigger().
-                 *
-                 * @since  1.0.0
-                 */
-                do_action( 'ctz_trigger_webhook', $data, $properties['hook_url'], $properties, $contact_form );
-            } catch (Exception $exception) {
-                /**
-                 * Filter: ctz_trigger_webhook_error_message
-                 *
-                 * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
-                 * Default is CF7 error message, but you can access exception to create your own.
-                 *
-                 * You can ignore errors returning false:
-                 * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
-                 *
-                 * @since 1.4.0
-                 */
-                $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
+            foreach ( (array) $properties['hook_url'] as $hook_url ) {
+                // Try/Catch to support exception on request
+                try {
+                    /**
+                     * Action: ctz_trigger_webhook
+                     *
+                     * You can add your own actions to process the hook.
+                     * We send it using CFTZ_Module_Zapier::pull_the_trigger().
+                     *
+                     * @since  1.0.0
+                     */
+                    do_action( 'ctz_trigger_webhook', $data, $hook_url, $properties, $contact_form );
+                } catch (Exception $exception) {
+                    $errors[] = array(
+                        'webhook'   => $hook_url,
+                        'exception' => $exception,
+                    );
 
-                // If empty ignore
-                if ( empty( $error_message ) ) return;
+                    /**
+                     * Filter: ctz_trigger_webhook_error_message
+                     *
+                     * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
+                     * Default is CF7 error message, but you can access exception to create your own.
+                     *
+                     * You can ignore errors returning false:
+                     * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
+                     *
+                     * @since 1.4.0
+                     */
+                    $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
 
-                // Set error and send error message
-                $submission = WPCF7_Submission::get_instance();
-                $submission->set_status( 'mail_failed' );
-                $submission->set_response( $error_message );
+                    // If empty ignore
+                    if ( empty( $error_message ) ) continue;
+
+                    // Submission error
+                    $submission = WPCF7_Submission::get_instance();
+                    $submission->set_status( 'mail_failed' );
+                    $submission->set_response( $error_message );
+                    break;
+                }
             }
+
+            // If empty ignore
+            if ( empty( $errors ) ) return;
+
+            /**
+             * Action: ctz_trigger_webhook_errors
+             *
+             * If we have errors, we skiped them in 'ctz_trigger_webhook_error_message' filter.
+             * You can now submit your own error.
+             *
+             * @since  2.4.0
+             */
+            do_action( 'ctz_trigger_webhook_errors', $errors, $contact_form );
         }
 
         /**
