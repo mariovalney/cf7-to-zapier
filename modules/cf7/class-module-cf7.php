@@ -141,7 +141,21 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             if ( isset( $_POST['ctz-webhook-hook-url'] ) ) {
-                $hook_urls = array_map( 'esc_url_raw', explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) );
+                $hook_urls = array_map( function( $hook_url ) {
+                    $placeholders = self::get_hook_url_placeholders( $hook_url );
+
+                    foreach ( $placeholders as $key => $placeholder ) {
+                        $hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
+                    }
+
+                    $hook_url = esc_url_raw( $hook_url );
+
+                    foreach ( $placeholders as $key => $placeholder ) {
+                        $hook_url = str_replace( '_____' . $key . '_____', $placeholder, $hook_url );
+                    }
+
+                    return $hook_url;
+                }, explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) );
                 $new_properties[ 'hook_url' ] = $hook_urls;
             }
 
@@ -225,6 +239,30 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             foreach ( (array) $properties['hook_url'] as $hook_url ) {
                 // Try/Catch to support exception on request
                 try {
+                    $placeholders = CFTZ_Module_CF7::get_hook_url_placeholders( $hook_url );
+                    foreach ( $placeholders as $key => $placeholder ) {
+                        $value = ( $data[ $key ] ?? '' );
+                        if ( ! is_scalar( $value ) ) {
+                            $value = implode( '|', $value );
+                        }
+
+                        /**
+                         * Filter: ctz_hook_url_placeholder
+                         *
+                         * You can change the placeholder replacement in hook_url;
+                         *
+                         * @param $value        string      Urlencoded replace value.
+                         * @param $placeholder  string      The placeholder to be replaced [$key].
+                         * @param $key          string      The key of placeholder.
+                         * @param $data         string      Data to be sent to webhook.
+                         *
+                         * @since 3.0.0
+                         */
+                        $value =  apply_filters( 'ctz_hook_url_placeholder', urlencode( $value ), $placeholder, $key, $data );
+
+                        $hook_url = str_replace( $placeholder, $value, $hook_url );
+                    }
+
                     /**
                      * Action: ctz_trigger_webhook
                      *
@@ -487,6 +525,26 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             return $data;
+        }
+
+        /**
+         * List placeholders from hook_url
+         *
+         * @since    3.0.0
+         * @param    string     $hook_url
+         * @return   array      $placeholders
+         */
+        public static function get_hook_url_placeholders( $hook_url ) {
+            $placeholders = [];
+
+            preg_match_all( '/\[{1}[^\[\]]+\]{1}/', $hook_url, $matches );
+
+            foreach ( $matches[0] as $placeholder ) {
+                $placeholder = substr( $placeholder, 1, -1 );
+                $placeholders[ $placeholder ] = '[' . $placeholder . ']';
+            }
+
+            return $placeholders;
         }
 
         /**

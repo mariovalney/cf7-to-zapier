@@ -55,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.8.1
+* Contact Form 7 - 5.8.6
 
 == Installation ==
 
@@ -141,6 +141,12 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 4. Zapier Step 3 - Webhook URL (waiting for first data)
 
 == Changelog ==
+
+= 3.0.0 =
+
+* New feature: placeholders in webhook URL [read more](https://wordpress.org/support/topic/use-webhook-url-placeholders).
+* Added 'ctz_hook_url_placeholder' filter.
+* Tested against new CF7 and WP versions.
 
 = 2.4.0 =
 
@@ -254,13 +260,12 @@ Props to @shoreline-chrism
 
 == Upgrade Notice ==
 
-= 2.4.0 =
+= 3.0.0 =
 
-Added support to multiple webhook URLs!
-You can check details [in this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/).
+Added support to placeholders in webhook URLs!
+You can check details [in this topic](https://wordpress.org/support/topic/use-webhook-url-placeholders).
 
 More changes:
 
-* Support to "_raw_" values (label value in [PIPES](https://contactform7.com/selectable-recipient-with-pipes/)).
-* Added 'ctz_trigger_webhook_errors' action to allow trigger submission error after ignoring them.
+* Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.

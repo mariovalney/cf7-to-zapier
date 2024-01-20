@@ -84,8 +84,17 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                             <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
                         </p>
                     <?php else: ?>
-                        <p class="description">
-                            <?php _e( 'You can add multiple webhook: one per line.' ); ?>
+                        <p class="description" style="font-size: 13px;">
+                            <?php
+                                _e( 'You can add multiple webhook: one per line' );
+
+                                echo '<br>';
+
+                                printf(
+                                    __( 'And use placeholders to be replaced by form data: %s', CFTZ_TEXTDOMAIN ),
+                                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[your-field]</span>'
+                                );
+                            ?>
                         </p>
                     <?php endif; ?>
                 </td>
