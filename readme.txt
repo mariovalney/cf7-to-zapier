@@ -142,6 +142,10 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier).
 
 == Changelog ==
 
+= 3.0.1 =
+
+* Just some docs.
+
 = 3.0.0 =
 
 * New feature: placeholders in webhook URL [read more](https://wordpress.org/support/topic/use-webhook-url-placeholders).

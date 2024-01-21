@@ -191,8 +191,11 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     </legend>
 
     <div style="margin: 20px 0;">
-        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;">To get utm_source: https://example.com/?utm_source=example
-Use this shortcode: [hidden utm_source default:get]</pre>
+        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
+            _e( 'To get utm_source: https://example.com/?utm_source=example', CFTZ_TEXTDOMAIN );
+            echo "\n";
+            _e( 'Use this shortcode: [hidden utm_source default:get]', CFTZ_TEXTDOMAIN );
+        ?></pre>
     </div>
 </fieldset>
 
@@ -236,5 +239,15 @@ Use this shortcode: [hidden utm_source default:get]</pre>
         <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
             echo json_encode( $sent_data, JSON_PRETTY_PRINT );
         ?></pre>
+        <p class="description"><?php
+            _e( 'This is just a example of field names and will not reflect data or customizations.', CFTZ_TEXTDOMAIN );
+
+            echo '<br>';
+
+            printf(
+                __( 'You can change field name with webhook config: %s', CFTZ_TEXTDOMAIN ),
+                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>'
+            );
+        ?></p>
     </div>
 </fieldset>

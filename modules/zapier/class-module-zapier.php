@@ -66,7 +66,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    2.3.0
              */
-            if (apply_filters( 'ctz_ignore_default_webhook', false )) {
+            if ( apply_filters( 'ctz_ignore_default_webhook', false ) ) {
                 return;
             }
 
