@@ -39,6 +39,29 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
 ?>
 
+<?php
+    /**
+     * Filter: ctz_remove_donation_alert
+     *
+     * You can remove it returning true:
+     * add_filter( 'ctz_remove_donation_alert', '__return_true' );
+     *
+     * @since 3.0.1
+     */
+    if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) :
+?>
+    <p style="background: #FF4A00; display: block; color: #FFFFFF; padding: 10px 15px; margin: 10px 0 20px;">
+        <strong style="margin-right: 5px;"><?php _e( 'Give your support!', CFTZ_TEXTDOMAIN ); ?></strong>
+        <?php
+            printf(
+                __( 'You can %s or %s.', CFTZ_TEXTDOMAIN ),
+                '<a href="https://www.paypal.com/donate?campaign_id=MCDWXL4JVE2UJ" target="_blank" style="color: #FFFFFF;">' . __( 'make a donation', CFTZ_TEXTDOMAIN ) . '</a>',
+                '<a href="https://wordpress.org/support/plugin/cf7-to-zapier/reviews/#new-post" target="_blank" style="color: #FFFFFF;">' . __( 'leave a review', CFTZ_TEXTDOMAIN ) . '</a>'
+            );
+        ?>
+    </p>
+<?php endif; ?>
+
 <h2>
     <?php _e( 'Webhook', CFTZ_TEXTDOMAIN ) ?>
 </h2>

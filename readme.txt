@@ -145,6 +145,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 = 3.0.1 =
 
 * Just some docs and donate link.
+* Added 'ctz_remove_donation_alert' filter to remove donate link.
 
 = 3.0.0 =
 
