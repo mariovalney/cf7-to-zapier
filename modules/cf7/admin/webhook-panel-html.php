@@ -55,7 +55,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         <?php
             printf(
                 __( 'You can %s or %s.', CFTZ_TEXTDOMAIN ),
-                '<a href="https://www.paypal.com/donate?campaign_id=MCDWXL4JVE2UJ" target="_blank" style="color: #FFFFFF;">' . __( 'make a donation', CFTZ_TEXTDOMAIN ) . '</a>',
+                '<a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS" target="_blank" style="color: #FFFFFF;">' . __( 'make a donation', CFTZ_TEXTDOMAIN ) . '</a>',
                 '<a href="https://wordpress.org/support/plugin/cf7-to-zapier/reviews/#new-post" target="_blank" style="color: #FFFFFF;">' . __( 'leave a review', CFTZ_TEXTDOMAIN ) . '</a>'
             );
         ?>

@@ -1,7 +1,7 @@
 # CF7 to Webhook #
 
 **Contributors:** mariovalney  
-**Donate link:** https://www.paypal.com/donate?campaign_id=MCDWXL4JVE2UJ  
+**Donate link:** https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS  
 **Tags:** cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney  
 **Requires at least:** 4.7  
 **Tested up to:** 6.4  
@@ -131,7 +131,7 @@ Brazilian developer who is part of [WordPress community](https://profiles.wordpr
 
 ### Can I help you? ###
 
-Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or [make a donation](https://www.paypal.com/donate?campaign_id=MCDWXL4JVE2UJ).
+Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or [make a donation](https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS).
 
 ## Screenshots ##
 
