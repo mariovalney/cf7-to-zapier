@@ -55,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 5.8.6
+* Contact Form 7 - 5.9.X
 
 == Installation ==
 
@@ -279,3 +279,4 @@ More changes:
 * Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.
 * A donate link if you feel the need to give back.
+* Some fixes.
