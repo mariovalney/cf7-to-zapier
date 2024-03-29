@@ -142,6 +142,10 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 == Changelog ==
 
+= 3.0.2 =
+
+* Avoid empty webhook URLs.
+
 = 3.0.1 =
 
 * Just some docs and donate link.

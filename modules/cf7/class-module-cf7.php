@@ -141,7 +141,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             if ( isset( $_POST['ctz-webhook-hook-url'] ) ) {
-                $hook_urls = array_map( function( $hook_url ) {
+                $hook_urls = array_filter( array_map( function( $hook_url ) {
                     $placeholders = self::get_hook_url_placeholders( $hook_url );
 
                     foreach ( $placeholders as $key => $placeholder ) {
@@ -155,7 +155,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     }
 
                     return $hook_url;
-                }, explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) );
+                }, explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) ) );
                 $new_properties[ 'hook_url' ] = $hook_urls;
             }
 
@@ -237,6 +237,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $errors = [];
 
             foreach ( (array) $properties['hook_url'] as $hook_url ) {
+                if ( empty( $hook_url ) ) {
+                    continue;
+                }
+
                 // Try/Catch to support exception on request
                 try {
                     $placeholders = CFTZ_Module_CF7::get_hook_url_placeholders( $hook_url );
