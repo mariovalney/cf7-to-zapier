@@ -2,7 +2,7 @@
 
 Contributors: mariovalney
 Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
-Tags: cf7, contact form, zapier, integration, contact form 7, webhook, mariovalney
+Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
 Tested up to: 6.6
 Stable tag: 3.0.4
