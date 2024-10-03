@@ -3,7 +3,7 @@
 /**
  * A helper to debug
  *
- * @package         Cf7_To_Zapier
+ * @package         Cf7_To_ActionNetwork
  * @since           2.3.0
  */
 

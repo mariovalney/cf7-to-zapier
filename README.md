@@ -1,290 +1,91 @@
-# CF7 to Webhook #
-
-**Contributors:** mariovalney  
-**Donate link:** https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS  
-**Tags:** cf7, contact form, zapier, integration, webhook  
+# CF7 to ActionNetwork #
+**Contributors:** [procom.dev](https://procom.dev), [Mário Valney](https://mariovalney.com/me)  
+**Tags:** cf7, contact form, actionnetwork, integration, contact form 7  
+**Official website:** https://procom.dev/contact-form-7-cf7-to-actionnetwork-free-wordpress-plugin/  
 **Requires at least:** 4.7  
-**Tested up to:** 6.6  
-**Stable tag:** 3.0.4  
+**Tested up to:** 6.4  
+**Stable tag:** trunk  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
-Use Contact Form 7 as a trigger to any webhook!
+Use Contact Form 7 to send data directly to ActionNetwork with automatic field mapping!
 
 ## Description ##
 
-[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/ "Install it first, of course") is a awesome plugin used by 1+ million WordPress websites.
+[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/) is a widely-used plugin by millions of WordPress websites for creating forms. 
 
-Webhooks are endpoint (urls) you can send data!
+The CF7 to ActionNetwork plugin allows you to send form data to ActionNetwork. The core fields required by ActionNetwork are automatically mapped from your CF7 form fields, while any additional custom fields are included in a "custom_fields" section within the JSON data.
 
-Now you can join both: the best contact form plugin to WordPress and any webhook which receive JSON!
-
-And Zapier?
-
-[Zapier (Zapier)](https://zapier.com) is a awesome service to connect your apps and automate workflows!
-
-Just activate and configure Zapier to receive data!
-
-Disclaimer: this plugin was created without any encouragement from Zapier or CF7 developers and any webhook/API service.
+Disclaimer: This plugin was created without any encouragement from ActionNetwork or CF7 developers. 
 
 ### How to Use ###
 
-Easily and quickly! Just activate "Contact Form 7" and "CF7 to Webhook" and configure a URL to send data (or go to Zapier to create your Zap).
+Here's an example to integrate with ActionNetwork:
 
-### Configuration ###
+1. Create an action in ActionNetwork: Forms, Petitions, Evenes, Ticketed Event or Letter Campaigns.
+2. Copy the API Endpoint URL (you can find it at the bottom of the right sidebar when managing the action).
+3. Insert the URL in your Contact Form 7 configuration under the 'ActionNetwork' tab and activate the integration.
+4. Create a form in Contact Form 7. The names of the fields will be mapped to the ones in the ActionNetwork action.
 
-This is a example to integrate with Zapier:
 
-1. Create a Zap.
-1. Choose your trigger as "Webhooks" app (Screenshot 2).
-1. Choose "Catch Hook" option (Screenshot 3).
-1. Done! Now insert the URL given (Screenshot 4) into your Contact Form configuration and activate integration.
+### ActionNetwork Core Fields ###
 
-### Creating your workflow ###
+Below are the core fields used by ActionNetwork:
+- family_name
+- given_name
+- postal_code
+- address_lines
+- locality
+- region
+- country
+- address
+- status
+- number
 
-After configuration you can send one form to create a example data into Zapier dashboard. Then you can continue creating your workflow with filters and other apps.
+The core fields are automatically mapped to their corresponding keys in ActionNetwork. All other fields are included under "custom_fields".
 
-### Translations ###
 
-You can [translate CF7 to Webhook](https://translate.wordpress.org/projects/wp-plugins/cf7-to-zapier) to your language.
+### Frequently Asked Questions ###
 
-### Review ###
 
-We would be grateful for a [review here](https://wordpress.org/support/plugin/cf7-to-zapier/reviews/).
+#### Does it work with Gutenberg?
+Yes. We it supports WordPress 5+ and CF7 too.
 
-### Support ###
+#### Does it work for forms sent out of CF7?
+No. The intention here is to integrate CF7 with ActionNetwork.
 
-* Contact Form 7 - 5.9.X
+#### My sent data is empty
+Please, visit the [support forum](https://wordpress.org/support/plugin/cf7-to-actionnetwork/) for help.
+
+#### Can I sent it to a non-ActionNetwork webhook?
+If you want to send data to a custom webhook, use this other plugin: [CF7 to Webhook](https://github.com/mariovalney/cf7-to-zapier).
+
+#### How can I upload files and send links to ActionNetwork?
+If you submit a form with a file, we will copy this to a directory before CF7 removes it and send the link to ActionNetwork.
+
+#### How can I rename a field to ActionNetwork?
+You can add an "actionnetwork" option to your field in the form edit tab. It’s similar to the "class" option: `[text your-field class:form-control id:field-id actionnetwork:actionnetwork-key]`. This will create a text field with name "your-field", class "form-control", id "field-id", and it will be sent to ActionNetwork with the key "actionnetwork-key".
+
+### Who is the original developer?
+[Mário Valney](https://mariovalney.com/me)
+Brazilian developer who is part of the [WordPress community](https://profiles.wordpress.org/mariovalney).
+
+### Can I help you?
+Yes! Visit the [GitHub repository](https://github.com/procom-dev/cf7-to-actionnetwork).
 
 ## Installation ##
 
-`Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.`
-
-* Install "CF7 to Webhook" by plugins dashboard.
-
-Or
-
-* Upload the entire `cf7-to-zapier` folder to the `/wp-content/plugins/` directory.
-
-Then
-
-* Activate the plugin through the 'Plugins' menu in WordPress.
-
-You will find 'Zapier' tab into form configuration.
-
-## Frequently Asked Questions ##
-
-### Did you renamed the plugin? ###
-
-Yes. Due to [this](https://make.wordpress.org/plugins/2019/08/08/trademark-enforcement/).
-
-### Does it works with Gutenberg? ###
-
-Yes. We support WordPress 5+ and CF7 too.
-
-### Does it works for forms sent out of CF7? ###
-
-Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).
-
-### Can I use it without Zapier? ###
-
-Yep. We are creating a integration to Zapier webhook, but you can insert any URL to receive a JSON formated data.
-
-### My sent data is empty ###
-
-Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier/) to get help.
-
-### How can I submit one form to multiple webhooks? ###
-
-Just add one webhook per line in "Webhook URL" settings.
-
-Please, read [this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/) for more information.
-
-### How can I show webhook errors on form submit? ###
-
-We already show WordPress request errors. If you want to add theatment to webhook errors, please [check this post](https://wordpress.org/support/topic/form-sent-to-zapier-randomly/#post-11249864).
-
-### How can I upload files and send link to webhook? ###
-
-If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.
-
-### How can I rename a field to webhook? ###
-
-You can add a "webhook" option to your field on form edit tab.
-
-It's like the "class" option: `[text your-field class:form-control id:field-id webhook:webhook-key]`.
-
-This will create a text field with name "your-field", class "form-control", id "field-id" and will be sent to webhook with key "webhook-key".
-
-### How I can get the free text value? ###
-
-We will replace the value for last option (which is the free_text input) with the value.
-
-This way your webhook will receive the free text value and other options if you allow it (like in checkbox).
-
-### Who is the developer? ###
-
-[Mário Valney](https://mariovalney.com/me)
-
-Brazilian developer who is part of [WordPress community](https://profiles.wordpress.org/mariovalney).
-
-### Can I help you? ###
-
-Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or [make a donation](https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS).
-
-## Screenshots ##
-
-### 1. CF7 to Webhook configuration ###
-![1. CF7 to Webhook configuration](http://ps.w.org/cf7-to-webhook/assets/screenshot-1.png)
-
-### 2. Zapier Step 1 - Choosing you app trigger ###
-![2. Zapier Step 1 - Choosing you app trigger](http://ps.w.org/cf7-to-webhook/assets/screenshot-2.png)
-
-### 3. Zapier Step 2 - Choosing Catch Hook option ###
-![3. Zapier Step 2 - Choosing Catch Hook option](http://ps.w.org/cf7-to-webhook/assets/screenshot-3.png)
-
-### 4. Zapier Step 3 - Webhook URL (waiting for first data) ###
-![4. Zapier Step 3 - Webhook URL (waiting for first data)](http://ps.w.org/cf7-to-webhook/assets/screenshot-4.png)
+1. Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.
+2. Install "CF7 to ActionNetwork" by using the plugins dashboard or upload the entire `cf7-to-actionnetwork` folder to the `/wp-content/plugins/` directory.
+3. Activate the plugin through the 'Plugins' menu in WordPress.
+4. You will find the 'ActionNetwork' tab in the form configuration.
 
 
 ## Changelog ##
 
-### 3.0.2 ###
-
-* Avoid empty webhook URLs.
-
-### 3.0.1 ###
-
-* Just some docs and donate link.
-* Added 'ctz_remove_donation_alert' filter to remove donate link.
-
-### 3.0.0 ###
-
-* New feature: placeholders in webhook URL [read more](https://wordpress.org/support/topic/use-webhook-url-placeholders).
-* Added 'ctz_hook_url_placeholder' filter.
-* Tested against new CF7 and WP versions.
-
-### 2.4.0 ###
-
-* Added support to "_raw_" values (label value in [PIPES](https://contactform7.com/selectable-recipient-with-pipes/)).
-* Added support to multiple webhook URLs.
-* Added 'ctz_trigger_webhook_errors' action to allow trigger submission error after ignoring them.
-* Tested against new CF7 and WP versions.
-
-### 2.3.0 ###
-
-* Added Custom Header option.
-* Added 'ctz_ignore_default_webhook' to allow ignore core submit.
-* Added more parameters to 'ctz_trigger_webhook' action.
-* Added more parameters to 'ctz_post_request_args' action.
-
-### 2.2.5 ###
-
-* Some minor adjustments.
-* Tested against new CF7 and WP versions.
-
-### 2.2.4 ###
-
-* Support to CF7 new way to load properties.
-
-### 2.2.3 ###
-
-* Support to CF7 multiple files upload.
-* Support to files with same name.
-
-### 2.2.2 ###
-
-* Support to CF7 5.2.1 changing 'wpcf7_special_mail_tags' filter.
-
-### 2.2.1 ###
-
-* Support to CF7 5.2 changing 'free_text' input name.
-
-Props to @brunojlt
-
-### 2.2.0 ###
-
-* Support to free_text option on radio and checkboxes.
-
-### 2.1.4 ###
-
-* Added 'ctz_hook_url' filter to change webhook URL
-
-Props to @shoreline-chrism
-
-### 2.1.2 ###
-
-* Fix checkboxes.
-
-### 2.1.1 ###
-
-* Fix slashes on POST data.
-
-### 2.1.0 ###
-
-* Support to rename fields.
-
-### 2.0.2 ###
-
-* Plugin renamed.
-
-### 2.0.0 ###
-
-* Support to submit files.
-
-### 1.4.0 ###
-
-* Show form error when WordPress request fails and added support to throw or own exceptions.
-* Added 'ctz_post_request_result' action after submit.
-* Added 'ctz_trigger_webhook_error_message' filter to change form message error.
-
-### 1.3.1 ###
-
-* Remove PHP 7+ dependency.
-* It's sad... I know.
-
-### 1.3.0 ###
-
-* Added support to [Special Mail Tags] (https://contactform7.com/special-mail-tags) on CF7.
-* Tested against WP 5.0.2 and CF7 version 5.1.
-
-### 1.2.1 ###
-
-* Tested against Contact Form 7 version 5.0.
-
-### 1.2 ###
-
-* Added support to [PIPE](https://contactform7.com/selectable-recipient-with-pipes) on CF7.
-* Tested against WP 4.9.2.
-
-### 1.1.1 ###
-
-* Fixed problem with a function inside empty() prior PHP 5.5.
-
-### 1.1 ###
-
-* Added the 'application/json' header by default to POST request.
-* Added 'ctz_post_request_args' filter to POST request args.
-* Tested against WP 4.9.
-
-### 1.0 ###
-
-* It's alive!
-* Form configuration.
-* Integration to Zapier webhook.
-* Ignore or not CF7 mail sent.
-
-## Upgrade Notice ##
-
-### 3.0.0 ###
-
-Added support to placeholders in webhook URLs!
-You can check details [in this topic](https://wordpress.org/support/topic/use-webhook-url-placeholders).
-
-More changes:
-
-* Added 'ctz_hook_url_placeholder' filter.
-* Tested against new CF7 and WP versions.
-* A donate link if you feel the need to give back.
-* Some fixes.
+### 1.0.0 ###
+* Initial release.
+* Integration to ActionNetwork with core fields and custom fields support.
+* Data mapping from CF7 to ActionNetwork.
+* ActionNetwork core fields detection and JSON structure adjustment.
