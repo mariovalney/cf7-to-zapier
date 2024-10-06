@@ -2,8 +2,8 @@
 **Contributors:** [procom.dev](https://procom.dev)), [Mário Valney](https://mariovalney.com/me) 
 **Tags:** cf7, contact form, actionnetwork, integration, contact form 7 
 **Requires at least:** 4.7  
-**Tested up to:** 6.4  
-**Stable tag:** trunk  
+**Tested up to:** 6.6  
+**Stable Tag: 1.0.0
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  

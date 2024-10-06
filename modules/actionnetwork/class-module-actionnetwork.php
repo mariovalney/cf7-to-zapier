@@ -86,7 +86,7 @@ if ( ! class_exists( 'CFTZ_Module_ActionNetwork' ) ) {
 
             $args = array(
                 'method'    => 'POST',
-                'body'      => json_encode( $data ),
+                'body'      => wp_json_encode( $data ),
                 'headers'   => $this->create_headers($properties['custom_headers'] ?? ''),
             );
 
@@ -112,7 +112,7 @@ if ( ! class_exists( 'CFTZ_Module_ActionNetwork' ) ) {
 
             // If result is a WP Error, throw a Exception woth the message.
             if ( is_wp_error( $result ) ) {
-                throw new Exception( $result->get_error_message() );
+                throw new Exception( esc_html( $result->get_error_message() ) );
             }
 
             /**

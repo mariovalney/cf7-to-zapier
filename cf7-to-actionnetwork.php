@@ -12,6 +12,8 @@
  * Author URI:        https://procom.dev
  * Text Domain:       cf7-to-actionnetwork
  * Domain Path:       /languages
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  */
 

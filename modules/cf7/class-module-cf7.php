@@ -82,7 +82,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             echo '<div class="notice notice-error is-dismissible">';
-            echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to use %s CF7 to ActionNetwork %s", CFTZ_TEXTDOMAIN ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+            echo '<p>' . sprintf(esc_html__( "You need to install/activate %1\$s Contact Form 7%2\$s plugin to use %3\$s CF7 to ActionNetwork %4\$s", 'cf7-actionnetwork' ),'<a href="' . esc_url( 'http://contactform7.com/' ) . '" target="_blank">','</a>','<strong>','</strong>') . '</p>';
 
             $screen = get_current_screen();
             if ( $screen->id == 'plugins' ) {
@@ -90,13 +90,13 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 return;
             }
 
-            if ( file_exists( ABSPATH . PLUGINDIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+            if ( file_exists( ABSPATH . WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
                 $url = 'plugins.php';
             } else {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", CFTZ_TEXTDOMAIN ) . '</a></p>';
+            echo '<p><a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( "Do it now?", 'cf7-actionnetwork' ) . '</a></p>';
             echo '</div>';
         }
 
@@ -108,7 +108,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          */
         public function wpcf7_editor_panels( $panels ) {
             $panels['actionnetwork-panel'] = array(
-                'title'     => __( 'ActionNetwork', CFTZ_TEXTDOMAIN ),
+                'title'     => __( 'ActionNetwork', 'cf7-actionnetwork' ),
                 'callback'  => [ $this, 'actionnetwork_panel_html' ],
             );
 
@@ -141,23 +141,29 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             if ( isset( $_POST['ctz-actionnetwork-hook-url'] ) ) {
-                $hook_urls = array_filter( array_map( function( $hook_url ) {
-                    $placeholders = self::get_hook_url_placeholders( $hook_url );
+				// Unslash the POST data first
+				$hook_urls_raw = wp_unslash( $_POST['ctz-actionnetwork-hook-url'] ); // Unslash once before processing
 
-                    foreach ( $placeholders as $key => $placeholder ) {
-                        $hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
-                    }
+				// Process each URL, removing placeholders and sanitizing
+				$hook_urls = array_filter( array_map( function( $hook_url ) {
+					$placeholders = self::get_hook_url_placeholders( $hook_url );
 
-                    $hook_url = esc_url_raw( $hook_url );
+					foreach ( $placeholders as $key => $placeholder ) {
+						$hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
+					}
 
-                    foreach ( $placeholders as $key => $placeholder ) {
-                        $hook_url = str_replace( '_____' . $key . '_____', $placeholder, $hook_url );
-                    }
+					// Sanitize the URL post replacement
+					$hook_url = esc_url_raw( $hook_url );
 
-                    return $hook_url;
-                }, explode( PHP_EOL, $_POST['ctz-actionnetwork-hook-url'] ) ) );
-                $new_properties[ 'hook_url' ] = $hook_urls;
-            }
+					foreach ( $placeholders as $key => $placeholder ) {
+						$hook_url = str_replace( '_____' . $key . '_____', $placeholder, $hook_url );
+					}
+
+					return $hook_url;
+				}, explode( PHP_EOL, $hook_urls_raw) ));
+
+				$new_properties['hook_url'] = $hook_urls;
+			}
 
             if ( isset( $_POST['ctz-actionnetwork-send-mail'] ) && $_POST['ctz-actionnetwork-send-mail'] == '1' ) {
                 $new_properties[ 'send_mail' ] = '1';
@@ -166,11 +172,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             if ( isset( $_POST['ctz-special-mail-tags'] ) ) {
-                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['ctz-special-mail-tags'] );
+                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( wp_unslash( $_POST['ctz-special-mail-tags'] ) );
             }
 
             if ( isset( $_POST['ctz-custom-headers'] ) ) {
-                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( $_POST['ctz-custom-headers'] );
+                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( wp_unslash( $_POST['ctz-custom-headers'] ) );
             }
 
             $properties = $contact_form->get_properties();
@@ -223,7 +229,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @return string Referred URL or empty string
          */
         private function get_referrer_data() {
-            return isset($_SERVER['HTTP_REFERER']) ? sanitize_text_field($_SERVER['HTTP_REFERER']) : '';
+            return isset($_SERVER['HTTP_REFERER']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_REFERER'])) : '';
         }
 
         /**
@@ -251,7 +257,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             // Extract the "source" parameter using parse_url() and parse_str()
             $source = 'contact-form-7';
-            $url_components = parse_url($current_url);
+            $url_components = wp_parse_url($current_url);
             if (isset($url_components['query'])) {
                 parse_str($url_components['query'], $params);
                 $source = isset($params['source']) ? sanitize_text_field($params['source']) : 'contact-form-7';
@@ -446,7 +452,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 if ( empty( $tag->name ) ) continue;
 
                 // Regular Tags
-                $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
+                $value = ( ! empty( $_POST[ $tag->name ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $tag->name ] ) ) : '';
 
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key => $v ) {
@@ -506,7 +512,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
                     $free_text_label = end( $tag->values );
                     $free_text_name  = $tag->name . '_free_text';
-                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? $_POST[ $free_text_name ] : '';
+                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $free_text_name ] ) ) : '';
 
                     if ( is_array( $value ) ) {
                         foreach ( $value as $key => $v ) {
@@ -567,7 +573,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 // Support to "_raw_" values. @see WPCF7_MailTag::__construct()
                 if ( $mail_tag->get_option( 'do_not_heat' ) ) {
                     $value = apply_filters( 'wpcf7_special_mail_tags', '', $mail_tag->tag_name(), false, $mail_tag );
-                    $value = $_POST[ $mail_tag->field_name() ] ?? '';
+                    $value = sanitize_text_field( wp_unslash( $_POST[ $mail_tag->field_name() ] ?? '' ) );
                 }
 
                 $value = apply_filters( 'wpcf7_special_mail_tags', $value, $mail_tag->tag_name(), false, $mail_tag );

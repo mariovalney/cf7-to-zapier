@@ -42,14 +42,14 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
 
 <h2>
-    <?php _e( 'ActionNetwork', CFTZ_TEXTDOMAIN ) ?>
+    <?php esc_html_e( 'ActionNetwork', 'cf7-actionnetwork' ) ?>
 </h2>
 
 <fieldset>
     <legend>
-        <?php _e( 'Send data from you CF7 forms to your ActionNetwork. Compatible with: Forms, Petitions, Evenes, Ticketed Event and Letter Campaigns.', CFTZ_TEXTDOMAIN ); ?>
+        <?php esc_html_e( 'Send data from you CF7 forms to your ActionNetwork. Compatible with: Forms, Petitions, Evenes, Ticketed Event and Letter Campaigns.', 'cf7-actionnetwork' ); ?>
         <br>
-        <?php _e( 'Each field on your CF7 form will be sent with its name and value. Make sure to use the same field names to match those on ActionNetwork.', CFTZ_TEXTDOMAIN ); ?>
+        <?php esc_html_e( 'Each field on your CF7 form will be sent with its name and value. Make sure to use the same field names to match those on ActionNetwork.', 'cf7-actionnetwork' ); ?>
     </legend>
 
     <table class="form-table">
@@ -57,14 +57,14 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Activate', CFTZ_TEXTDOMAIN ) ?>
+                        <?php esc_html_e( 'Activate', 'cf7-actionnetwork' ) ?>
                     </label>
                 </th>
                 <td>
                     <p>
                         <label for="ctz-actionnetwork-activate">
                             <input type="checkbox" id="ctz-actionnetwork-activate" name="ctz-actionnetwork-activate" value="1" <?php checked( $activate, "1" ) ?>>
-                            <?php _e( 'Send data to ActionNetwork', CFTZ_TEXTDOMAIN ) ?>
+                            <?php esc_html_e( 'Send data to ActionNetwork', 'cf7-actionnetwork' ) ?>
                         </label>
                     </p>
                 </td>
@@ -72,7 +72,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'API Endpoint URL', CFTZ_TEXTDOMAIN ) ?>
+                        <?php esc_html_e( 'API Endpoint URL', 'cf7-actionnetwork' ) ?>
                     </label>
                 </th>
                 <td>
@@ -83,25 +83,25 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                     </p>
                     <?php if ( $activate && empty( $hook_url ) ): ?>
                         <p class="description" style="color: #D00;">
-                            <?php _e( 'You have to enter an ActionNetwork API Endpoint' ); ?>
+                            <?php esc_html_e( 'You have to enter an ActionNetwork API Endpoint' ); ?>
                         </p>
                     <?php endif; ?>
                     <p class="description">
-                            <?php _e( 'Each action (Form, Petition...) has its own API Endpoint URL. You can find it at the bottom of the right sidebar when managing the action.' ); ?>
+                            <?php esc_html_e( 'Each action (Form, Petition...) has its own API Endpoint URL. You can find it at the bottom of the right sidebar when managing the action.' ); ?>
                         </p>
                 </td>
             </tr>
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Send CF7 email', CFTZ_TEXTDOMAIN ) ?>
+                        <?php esc_html_e( 'Send CF7 email', 'cf7-actionnetwork' ) ?>
                     </label>
                 </th>
                 <td>
                     <p>
                         <label for="ctz-actionnetwork-send-mail">
                             <input type="checkbox" id="ctz-actionnetwork-send-mail" name="ctz-actionnetwork-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
-                            <?php _e( 'Send the email from CF7 configured in the "Mail" tab', CFTZ_TEXTDOMAIN ) ?>
+                            <?php esc_html_e( 'Send the email from CF7 configured in the "Mail" tab', 'cf7-actionnetwork' ) ?>
                         </label>
                     </p>
                 </td>
@@ -111,11 +111,11 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 </fieldset>
 
 <h2>
-    <?php _e( 'ActionNetwork core fields', CFTZ_TEXTDOMAIN ) ?>
+    <?php esc_html_e( 'ActionNetwork core fields', 'cf7-actionnetwork' ) ?>
 </h2>
 <fieldset>
     <legend>
-        <?php _e( 'Below are the core fields used by ActionNetwork:', CFTZ_TEXTDOMAIN ) ?>
+        <?php esc_html_e( 'Below are the core fields used by ActionNetwork:', 'cf7-actionnetwork' ) ?>
     </legend>
     <ul>
         <?php
@@ -137,13 +137,15 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         ?>
     </ul>
     <p>
-        <?php _e('This plugin sends form data from Contact Form 7 to ActionNetwork. Core fields are mapped automatically to the corresponding keys in ActionNetwork, and any additional fields are treated as custom fields.', CFTZ_TEXTDOMAIN); ?>
+        <?php esc_html_e('This plugin sends form data from Contact Form 7 to ActionNetwork. Core fields are mapped automatically to the corresponding keys in ActionNetwork, and any additional fields are treated as custom fields.', 'cf7-actionnetwork'); ?>
     </p>
 </fieldset>
 
 <h2>
-    <?php _e( 'ActionNetwork source codes', CFTZ_TEXTDOMAIN ) ?>
+    <?php esc_html_e( 'ActionNetwork source codes', 'cf7-actionnetwork' ) ?>
     <p>
-        <?php _e('Whatever you put in <em>"?source=[here]"</em> at the end of the URL where CF7 form is inserted, will be sent as Source Code to Action Network. Example of source codes<br /><em>https://yourwebsite.com/your-form/</em>?source=ads<br /><em>https://yourwebsite.com/your-form/</em>?source=email<br /><em>https://yourwebsite.com/your-form/</em>?source=whatsapp<br /><br />(If no source is provided in the URL parameters, "contact-form-7" will be placed instead).', CFTZ_TEXTDOMAIN); ?>
+        <?php
+echo wp_kses_post(__('Whatever you put in <em>"?source=[here]"</em> at the end of the URL where CF7 form is inserted, will be sent as Source Code to Action Network. Example of source codes<br /><em>https://yourwebsite.com/your-form/</em>?source=ads<br /><em>https://yourwebsite.com/your-form/</em>?source=email<br /><em>https://yourwebsite.com/your-form/</em>?source=whatsapp<br /><br />(If no source is provided in the URL parameters, "contact-form-7" will be placed instead).', 'cf7-actionnetwork'));
+?>
     </p>
 </h2>
