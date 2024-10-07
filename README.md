@@ -1,10 +1,10 @@
-# CF7 to ActionNetwork #
+# Connect CF7 to ActionNetwork #
 **Contributors:** [procom.dev](https://procom.dev), [Mário Valney](https://mariovalney.com/me)  
-**Tags:** cf7, contact form, actionnetwork, integration, contact form 7  
+**Tags:** cf7, contact form, actionnetwork, action network, contact form 7
 **Official website:** https://procom.dev/contact-form-7-cf7-to-actionnetwork-free-wordpress-plugin/  
 **Requires at least:** 4.7  
 **Tested up to:** 6.4  
-**Stable tag:** trunk  
+**Stable tag:** 1.0.0  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -45,6 +45,15 @@ Below are the core fields used by ActionNetwork:
 
 The core fields are automatically mapped to their corresponding keys in ActionNetwork. All other fields are included under "custom_fields".
 
+### ActionNetwork source codes ###
+
+Whatever you put in "?source=[here]" at the end of the URL where CF7 form is inserted, will be sent as Source Code to Action Network. Example of source codes
+– https://yourwebsite.com/your-form/?source=ads
+– https://yourwebsite.com/your-form/?source=email
+– ttps://yourwebsite.com/your-form/?source=whatsapp
+
+If no source is provided in the URL parameters, "contact-form-7" will be placed instead.
+
 
 ### Frequently Asked Questions ###
 
@@ -60,12 +69,6 @@ Please, visit the [support forum](https://wordpress.org/support/plugin/cf7-to-ac
 
 #### Can I sent it to a non-ActionNetwork webhook?
 If you want to send data to a custom webhook, use this other plugin: [CF7 to Webhook](https://github.com/mariovalney/cf7-to-zapier).
-
-#### How can I upload files and send links to ActionNetwork?
-If you submit a form with a file, we will copy this to a directory before CF7 removes it and send the link to ActionNetwork.
-
-#### How can I rename a field to ActionNetwork?
-You can add an "actionnetwork" option to your field in the form edit tab. It’s similar to the "class" option: `[text your-field class:form-control id:field-id actionnetwork:actionnetwork-key]`. This will create a text field with name "your-field", class "form-control", id "field-id", and it will be sent to ActionNetwork with the key "actionnetwork-key".
 
 ### Who is the original developer?
 [Mário Valney](https://mariovalney.com/me)
@@ -89,3 +92,4 @@ Yes! Visit the [GitHub repository](https://github.com/procom-dev/cf7-to-actionne
 * Integration to ActionNetwork with core fields and custom fields support.
 * Data mapping from CF7 to ActionNetwork.
 * ActionNetwork core fields detection and JSON structure adjustment.
+* Added automatic Source (if any) and Referrer from the URL
