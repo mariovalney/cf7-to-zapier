@@ -4,7 +4,7 @@
  * @package           Cf7_To_ActionNetwork
  * @since             1.0.0
  *
- * Plugin Name:       CF7 to ActionNetwork
+ * Plugin Name:       Connect CF7 to Action Network
  * Plugin URI:        https://github.com/procom-dev/cf7-to-actionnetwork
  * Description:       Use Contact Form 7 to send data directly to ActionNetwork with automatic field mapping!
  * Version:           1.0.0
