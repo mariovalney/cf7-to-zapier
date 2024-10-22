@@ -7,7 +7,7 @@
  * Plugin Name:       CF7 to Webhook
  * Plugin URI:        https://github.com/mariovalney/cf7-to-zapier
  * Description:       Use Contact Form 7 as a trigger to any webhook like Zapier!
- * Version:           3.0.4
+ * Version:           3.0.5
  * Author:            Mário Valney
  * Author URI:        http://mariovalney.com/me
  * Text Domain:       cf7-to-webhook
@@ -167,7 +167,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @access   private
          */
         public function load_plugin_textdomain() {
-            load_plugin_textdomain( CFTZ_TEXTDOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
+            load_plugin_textdomain( 'cf7-to-webhook', false, basename( dirname( __FILE__ ) ) . '/languages/' );
         }
 
         /**
@@ -177,7 +177,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'CFTZ_VERSION', '3.0.4' );
+            define( 'CFTZ_VERSION', '3.0.5' );
             define( 'CFTZ_PLUGIN_FILE', __FILE__ );
             define( 'CFTZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
             define( 'CFTZ_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CFTZ_PLUGIN_BASENAME ) );
@@ -187,11 +187,6 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
             // Definition of upload_dir
             if ( ! defined( 'CFTZ_UPLOAD_DIR' ) ) {
                 define( 'CFTZ_UPLOAD_DIR', 'cf7-to-webhook-uploads' );
-            }
-
-            // Definition of text domain
-            if ( ! defined( 'CFTZ_TEXTDOMAIN' ) ) {
-                define( 'CFTZ_TEXTDOMAIN', 'cf7-to-webhook' );
             }
 
             // Running Modules (first of all)

@@ -5,7 +5,7 @@
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
 **Tested up to:** 6.6  
-**Stable tag:** 3.0.4  
+**Stable tag:** 3.0.5  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -287,4 +287,4 @@ More changes:
 * Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.
 * A donate link if you feel the need to give back.
-* Some fixes.
+* Some fixes (including translations).

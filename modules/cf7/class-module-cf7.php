@@ -82,7 +82,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             echo '<div class="notice notice-error is-dismissible">';
-            echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to use %s CF7 to Webhook %s", CFTZ_TEXTDOMAIN ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+            echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to use %s CF7 to Webhook %s", 'cf7-to-webhook' ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
 
             $screen = get_current_screen();
             if ( $screen->id == 'plugins' ) {
@@ -96,7 +96,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", CFTZ_TEXTDOMAIN ) . '</a></p>';
+            echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", "cf7-to-webhook" ) . '</a></p>';
             echo '</div>';
         }
 
@@ -108,7 +108,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          */
         public function wpcf7_editor_panels( $panels ) {
             $panels['webhook-panel'] = array(
-                'title'     => __( 'Webhook', CFTZ_TEXTDOMAIN ),
+                'title'     => __( 'Webhook', 'cf7-to-webhook' ),
                 'callback'  => [ $this, 'webhook_panel_html' ],
             );
 
