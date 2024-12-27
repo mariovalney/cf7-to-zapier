@@ -4,8 +4,8 @@
 **Donate link:** https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS  
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
-**Tested up to:** 6.6  
-**Stable tag:** 3.0.6  
+**Tested up to:** 6.8  
+**Stable tag:** 4.0.0  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -55,7 +55,7 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 5.9.X
+* Contact Form 7 - 6.0.X
 
 ## Installation ##
 
@@ -149,6 +149,11 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 
 ## Changelog ##
+
+### 4.0.0 ###
+
+* New feature: ?? [read more](https://wordpress.org/support/topic/).
+* Settings UI renewed.
 
 ### 3.0.2 ###
 

@@ -177,7 +177,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'CFTZ_VERSION', '3.0.6' );
+            define( 'CFTZ_VERSION', '4.0.0' );
             define( 'CFTZ_PLUGIN_FILE', __FILE__ );
             define( 'CFTZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
             define( 'CFTZ_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CFTZ_PLUGIN_BASENAME ) );

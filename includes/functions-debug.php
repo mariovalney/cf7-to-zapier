@@ -9,8 +9,21 @@
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
+/**
+ * Check we are working
+ */
+if ( ! function_exists( 'ctz_is_developing' ) ) {
+    function ctz_is_developing() {
+        if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
 function cftz_activated_debug_functions() {
-    return ( defined( 'WP_DEBUG' ) && WP_DEBUG ) && ! ( defined( 'CFTZ_REMOVE_DEBUG_FUNCTIONS' ) && CFTZ_REMOVE_DEBUG_FUNCTIONS );
+    return ctz_is_developing() && ! ( defined( 'CFTZ_REMOVE_DEBUG_FUNCTIONS' ) && CFTZ_REMOVE_DEBUG_FUNCTIONS );
 }
 
 /**

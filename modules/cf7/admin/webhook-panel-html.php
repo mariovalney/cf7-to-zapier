@@ -39,238 +39,259 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
 ?>
 
-<?php
-    /**
-     * Filter: ctz_remove_donation_alert
-     *
-     * You can remove it returning true:
-     * add_filter( 'ctz_remove_donation_alert', '__return_true' );
-     *
-     * @since 3.0.1
-     */
-    if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) :
-?>
-    <p style="background: #FF4A00; display: block; color: #FFFFFF; padding: 10px 15px; margin: 10px 0 20px;">
-        <strong style="margin-right: 5px;"><?php _e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
-        <?php
-            printf(
-                __( 'You can %s or %s.', 'cf7-to-zapier' ),
-                '<a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS" target="_blank" style="color: #FFFFFF;">' . __( 'make a donation', 'cf7-to-zapier' ) . '</a>',
-                '<a href="https://wordpress.org/support/plugin/cf7-to-zapier/reviews/#new-post" target="_blank" style="color: #FFFFFF;">' . __( 'leave a review', 'cf7-to-zapier' ) . '</a>'
-            );
-        ?>
-    </p>
-<?php endif; ?>
-
-<h2>
-    <?php _e( 'Webhook', 'cf7-to-zapier' ) ?>
-</h2>
-
-<fieldset>
-    <legend>
-        <?php _e( 'In these options you can activate or deactivate Webhook integration.', 'cf7-to-zapier' ); ?>
-        <br>
-        <?php _e( 'To integrate you should insert your webhook URL below. For example, into Zapier you can create a trigger using "Webhooks" app and choose "Catch Hook" option.', 'cf7-to-zapier' ); ?>
-    </legend>
-
-    <table class="form-table">
-        <tbody>
-            <tr>
-                <th scope="row">
-                    <label>
-                        <?php _e( 'Integrate', 'cf7-to-zapier' ) ?>
-                    </label>
-                </th>
-                <td>
-                    <p>
-                        <label for="ctz-webhook-activate">
-                            <input type="checkbox" id="ctz-webhook-activate" name="ctz-webhook-activate" value="1" <?php checked( $activate, "1" ) ?>>
-                            <?php _e( 'Send to Webhook', 'cf7-to-zapier' ) ?>
-                        </label>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label>
-                        <?php _e( 'Webhook URL', 'cf7-to-zapier' ) ?>
-                    </label>
-                </th>
-                <td>
-                    <p>
-                        <label for="ctz-webhook-hook-url">
-                            <textarea id="ctz-webhook-hook-url" name="ctz-webhook-hook-url" rows="4" style="width: 100%;"><?php echo esc_textarea( implode( PHP_EOL, $hook_url ) ) ?></textarea>
-                        </label>
-                    </p>
-                    <?php if ( $activate && empty( $hook_url ) ): ?>
-                        <p class="description" style="color: #D00;">
-                            <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
-                        </p>
-                    <?php else: ?>
-                        <p class="description" style="font-size: 13px;">
-                            <?php
-                                _e( 'You can add multiple webhook: one per line' );
-
-                                echo '<br>';
-
-                                printf(
-                                    __( 'And use placeholders to be replaced by form data: %s', 'cf7-to-zapier' ),
-                                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[your-field]</span>'
-                                );
-                            ?>
-                        </p>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label>
-                        <?php _e( 'Send Mail', 'cf7-to-zapier' ) ?>
-                    </label>
-                </th>
-                <td>
-                    <p>
-                        <label for="ctz-webhook-send-mail">
-                            <input type="checkbox" id="ctz-webhook-send-mail" name="ctz-webhook-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
-                            <?php _e( 'Send CF7 mail as usually', 'cf7-to-zapier' ) ?>
-                        </label>
-                    </p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</fieldset>
-
-<h2>
-    <?php _e( 'Special Mail Tags', 'cf7-to-zapier' ) ?>
-</h2>
-
-<fieldset>
-    <legend>
-        <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> or <a href="https://contactform7.com/selectable-recipient-with-pipes/" target="_blank">labels from selectable with pipes</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', 'cf7-to-zapier' ); ?>
-    </legend>
-
-    <div style="margin: 20px 0;">
-        <label for="ctz-special-mail-tags">
+<div id="ctz-settings">
+    <?php
+        /**
+         * Filter: ctz_remove_donation_alert
+         *
+         * You can remove it returning true:
+         * add_filter( 'ctz_remove_donation_alert', '__return_true' );
+         *
+         * @since 3.0.1
+         */
+        if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) :
+    ?>
+        <p style="background: #FF4A00; display: block; color: #FFFFFF; padding: 10px 15px; margin: 10px 0 20px;">
+            <strong style="margin-right: 5px;"><?php _e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
             <?php
-                $special_mail_tags = esc_textarea( $special_mail_tags );
-                $rows = ( (int) substr_count( $special_mail_tags, "\n" ) ) + 2;
-                $rows = max( $rows, 4 );
+                printf(
+                    __( 'You can %s or %s.', 'cf7-to-zapier' ),
+                    '<a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS" target="_blank" style="color: #FFFFFF;">' . __( 'make a donation', 'cf7-to-zapier' ) . '</a>',
+                    '<a href="https://wordpress.org/support/plugin/cf7-to-zapier/reviews/#new-post" target="_blank" style="color: #FFFFFF;">' . __( 'leave a review', 'cf7-to-zapier' ) . '</a>'
+                );
             ?>
-            <textarea id="ctz-special-mail-tags" name="ctz-special-mail-tags" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $special_mail_tags; ?></textarea>
-        </label>
-        <p class="description"><?php
-            printf(
-                __( 'Insert Special Tags like in mail body: %s', 'cf7-to-zapier' ),
-                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title]</span>'
-            );
+        </p>
+    <?php endif; ?>
 
-            echo '<br>';
+    <h2>
+        <?php _e( 'Webhook', 'cf7-to-zapier' ) ?>
+    </h2>
 
-            printf(
-                __( 'Or add a second word to pass as key to Webhook: %s', 'cf7-to-zapier' ),
-                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title title]</span>'
-            );
-        ?></p>
+    <fieldset>
+        <legend>
+            <?php _e( 'In these options you can activate or deactivate Webhook integration.', 'cf7-to-zapier' ); ?>
+            <br>
+            <?php _e( 'To integrate you should insert your webhook URL below. For example, into Zapier you can create a trigger using "Webhooks" app and choose "Catch Hook" option.', 'cf7-to-zapier' ); ?>
+        </legend>
+
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label>
+                            <?php _e( 'Integrate', 'cf7-to-zapier' ) ?>
+                        </label>
+                    </th>
+                    <td>
+                        <p>
+                            <label for="ctz-webhook-activate">
+                                <input type="checkbox" id="ctz-webhook-activate" name="ctz-webhook-activate" value="1" <?php checked( $activate, "1" ) ?>>
+                                <?php _e( 'Send to Webhook', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label>
+                            <?php _e( 'Webhook URL', 'cf7-to-zapier' ) ?>
+                        </label>
+                    </th>
+                    <td>
+                        <p>
+                            <label for="ctz-webhook-hook-url">
+                                <textarea id="ctz-webhook-hook-url" name="ctz-webhook-hook-url" rows="4" style="width: 100%;"><?php echo esc_textarea( implode( PHP_EOL, $hook_url ) ) ?></textarea>
+                            </label>
+                        </p>
+                        <?php if ( $activate && empty( $hook_url ) ): ?>
+                            <p class="description" style="color: #D00;">
+                                <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
+                            </p>
+                        <?php else: ?>
+                            <p class="description" style="font-size: 13px;">
+                                <?php
+                                    _e( 'You can add multiple webhook: one per line' );
+
+                                    echo '<br>';
+
+                                    printf(
+                                        __( 'And use placeholders to be replaced by form data: %s', 'cf7-to-zapier' ),
+                                        '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[your-field]</span>'
+                                    );
+                                ?>
+                            </p>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label>
+                            <?php _e( 'Send Mail', 'cf7-to-zapier' ) ?>
+                        </label>
+                    </th>
+                    <td>
+                        <p>
+                            <label for="ctz-webhook-send-mail">
+                                <input type="checkbox" id="ctz-webhook-send-mail" name="ctz-webhook-send-mail" value="1" <?php checked( $send_mail, "1" ) ?>>
+                                <?php _e( 'Send CF7 mail as usually', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <hr style="margin: 10px 0 20px 0;">
+
+    <div class="ctz-accordion-wrapper">
+        <div class="ctz-accordion-trigger">
+            <h2><?php _e( 'Special Mail Tags', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you need more information.', 'cf7-to-zapier' ) ?></p>
+        </div>
+
+        <div class="ctz-accordion-content">
+            <fieldset>
+                <legend>
+                    <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> or <a href="https://contactform7.com/selectable-recipient-with-pipes/" target="_blank">labels from selectable with pipes</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', 'cf7-to-zapier' ); ?>
+                </legend>
+
+                <div style="margin: 20px 0;">
+                    <label for="ctz-special-mail-tags">
+                        <?php
+                            $special_mail_tags = esc_textarea( $special_mail_tags );
+                            $rows = ( (int) substr_count( $special_mail_tags, "\n" ) ) + 2;
+                            $rows = max( $rows, 4 );
+                        ?>
+                        <textarea id="ctz-special-mail-tags" name="ctz-special-mail-tags" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $special_mail_tags; ?></textarea>
+                    </label>
+                    <p class="description"><?php
+                        printf(
+                            __( 'Insert Special Tags like in mail body: %s', 'cf7-to-zapier' ),
+                            '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title]</span>'
+                        );
+
+                        echo '<br>';
+
+                        printf(
+                            __( 'Or add a second word to pass as key to Webhook: %s', 'cf7-to-zapier' ),
+                            '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[_post_title title]</span>'
+                        );
+                    ?></p>
+                </div>
+            </fieldset>
+        </div>
     </div>
-</fieldset>
 
-<h2>
-    <?php _e( 'Custom Headers', 'cf7-to-zapier' ) ?>
-</h2>
+    <div class="ctz-accordion-wrapper">
+        <div class="ctz-accordion-trigger">
+            <h2><?php _e( 'Custom Headers', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you need authentication / authorization.', 'cf7-to-zapier' ) ?></p>
+        </div>
 
-<fieldset>
-    <legend>
-        <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request.', 'The URL should point to HTTP Headers documentation in your language.', 'cf7-to-zapier' ); ?>
-    </legend>
+        <div class="ctz-accordion-content">
+            <fieldset>
+                <legend>
+                    <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request.', 'The URL should point to HTTP Headers documentation in your language.', 'cf7-to-zapier' ); ?>
+                </legend>
 
-    <div style="margin: 20px 0;">
-        <label for="ctz-custom-headers">
-            <?php
-                $custom_headers = esc_textarea( $custom_headers );
-                $rows = ( (int) substr_count( $custom_headers, "\n" ) ) + 2;
-                $rows = max( $rows, 4 );
-            ?>
-            <textarea id="ctz-custom-headers" name="ctz-custom-headers" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $custom_headers; ?></textarea>
-        </label>
-        <p class="description"><?php
-            printf(
-                __( 'One header by line, separated by colon. Example: %s', 'cf7-to-zapier' ),
-                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
-            );
-        ?></p>
+                <div style="margin: 20px 0;">
+                    <label for="ctz-custom-headers">
+                        <?php
+                            $custom_headers = esc_textarea( $custom_headers );
+                            $rows = ( (int) substr_count( $custom_headers, "\n" ) ) + 2;
+                            $rows = max( $rows, 4 );
+                        ?>
+                        <textarea id="ctz-custom-headers" name="ctz-custom-headers" class="large-text code" rows="<?php echo $rows; ?>"><?php echo $custom_headers; ?></textarea>
+                    </label>
+                    <p class="description"><?php
+                        printf(
+                            __( 'One header by line, separated by colon. Example: %s', 'cf7-to-zapier' ),
+                            '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
+                        );
+                    ?></p>
+                </div>
+            </fieldset>
+        </div>
     </div>
-</fieldset>
 
-<hr style="margin: 10px 0 30px 0;">
+    <div class="ctz-accordion-wrapper">
+        <div class="ctz-accordion-trigger">
+            <h2><?php _e( 'Your data', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'Check how your data will be sent.', 'cf7-to-zapier' ) ?></p>
+        </div>
 
-<h2>
-    <?php _e( 'URL Params', 'cf7-to-zapier' ) ?>
-</h2>
+        <div class="ctz-accordion-content">
+            <h3>
+                <?php _e( 'URL Params', 'cf7-to-zapier' ) ?>
+            </h3>
 
-<fieldset>
-    <legend>
-        <?php echo _x( 'You can add URL parameters using <a href="https://contactform7.com/hidden-field/" target="_blank">Hidden Fields</a> with <a href="https://contactform7.com/getting-default-values-from-the-context/" target="_blank">default values</a> in your form.', 'The URL should point to CF7 documentation.', 'cf7-to-zapier' ); ?>
-    </legend>
+            <fieldset>
+                <legend>
+                    <?php echo _x( 'You can add URL parameters using <a href="https://contactform7.com/hidden-field/" target="_blank">Hidden Fields</a> with <a href="https://contactform7.com/getting-default-values-from-the-context/" target="_blank">default values</a> in your form.', 'The URL should point to CF7 documentation.', 'cf7-to-zapier' ); ?>
+                </legend>
 
-    <div style="margin: 20px 0;">
-        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
-            _e( 'To get utm_source: https://example.com/?utm_source=example', 'cf7-to-zapier' );
-            echo "\n";
-            _e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
-        ?></pre>
+                <div style="margin: 20px 0;">
+                    <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
+                        _e( 'To get utm_source: https://example.com/?utm_source=example', 'cf7-to-zapier' );
+                        echo "\n";
+                        _e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
+                    ?></pre>
+                </div>
+            </fieldset>
+
+            <h3>
+                <?php _e( 'Data sent to Webhook', 'cf7-to-zapier' ) ?>
+            </h3>
+
+            <fieldset>
+                <legend>
+                    <?php _e( 'We will send your form data as below:', 'cf7-to-zapier' ) ?>
+                </legend>
+
+                <div style="margin: 20px 0;">
+                    <?php
+                        $sent_data = array();
+
+                        // Special Tags
+                        $special_tags = array();
+                        $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
+                        $tags = array_keys( $special_tags );
+
+                        // Form Tags
+                        $form_tags = $contactform->scan_form_tags();
+                        foreach ( $form_tags as $tag ) {
+                            $key = $tag->get_option('webhook');
+                            if (! empty($key) && ! empty($key[0])) {
+                                $tags[] = $key[0];
+                                continue;
+                            }
+
+                            $tags[] = $tag->name;
+                        }
+
+                        foreach ( $tags as $tag ) {
+                            if ( empty( $tag ) ) continue;
+
+                            $sent_data[ $tag ] = '??????';
+                        }
+                    ?>
+
+                    <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
+                        echo json_encode( $sent_data, JSON_PRETTY_PRINT );
+                    ?></pre>
+                    <p class="description"><?php
+                        _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' );
+
+                        echo '<br>';
+
+                        printf(
+                            __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ),
+                            '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>'
+                        );
+                    ?></p>
+                </div>
+            </fieldset>
+        </div>
     </div>
-</fieldset>
-
-<h2>
-    <?php _e( 'Data sent to Webhook', 'cf7-to-zapier' ) ?>
-</h2>
-
-<fieldset>
-    <legend>
-        <?php _e( 'We will send your form data as below:', 'cf7-to-zapier' ) ?>
-    </legend>
-
-    <div style="margin: 20px 0;">
-        <?php
-            $sent_data = array();
-
-            // Special Tags
-            $special_tags = array();
-            $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
-            $tags = array_keys( $special_tags );
-
-            // Form Tags
-            $form_tags = $contactform->scan_form_tags();
-            foreach ( $form_tags as $tag ) {
-                $key = $tag->get_option('webhook');
-                if (! empty($key) && ! empty($key[0])) {
-                    $tags[] = $key[0];
-                    continue;
-                }
-
-                $tags[] = $tag->name;
-            }
-
-            foreach ( $tags as $tag ) {
-                if ( empty( $tag ) ) continue;
-
-                $sent_data[ $tag ] = '??????';
-            }
-        ?>
-
-        <pre style="background: #FFF; border: 1px solid #CCC; padding: 10px; margin: 0;"><?php
-            echo json_encode( $sent_data, JSON_PRETTY_PRINT );
-        ?></pre>
-        <p class="description"><?php
-            _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' );
-
-            echo '<br>';
-
-            printf(
-                __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ),
-                '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>'
-            );
-        ?></p>
-    </div>
-</fieldset>
+</div>

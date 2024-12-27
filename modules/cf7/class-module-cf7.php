@@ -63,6 +63,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             // Admin Hooks
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
+            $this->core->add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
         }
 
         /**
@@ -98,6 +99,25 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", "cf7-to-zapier" ) . '</a></p>';
             echo '</div>';
+        }
+
+        /**
+         * Action: 'admin_enqueue_scripts'
+         * Add admin scripts like.
+         *
+         * @see contact-form-7/admin/admin.php
+         *
+         * @return void
+         */
+        public function admin_enqueue_scripts( $page ) {
+            if ( false === strpos( $page, 'wpcf7' ) ) {
+                return;
+            }
+
+            $version = ctz_is_developing() ? uniqid() : CFTZ_VERSION;
+
+            wp_enqueue_style( 'ctz-admin-style', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.css', [], $version );
+            wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'jquery' ], $version );
         }
 
         /**
