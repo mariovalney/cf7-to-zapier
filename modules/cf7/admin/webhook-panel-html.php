@@ -63,9 +63,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         </p>
     <?php endif; ?>
 
-    <h2>
-        <?php _e( 'Webhook', 'cf7-to-zapier' ) ?>
-    </h2>
+    <h1 class="ctz-section-title" class="ctz-section-title"><?php _e( 'Webhook', 'cf7-to-zapier' ) ?></h1>
 
     <fieldset>
         <legend>
@@ -142,7 +140,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         </table>
     </fieldset>
 
-    <hr style="margin: 10px 0 20px 0;">
+    <h1 class="ctz-section-title"><?php _e( 'More settings', 'cf7-to-zapier' ) ?></h1>
 
     <div class="ctz-accordion-wrapper">
         <div class="ctz-accordion-trigger">

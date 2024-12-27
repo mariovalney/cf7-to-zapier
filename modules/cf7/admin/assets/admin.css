@@ -1,3 +1,22 @@
+#ctz-settings .ctz-section-title {
+  font-weight: bold;
+  margin: 0 0 1.3rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: #FF4A00;
+}
+
+#ctz-settings .ctz-section-title:after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: #dcdcde;
+  margin-left: 1rem;
+  flex-grow: 1;
+}
+
 #ctz-settings .ctz-accordion-wrapper {
   margin: 0 -16px;
 }
