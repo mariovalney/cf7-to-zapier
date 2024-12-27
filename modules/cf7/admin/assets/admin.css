@@ -1,13 +1,62 @@
-#ctz-settings .ctz-section-title {
+#webhook-panel {
+  padding: 16px 16px 0 !important;
+}
+
+#webhook-panel .ctz-b0 {
+  border: none !important;
+}
+
+#webhook-panel pre {
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  padding: 10px;
+  margin: 0;
+}
+
+#webhook-panel .description {
+  font-size: 13px;
+}
+
+#webhook-panel legend {
+  margin: 0 0 0.5!important;
+}
+
+#webhook-panel legend p {
+  margin: 0 0 0.5rem;
+}
+
+#webhook-panel legend p:last-child {
+  margin-bottom: 0;
+}
+
+#webhook-panel .donation-alert {
+  background: #FF4A00;
+  display: block;
+  color: #FFFFFF;
+  padding: 10px 15px;
+  margin: 10px 0 20px;
+}
+
+#webhook-panel .donation-alert strong {
+  margin-right: 5px;
+}
+
+#webhook-panel .donation-alert a {
+  color: inherit;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#webhook-panel .ctz-section-title {
   font-weight: bold;
-  margin: 0 0 1.3rem;
+  margin: 0 0 0.4rem;
   display: flex;
   align-items: center;
   white-space: nowrap;
   color: #FF4A00;
 }
 
-#ctz-settings .ctz-section-title:after {
+#webhook-panel .ctz-section-title:after {
   content: '';
   display: block;
   height: 1px;
@@ -17,43 +66,78 @@
   flex-grow: 1;
 }
 
-#ctz-settings .ctz-accordion-wrapper {
+#webhook-panel .ctz-accordion-wrapper {
   margin: 0 -16px;
 }
 
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-trigger {
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger {
   cursor: pointer;
-  padding: 0.3rem 16px 0.4rem;
-}
-
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-trigger:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-trigger h2 {
-  font-weight: bold;
+  padding: 1rem 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-trigger h2:after {
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger:after {
   content: "\f347";
   font-size: 1.1rem;
   font-family: 'dashicons';
 }
 
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-trigger.open h2:after {
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger.open:after {
   content: "\f343";
 }
 
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-content {
-  padding: 1rem 16px;
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger:hover {
+  background: rgba(0, 0, 0, 0.1);
 }
 
-#ctz-settings .ctz-accordion-wrapper .ctz-accordion-content h3 {
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger h2 {
+  font-weight: bold;
+  margin: 0;
+}
+
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-trigger .description {
+  margin: 0.5rem 0 0 0;
+}
+
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-content {
+  padding: 1rem 16px 1.5rem;
+  border-bottom: 1px solid #dcdcde;
+}
+
+#webhook-panel .ctz-accordion-wrapper .ctz-accordion-content h3 {
   font-weight: normal;
   font-size: 1rem;
   text-decoration: underline;
   margin: 0 0 1rem;
+}
+
+#webhook-panel .faq-list {
+  margin: 0;
+}
+
+#webhook-panel .faq-list li {
+  margin: 0 0 0.5rem;
+}
+
+#webhook-panel .faq-list li a {
+  color: #FF4A00;
+  box-shadow: none;
+}
+
+#webhook-panel .faq-list li a:hover {
+  color: #E54300;
+}
+
+#webhook-panel .faq-list li.new-topic {
+  margin-top: 1rem;
+}
+
+#webhook-panel .faq-list li.new-topic a {
+  color: #2271b1;
+}
+
+#webhook-panel .faq-list li.new-topic a:hover {
+  color: #135e96;
 }
