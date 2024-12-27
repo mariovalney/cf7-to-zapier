@@ -152,7 +152,8 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 4.0.0 ###
 
-* New feature: ?? [read more](https://wordpress.org/support/topic/).
+* New feature: error notification and status check.
+* New feature: send file content as base64 (props to @ozanerturk).
 * Settings UI renewed.
 
 ### 3.0.2 ###
@@ -282,14 +283,12 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 3.0.0 ###
+### 4.0.0 ###
 
-Added support to placeholders in webhook URLs!
-You can check details [in this topic](https://wordpress.org/support/topic/use-webhook-url-placeholders).
+We have a lot of new features and a new UI!
+It's not a breaking change version, but we recommend to test your form after update (we have new settings: saving the form maybe help).
 
 More changes:
 
-* Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.
-* A donate link if you feel the need to give back.
 * Some fixes (including translations).

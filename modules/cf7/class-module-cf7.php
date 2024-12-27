@@ -442,6 +442,9 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         private function get_data_from_contact_form( $contact_form ) {
             $data = [];
 
+            // Form properties
+            $properties = self::get_form_properties( $contact_form );
+
             // Submission
             $submission = WPCF7_Submission::get_instance();
             $uploaded_files = ( ! empty( $submission ) ) ? $submission->uploaded_files() : [];
@@ -476,6 +479,20 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
                     $copied_files = [];
                     foreach ( (array) $files as $file ) {
+                        // Send file content
+                        if ( ! empty( $properties['files_send_content'] ) ) {
+                            $file_content = file_get_contents( $file );
+                            $file_content = base64_encode( $file_content );
+
+                            $copied_files[] = array(
+                                'filename' => basename( $file ),
+                                'content' => $file_content,
+                            );
+
+                            continue;
+                        }
+
+                        // Send file link
                         wp_mkdir_p( $upload_dir );
 
                         $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
@@ -493,7 +510,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
                     $value = $copied_files;
 
-                    if (count($value) === 1) {
+                    if ( count( $value ) === 1 ) {
                         $value = $value[0];
                     }
                 }
@@ -684,6 +701,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 ],
                 [
                     'key'     => 'send_mail',
+                    'default' => '0',
+                    'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'files_send_content',
                     'default' => '0',
                     'type'    => 'checkbox',
                 ],

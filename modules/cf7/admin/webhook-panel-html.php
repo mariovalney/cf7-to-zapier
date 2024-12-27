@@ -115,6 +115,39 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
+            <h2><?php _e( 'Files', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'Define how you want to send files.', 'cf7-to-zapier' ) ?></p>
+        </div>
+    </div>
+
+    <div class="ctz-accordion-content">
+        <fieldset>
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <label>
+                                <?php _e( 'Send content', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <label for="ctz-webhook-files_send_content">
+                                    <?php ctz_checkbox_input( 'files_send_content', $files_send_content ); ?>
+                                    <?php _e( 'Check to send file content insted of a link', 'cf7-to-zapier' ) ?>
+                                </label>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
+
+<div class="ctz-accordion-wrapper">
+    <div class="ctz-accordion-trigger">
+        <div>
             <h2><?php _e( 'Special Mail Tags', 'cf7-to-zapier' ) ?></h2>
             <p class="description"><?php _e( 'When you need more information.', 'cf7-to-zapier' ) ?></p>
         </div>
