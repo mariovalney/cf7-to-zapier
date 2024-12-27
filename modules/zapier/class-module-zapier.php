@@ -96,9 +96,17 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              */
             $result = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form ) );
 
-            // If result is a WP Error, throw a Exception woth the message.
+            // If result is a WP Error, throw a Exception with the message.
             if ( is_wp_error( $result ) ) {
-                throw new Exception( $result->get_error_message() );
+                throw new CFTZ_Exception( $result );
+            }
+
+            // Check the accepted code status for webhook
+            $code = wp_remote_retrieve_response_code( $result );
+            if ( ! in_array( $code, $properties['accepted_statuses'] ) ) {
+                $error = new WP_Error();
+                $error->add( $code, __( 'Webhook returned a error code.', 'cf7-to-zapier' ), [ 'result' => $result ] );
+                throw new CFTZ_Exception( $error );
             }
 
             /**

@@ -152,51 +152,81 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    WPCF7_ContactForm  $contactform    Current ContactForm Obj
          */
         public function wpcf7_save_contact_form( $contact_form ) {
-            $new_properties = [];
+            $props = static::get_properties();
+            $properties = static::get_form_properties( $contact_form );
 
-            if ( isset( $_POST['ctz-webhook-activate'] ) && $_POST['ctz-webhook-activate'] == '1' ) {
-                $new_properties[ 'activate' ] = '1';
-            } else {
-                $new_properties[ 'activate' ] = '0';
-            }
+            foreach ( $props as $prop ) {
+                $key = $prop['key'];
+                $name = 'ctz-webhook-' . $key;
 
-            if ( isset( $_POST['ctz-webhook-hook-url'] ) ) {
-                $hook_urls = array_filter( array_map( function( $hook_url ) {
-                    $placeholders = self::get_hook_url_placeholders( $hook_url );
+                $value = ( isset( $_POST[ $name ] ) ) ? $_POST[ $name ] : null;
 
-                    foreach ( $placeholders as $key => $placeholder ) {
-                        $hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
+                // Checkbox
+                if ( $prop['type'] === 'checkbox' ) {
+                    $properties[ $key ] = ( $value === '1' ) ? '1' : '0';
+                    continue;
+                }
+
+                // Textarea
+                if ( $prop['type'] === 'textarea' ) {
+                    $properties[ $key ] = sanitize_textarea_field( $value );
+                    continue;
+                }
+
+                // Hook Urls
+                if ( $prop['type'] === 'hookurl' ) {
+                    $properties[ $key ] = array_filter( array_map( function( $hook_url ) {
+                        $placeholders = self::get_hook_url_placeholders( $hook_url );
+
+                        foreach ( $placeholders as $key => $placeholder ) {
+                            $hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
+                        }
+
+                        $hook_url = esc_url_raw( $hook_url );
+
+                        foreach ( $placeholders as $key => $placeholder ) {
+                            $hook_url = str_replace( '_____' . $key . '_____', $placeholder, $hook_url );
+                        }
+
+                        return $hook_url;
+                    }, explode( PHP_EOL, $value ?? '' ) ) );
+                    continue;
+                }
+
+                // Mail list
+                if ( $prop['type'] === 'maillist' ) {
+                    $value = explode( ',', sanitize_text_field( $value ) );
+                    $value = array_filter( $value, function( $email ) {
+                        return filter_var( trim( $email ), FILTER_VALIDATE_EMAIL );
+                    } );
+
+                    $properties[ $key ] = array_unique( $value );
+                    continue;
+                }
+
+                // Mail list
+                if ( $prop['type'] === 'codelist' ) {
+                    $value = explode( ',', sanitize_text_field( $value ) );
+                    $value = array_map( 'trim', $value );
+                    $value = array_map( 'intval', $value );
+                    $value = array_unique( array_filter( $value ) );
+
+                    if ( empty( $value ) ) {
+                        $value = $prop['default'];
                     }
 
-                    $hook_url = esc_url_raw( $hook_url );
+                    $properties[ $key ] = $value;
+                    continue;
+                }
 
-                    foreach ( $placeholders as $key => $placeholder ) {
-                        $hook_url = str_replace( '_____' . $key . '_____', $placeholder, $hook_url );
-                    }
-
-                    return $hook_url;
-                }, explode( PHP_EOL, $_POST['ctz-webhook-hook-url'] ) ) );
-                $new_properties[ 'hook_url' ] = $hook_urls;
+                // Default
+                $properties[ $key ] = sanitize_text_field( $value );
             }
 
-            if ( isset( $_POST['ctz-webhook-send-mail'] ) && $_POST['ctz-webhook-send-mail'] == '1' ) {
-                $new_properties[ 'send_mail' ] = '1';
-            } else {
-                $new_properties[ 'send_mail' ] = '0';
-            }
-
-            if ( isset( $_POST['ctz-special-mail-tags'] ) ) {
-                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['ctz-special-mail-tags'] );
-            }
-
-            if ( isset( $_POST['ctz-custom-headers'] ) ) {
-                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( $_POST['ctz-custom-headers'] );
-            }
-
-            $properties = $contact_form->get_properties();
-            $old_properties = $properties[ self::METADATA ];
-            $properties[ self::METADATA ] = array_merge( $old_properties, $new_properties );
-            $contact_form->set_properties( $properties );
+            // Update
+            $form_properties = $contact_form->get_properties();
+            $form_properties[ self::METADATA ] = $properties;
+            $contact_form->set_properties( $form_properties );
         }
 
         /**
@@ -208,13 +238,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          */
         public function wpcf7_contact_form_properties( $properties, $instance ) {
             if ( ! isset( $properties[ self::METADATA ] ) ) {
-                $properties[ self::METADATA ] = array(
-                    'activate'          => '0',
-                    'hook_url'          => [],
-                    'send_mail'         => '0',
-                    'special_mail_tags' => '',
-                    'custom_headers'    => '',
-                );
+                $properties[ self::METADATA ] = static::get_form_properties();
             }
 
             return $properties;
@@ -228,9 +252,9 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    obj                $contact_form   ContactForm Obj
          */
         public function wpcf7_skip_mail( $skip_mail, $contact_form ) {
-            $properties = $contact_form->prop( self::METADATA );
+            $properties = self::get_form_properties( $contact_form );
 
-            if ( $this->can_submit_to_zapier( $contact_form ) ) {
+            if ( $this->can_submit_to_webhook( $contact_form ) ) {
                 return empty( $properties['send_mail'] );
             }
 
@@ -238,15 +262,15 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         }
 
         /**
-         * Action 'wpcf7_mail_sent' to send data to Zapier
+         * Action 'wpcf7_mail_sent' to send data to webhook
          *
          * @since    1.0.0
          * @param    obj                $contact_form   ContactForm Obj
          */
         public function wpcf7_mail_sent( $contact_form ) {
-            $properties = $contact_form->prop( self::METADATA );
+            $properties = self::get_form_properties( $contact_form );
 
-            if ( ! $this->can_submit_to_zapier( $contact_form ) ) {
+            if ( ! $this->can_submit_to_webhook( $contact_form ) ) {
                 return;
             }
 
@@ -315,7 +339,76 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                      */
                     $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
 
-                    // If empty ignore
+                    /**
+                     * Filter: ctz_trigger_webhook_error_mails
+                     *
+                     * The 'ctz_trigger_webhook_error_mails' filter change the mails we'll notify in case of error.
+                     * Default is site administrator, but you can change it in administration.
+                     *
+                     * @since 4.0.0
+                     */
+                    $error_mails =  apply_filters( 'ctz_trigger_webhook_error_mails', $properties['error_mails'], $exception );
+
+                    if ( ! empty( $error_mails ) ) {
+                        $form = sprintf( '#%s - %s', $contact_form->id(), $contact_form->title() );
+
+                        $notification = __( '
+                            Hey! How are you?
+
+                            "CF7 to Webhook" has a built-in feature that detects when a webhook fails and notifies you with this automated email.
+
+                            - Form: [FORM]
+                            - Webhook: [WEBHOOK]
+                            - Error: [EXCEPTION]
+
+                            Submited data:
+                            [REQUEST]
+
+                            Response Code:
+                            [RESPONSE_CODE]
+
+                            Response Message:
+                            [RESPONSE_MESSAGE]
+
+                            Response Body:
+                            [RESPONSE_BODY]
+
+                            --
+
+                            You\'ll receive one notification for each webhook with errors.
+                            Other webhooks maybe were successful.
+                        ', 'cf7-to-zapier' );
+
+                        $notification = str_replace(
+                            array(
+                                '[FORM]',
+                                '[WEBHOOK]',
+                                '[EXCEPTION]',
+                                '[REQUEST]',
+                                '[RESPONSE_CODE]',
+                                '[RESPONSE_MESSAGE]',
+                                '[RESPONSE_BODY]',
+                            ),
+                            array(
+                                $form,
+                                $hook_url,
+                                ( method_exists( $exception, 'get_error') ) ? json_encode( $exception->get_error() ) : $exception->getMessage(),
+                                json_encode( $data ),
+                                ( method_exists( $exception, 'get_response_code') ) ? json_encode( $exception->get_response_code() ) : '',
+                                ( method_exists( $exception, 'get_response_message') ) ? json_encode( $exception->get_response_message() ) : '',
+                                ( method_exists( $exception, 'get_response_body') ) ? json_encode( $exception->get_response_body() ) : '',
+                            ),
+                            $notification
+                        );
+
+                        wp_mail(
+                            $error_mails,
+                            sprintf( __( '[%s] Webhook Error on Form %s', 'cf7-to-zapier' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), $form ),
+                            $notification,
+                        );
+                    }
+
+                    // If empty ignore after sending notification
                     if ( empty( $error_message ) ) continue;
 
                     // Submission error
@@ -474,7 +567,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $tags = [];
             $data = [];
 
-            $properties = $contact_form->prop( self::METADATA );
+            $properties = self::get_form_properties( $contact_form );
             if ( ! empty( $properties['special_mail_tags'] ) ) {
                 $tags = self::get_special_mail_tags_from_string( $properties['special_mail_tags'] );
             }
@@ -503,13 +596,13 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         }
 
         /**
-         * Check we can submit a form to Zapier
+         * Check we can submit a form to webhook
          *
          * @since    1.0.0
          * @param    obj                $contact_form   ContactForm Obj
          */
-        private function can_submit_to_zapier( $contact_form ) {
-            $properties = $contact_form->prop( self::METADATA );
+        private function can_submit_to_webhook( $contact_form ) {
+            $properties = self::get_form_properties( $contact_form );
 
             if ( empty( $properties ) || empty( $properties['activate'] ) || empty( $properties['hook_url'] ) ) {
                 return false;
@@ -569,6 +662,82 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             }
 
             return $placeholders;
+        }
+
+        /**
+         * Get CF7 To Webhook Properties
+         *
+         * @since    4.0.0
+         * @return   array      $options
+         */
+        public static function get_properties() {
+            return [
+                [
+                    'key'     => 'activate',
+                    'default' => '0',
+                    'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'hook_url',
+                    'default' => [],
+                    'type'    => 'hookurl',
+                ],
+                [
+                    'key'     => 'send_mail',
+                    'default' => '0',
+                    'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'special_mail_tags',
+                    'default' => '',
+                    'type'    => 'textarea',
+                ],
+                [
+                    'key'     => 'custom_headers',
+                    'default' => '',
+                    'type'    => 'textarea',
+                ],
+                [
+                    'key'     => 'error_mails',
+                    'default' => [ get_option( 'admin_email' ) ],
+                    'type'    => 'maillist',
+                ],
+                [
+                    'key'     => 'accepted_statuses',
+                    'default' => [ 200, 201, 202, 204, 205 ],
+                    'type'    => 'codelist',
+                ],
+            ];
+        }
+
+        /**
+         * GEt contact form properties
+         *
+         * @since    4.0.0
+         * @param    WPCF7_ContactForm  $contactform    Current ContactForm Obj
+         * @return   array      $options
+         */
+        public static function get_form_properties( $contactform = null ) {
+            $settings = static::get_properties();
+
+            if ( empty( $contactform ) || ! is_a( $contactform, 'WPCF7_ContactForm' ) ) {
+                return array_column( $settings, 'default', 'key' );
+            }
+
+            $options = array();
+            $properties = $contactform->prop( self::METADATA );
+            foreach ( $settings as $setting ) {
+                $key = $setting['key'];
+
+                if ( isset( $properties[ $key ] ) ) {
+                    $options[ $key ] = $properties[ $key ];
+                    continue;
+                }
+
+                $options[ $key ] = $setting['default'];
+            }
+
+            return $options;
         }
 
         /**

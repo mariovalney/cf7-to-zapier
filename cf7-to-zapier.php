@@ -55,7 +55,7 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @since    1.0.0
          */
         public function __construct() {
-            $this->include_functions_file();
+            $this->include_file();
             $this->define_hooks();
             $this->add_modules();
         }
@@ -105,8 +105,11 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @since    1.0.0
          * @access   private
          */
-        private function include_functions_file() {
+        private function include_file() {
             require_once plugin_dir_path( __FILE__ ) . 'includes/functions-debug.php';
+
+            require_once plugin_dir_path( __FILE__ ) . 'includes/functions-admin.php';
+            require_once plugin_dir_path( __FILE__ ) . 'includes/class-exception.php';
         }
 
         /**
