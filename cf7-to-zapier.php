@@ -7,7 +7,7 @@
  * Plugin Name:       CF7 to Webhook
  * Plugin URI:        https://github.com/mariovalney/cf7-to-zapier
  * Description:       Use Contact Form 7 as a trigger to any webhook like Zapier!
- * Version:           3.0.6
+ * Version:           4.0.0
  * Author:            Mário Valney
  * Author URI:        http://mariovalney.com/me
  * Text Domain:       cf7-to-zapier
