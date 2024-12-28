@@ -144,6 +144,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 = 4.0.0 =
 
+* New feature: advanced custom body.
 * New feature: error notification and status check.
 * New feature: send file content as base64 (props to @ozanerturk).
 * Settings UI renewed.
@@ -279,6 +280,12 @@ Props to @shoreline-chrism
 
 We have a lot of new features and a new UI!
 It's not a breaking change version, but we recommend to test your form after update (we have new settings: saving the form maybe help).
+
+New options:
+
+* Advanced custom body.
+* Error notification and response status check.
+* Send file content as Base64 instead of create a link to download.
 
 More changes:
 
