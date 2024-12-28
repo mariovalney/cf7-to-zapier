@@ -14,6 +14,12 @@ Use Contact Form 7 as a trigger to any webhook!
 
 ## Description ##
 
+**CF7 to Webhook** is trusted by more than 30.000 WordPress websites and translated in languages!
+
+Thank you!
+
+---
+
 [Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/ "Install it first, of course") is a awesome plugin used by 1+ million WordPress websites.
 
 Webhooks are endpoint (urls) you can send data!
