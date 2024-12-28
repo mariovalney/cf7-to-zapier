@@ -70,10 +70,25 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 return;
             }
 
+            $body = json_encode( $data );
+            $is_json = true;
+
+            if ( ! empty( $properties['custom_body'] ) ) {
+                $body = $properties['custom_body'];
+
+                foreach ( $data as $key => $value ) {
+                    $body = str_replace( '[' . $key . ']', $value, $body );
+                }
+
+                if ( json_decode( $body, JSON_FORCE_OBJECT ) === null ) {
+                    $is_json = false;
+                }
+            }
+
             $args = array(
                 'method'    => 'POST',
-                'body'      => json_encode( $data ),
-                'headers'   => $this->create_headers($properties['custom_headers'] ?? ''),
+                'body'      => $body,
+                'headers'   => $this->create_headers( $properties['custom_headers'] ?? '', $is_json ),
             );
 
             /**
@@ -134,19 +149,20 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          *
          * @since    2.3.0
          */
-        public function create_headers($custom) {
-            $headers = array( 'Content-Type'  => 'application/json' );
+        public function create_headers( $custom, $is_json = true ) {
+            $headers = [ 'Content-Type'  => $is_json ? 'application/json' : 'text/plain' ];
+
             $blog_charset = get_option( 'blog_charset' );
             if ( ! empty( $blog_charset ) ) {
                 $headers['Content-Type'] .= '; charset=' . get_option( 'blog_charset' );
             }
 
-            $custom = explode("\n", $custom);
-            foreach ($custom as $header) {
-                $header = explode(':', $header, 2);
-                $header = array_map('trim', $header);
+            $custom = explode( "\n", $custom );
+            foreach ( $custom as $header ) {
+                $header = explode( ':', $header, 2 );
+                $header = array_map( 'trim', $header );
 
-                if (count($header) === 2) {
+                if ( count( $header ) === 2 ) {
                     $headers[ $header[0] ] = $header[1];
                 }
             }

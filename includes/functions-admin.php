@@ -48,6 +48,6 @@ if ( ! function_exists( 'ctz_textarea_input' ) ) {
         $rows = ( (int) substr_count( $value, "\n" ) ) + 2;
         $rows = max( $rows, 4 );
 
-        echo '<textarea id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" rows="' . $rows . '" class="large-text">' . $value . '</textarea>';
+        echo '<textarea id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" rows="' . $rows . '" class="large-text code">' . $value . '</textarea>';
     }
 }

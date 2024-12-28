@@ -6,6 +6,18 @@
   border: none !important;
 }
 
+#webhook-panel .ctz-mt3 {
+  margin-top: 1rem !important;
+}
+
+#webhook-panel .ctz-mb3 {
+  margin-bottom: 1rem !important;
+}
+
+#webhook-panel .ctz-color-red {
+  color: #AA0000;
+}
+
 #webhook-panel pre {
   background: #FFFFFF;
   border: 1px solid #CCCCCC;
@@ -19,6 +31,7 @@
 
 #webhook-panel legend {
   margin: 0 0 0.5!important;
+  padding: 0;
 }
 
 #webhook-panel legend p {

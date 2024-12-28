@@ -209,6 +209,82 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
+            <h2><?php _e( 'Custom Body', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you need customize your request.', 'cf7-to-zapier' ) ?></p>
+        </div>
+    </div>
+
+    <div class="ctz-accordion-content">
+        <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( "This can break your integration (check your quotes).", 'cf7-to-zapier' ) ?></p>
+        <p class="description ctz-mb3"><strong><?php _e( 'REMEMBER:', 'cf7-to-zapier' ) ?></strong> <?php printf( __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ), '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>' ); ?></p>
+
+        <fieldset>
+            <label for="ctz-custom_body">
+                <?php ctz_textarea_input( 'custom_body', $custom_body ); ?>
+            </label>
+            <p class="description"><?php _e( 'To create your own body, you can replace values like in mail body (case sensitive).', 'cf7-to-zapier' ); ?></p>
+            <p class="description"><?php
+                printf(
+                    __( 'Example: %s', 'cf7-to-zapier' ),
+                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">{ "message": "Sir [your-name] from [your-city]." }</span>'
+                );
+            ?></p>
+        </fieldset>
+
+        <fieldset class="ctz-mt3">
+            <?php
+                $sent_data = array();
+                $is_json = true;
+
+                // Special Tags
+                $special_tags = array();
+                $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
+                $tags = array_keys( $special_tags );
+
+                // Form Tags
+                $form_tags = $contactform->scan_form_tags();
+                foreach ( $form_tags as $tag ) {
+                    $key = $tag->get_option('webhook');
+                    if (! empty($key) && ! empty($key[0])) {
+                        $tags[] = $key[0];
+                        continue;
+                    }
+
+                    $tags[] = $tag->name;
+                }
+
+                foreach ( $tags as $tag ) {
+                    if ( empty( $tag ) ) continue;
+                    $sent_data[ $tag ] = '??????';
+                }
+
+                // Custom Body
+                if ( ! empty( $custom_body ) ) {
+                    $custom_sent_data = $custom_body;
+
+                    foreach ( $sent_data as $key => $value ) {
+                        $custom_sent_data = str_replace( '[' . $key . ']', $value, $custom_sent_data );
+                    }
+
+                    $custom_sent_json = json_decode( $custom_sent_data, JSON_FORCE_OBJECT );
+
+                    $sent_data = ( $custom_sent_json === null ) ? $custom_sent_data : $custom_sent_json;
+                    $is_json = ( $custom_sent_json !== null );
+                }
+            ?>
+
+            <legend>
+                <?php $is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
+            </legend>
+            <pre><?php echo $is_json ? json_encode( $sent_data, JSON_PRETTY_PRINT ) : $sent_data; ?></pre>
+            <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
+        </fieldset>
+    </div>
+</div>
+
+<div class="ctz-accordion-wrapper">
+    <div class="ctz-accordion-trigger">
+        <div>
             <h2><?php _e( 'Errors', 'cf7-to-zapier' ) ?></h2>
             <p class="description"><?php _e( 'How we handle errors.', 'cf7-to-zapier' ) ?></p>
         </div>
@@ -279,62 +355,6 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
                 echo "\n";
                 _e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
             ?></pre>
-        </fieldset>
-    </div>
-</div>
-
-<div class="ctz-accordion-wrapper">
-    <div class="ctz-accordion-trigger">
-        <div>
-            <h2><?php _e( 'Body Data', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'Data sent to your webhook.', 'cf7-to-zapier' ); ?></p>
-        </div>
-    </div>
-
-    <div class="ctz-accordion-content">
-        <fieldset>
-            <legend>
-                <?php _e( 'We will send your form data as below:', 'cf7-to-zapier' ) ?>
-            </legend>
-
-            <?php
-                $sent_data = array();
-
-                // Special Tags
-                $special_tags = array();
-                $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
-                $tags = array_keys( $special_tags );
-
-                // Form Tags
-                $form_tags = $contactform->scan_form_tags();
-                foreach ( $form_tags as $tag ) {
-                    $key = $tag->get_option('webhook');
-                    if (! empty($key) && ! empty($key[0])) {
-                        $tags[] = $key[0];
-                        continue;
-                    }
-
-                    $tags[] = $tag->name;
-                }
-
-                foreach ( $tags as $tag ) {
-                    if ( empty( $tag ) ) continue;
-
-                    $sent_data[ $tag ] = '??????';
-                }
-            ?>
-
-            <pre><?php echo json_encode( $sent_data, JSON_PRETTY_PRINT ); ?></pre>
-            <p class="description"><?php
-                _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' );
-
-                echo '<br>';
-
-                printf(
-                    __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ),
-                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>'
-                );
-            ?></p>
         </fieldset>
     </div>
 </div>

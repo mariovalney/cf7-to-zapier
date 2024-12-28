@@ -173,6 +173,12 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     continue;
                 }
 
+                // JSON
+                if ( $prop['type'] === 'json' ) {
+                    $properties[ $key ] = stripslashes( sanitize_textarea_field( $value ) );
+                    continue;
+                }
+
                 // Hook Urls
                 if ( $prop['type'] === 'hookurl' ) {
                     $properties[ $key ] = array_filter( array_map( function( $hook_url ) {
@@ -718,6 +724,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'key'     => 'custom_headers',
                     'default' => '',
                     'type'    => 'textarea',
+                ],
+                [
+                    'key'     => 'custom_body',
+                    'default' => '',
+                    'type'    => 'json',
                 ],
                 [
                     'key'     => 'error_mails',
