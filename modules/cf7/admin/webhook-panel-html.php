@@ -4,12 +4,68 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 /**
+ * Properties
  * $contactform is 'WPCF7_ContactForm' from 'CFTZ_Module_CF7::html_template_panel_html'
  */
 $properties = CFTZ_Module_CF7::get_properties();
 extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
 
+/**
+ * Preview data
+ * Is not the same code but is pretty accurate to same logic
+ *
+ * TODO: use the same codebase maybe with a empty submission
+ */
+$preview = array();
+$preview_is_json = true;
+
+// Special Tags
+$special_tags = array();
+$special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
+
+// Form Tags
+$form_tags = [];
+foreach ( $contactform->scan_form_tags() as $tag ) {
+    if ( empty( $tag->name ) ) {
+        continue;
+    }
+
+    $key = $tag->get_option('webhook');
+    if (! empty($key) && ! empty($key[0])) {
+        $form_tags[] = $key[0];
+        continue;
+    }
+
+    $form_tags[] = $tag->name;
+}
+
+$tags = array_merge( array_keys( $special_tags ), array_filter( $form_tags ) );
+
+foreach ( $tags as $tag ) {
+    if ( empty( $tag ) ) continue;
+    $preview[ $tag ] = '??????';
+}
+
+// Custom Body
+if ( ! empty( $custom_body ) ) {
+    $custom_preview = $custom_body;
+
+    foreach ( $preview as $key => $value ) {
+        $value = json_encode( $value );
+        $value = preg_replace('/^"(.*)"$/', '$1', $value);
+
+        $custom_preview = str_replace( '[' . $key . ']', $value, $custom_preview );
+    }
+
+    $custom_sent_json = json_decode( $custom_preview );
+
+    $preview = ( $custom_sent_json === null ) ? $custom_preview : $custom_sent_json;
+    $preview_is_json = ( $custom_sent_json !== null );
+}
+
 ?>
+
+<script type="text/javascript">window.CTZ_ADMIN_TAGS = <?php echo json_encode( array_values( $form_tags ) ); ?></script>
 
 <?php
     /**
@@ -22,6 +78,7 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
      */
     if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) :
 ?>
+
     <p class="donation-alert">
         <strong><?php _e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
         <?php
@@ -32,6 +89,7 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
             );
         ?>
     </p>
+
 <?php endif; ?>
 
 <h1 class="ctz-section-title" class="ctz-section-title"><?php _e( 'Webhook', 'cf7-to-zapier' ) ?></h1>
@@ -91,6 +149,15 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
                     <?php endif; ?>
                 </td>
             </tr>
+        </tbody>
+    </table>
+</fieldset>
+
+<h1 class="ctz-section-title"><?php _e( 'Settings', 'cf7-to-zapier' ) ?></h1>
+
+<fieldset>
+    <table class="form-table">
+        <tbody>
             <tr>
                 <th scope="row">
                     <label>
@@ -106,11 +173,24 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
                     </p>
                 </td>
             </tr>
+            <tr>
+                <th scope="row">
+                    <label>
+                        <?php _e( 'Template', 'cf7-to-zapier' ) ?>
+                    </label>
+                </th>
+                <td>
+                    <p>
+                        <label for="ctz-webhook-template">
+                            <select id="ctz-webhook-template" class="ctz-template-select"><option></option></select>
+                            <p class="description"><?php _e( 'You can choose a template from community to update your header/body settings.', 'cf7-to-zapier' ) ?></p>
+                        </label>
+                    </p>
+                </td>
+            </tr>
         </tbody>
     </table>
 </fieldset>
-
-<h1 class="ctz-section-title"><?php _e( 'Advanced settings', 'cf7-to-zapier' ) ?></h1>
 
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
@@ -179,11 +259,49 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
     </div>
 </div>
 
+<h1 class="ctz-section-title"><?php _e( 'Advanced settings', 'cf7-to-zapier' ) ?></h1>
+
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Custom Headers', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you need authentication / authorization.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php _e( 'Method', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you are not making a POST.', 'cf7-to-zapier' ) ?></p>
+        </div>
+    </div>
+
+    <div class="ctz-accordion-content">
+        <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( 'If you select GET, we will send your data as "query params" (if your body is not a valid JSON we will trigger a error).', 'cf7-to-zapier' ) ?></p>
+
+        <fieldset>
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <label>
+                                <?php _e( 'Method', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <label for="ctz-custom_method">
+                                    <?php ctz_select_input( 'custom_method', $custom_method, [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ] ); ?>
+                                    <p class="description"><?php _e( 'Choose a HTTP method. In general, you should not change this.', 'cf7-to-zapier' ); ?></p>
+                                </label>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+
+    </div>
+</div>
+
+<div class="ctz-accordion-wrapper">
+    <div class="ctz-accordion-trigger">
+        <div>
+            <h2><?php _e( 'Headers', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you need authentication/authorization.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
@@ -209,7 +327,7 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Custom Body', 'cf7-to-zapier' ) ?></h2>
+            <h2><?php _e( 'Body', 'cf7-to-zapier' ) ?></h2>
             <p class="description"><?php _e( 'When you need customize your request.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
@@ -233,50 +351,13 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
 
         <fieldset class="ctz-mt3">
             <?php
-                $sent_data = array();
-                $is_json = true;
 
-                // Special Tags
-                $special_tags = array();
-                $special_tags = CFTZ_Module_CF7::get_special_mail_tags_from_string( $special_mail_tags );
-                $tags = array_keys( $special_tags );
-
-                // Form Tags
-                $form_tags = $contactform->scan_form_tags();
-                foreach ( $form_tags as $tag ) {
-                    $key = $tag->get_option('webhook');
-                    if (! empty($key) && ! empty($key[0])) {
-                        $tags[] = $key[0];
-                        continue;
-                    }
-
-                    $tags[] = $tag->name;
-                }
-
-                foreach ( $tags as $tag ) {
-                    if ( empty( $tag ) ) continue;
-                    $sent_data[ $tag ] = '??????';
-                }
-
-                // Custom Body
-                if ( ! empty( $custom_body ) ) {
-                    $custom_sent_data = $custom_body;
-
-                    foreach ( $sent_data as $key => $value ) {
-                        $custom_sent_data = str_replace( '[' . $key . ']', $value, $custom_sent_data );
-                    }
-
-                    $custom_sent_json = json_decode( $custom_sent_data, JSON_FORCE_OBJECT );
-
-                    $sent_data = ( $custom_sent_json === null ) ? $custom_sent_data : $custom_sent_json;
-                    $is_json = ( $custom_sent_json !== null );
-                }
             ?>
 
             <legend>
-                <?php $is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
+                <?php $preview_is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
             </legend>
-            <pre><?php echo $is_json ? json_encode( $sent_data, JSON_PRETTY_PRINT ) : $sent_data; ?></pre>
+            <pre id="ctz-webhook-preview"><?php echo $preview_is_json ? json_encode( $preview, JSON_PRETTY_PRINT ) : $preview; ?></pre>
             <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
         </fieldset>
     </div>

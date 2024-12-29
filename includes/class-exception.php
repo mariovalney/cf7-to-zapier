@@ -77,7 +77,14 @@ if ( ! class_exists( 'CFTZ_Exception' ) ) {
          * @return   object     $result
          */
         public function get_response_body() {
-            return wp_remote_retrieve_body( $this->get_result() );
+            $body = wp_remote_retrieve_body( $this->get_result() );
+
+            if ( empty( $body ) ) {
+                $body = $this->error->get_error_data() ?? [];
+                return $body['body'] ?? '';
+            }
+
+            return $body;
         }
 
     }

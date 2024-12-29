@@ -79,6 +79,10 @@
   flex-grow: 1;
 }
 
+#webhook-panel .select2 {
+  width: 100% !important;
+}
+
 #webhook-panel .ctz-accordion-wrapper {
   margin: 0 -16px;
 }
@@ -153,4 +157,94 @@
 
 #webhook-panel .faq-list li.new-topic a:hover {
   color: #135e96;
+}
+
+#ctz-webhook-confirmation {
+  display: none;
+  position: fixed;
+  background: #FFF;
+  z-index: 99999999;
+  max-width: 600px;
+  margin: 1.75rem auto;
+  top: 5%;
+  left: 50%;
+  margin-left: -300px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  padding: 3rem 2.5rem 2.5rem;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#ctz-webhook-confirmation .ctz-webhook-confirmation-message {
+  margin: 0 0 3rem;
+  color: #FF4A00;
+  font-size: 2rem;
+  line-height: 1.4;
+  font-weight: 300;
+}
+
+#ctz-webhook-confirmation .ctz-webhook-confirmation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4rem 0 0;
+}
+
+#ctz-webhook-confirmation .ctz-webhook-confirmation-buttons a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.4rem 1rem;
+  width: 100px;
+  max-width: 100%;
+  box-shadow: none;
+  border: 1px solid #FFFFFF;
+}
+
+#ctz-webhook-confirmation .ctz-webhook-confirmation-buttons .btn-cancel {
+  background: #FFFFFF;
+  color: #AA0000;
+  border-color: #AA0000;
+}
+
+#ctz-webhook-confirmation .ctz-webhook-confirmation-buttons .btn-confirm {
+  background: #FF4A00;
+  color: #FFFFFF;
+  border-color: #FF4A00;
+}
+
+#ctz-webhook-confirmation-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 9999998;
+}
+
+body.ctz-webhook-confirmation-opened {
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  #ctz-webhook-confirmation {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #ctz-webhook-confirmation .ctz-webhook-confirmation-buttons {
+    flex-direction: column;
+    margin: 3rem 0 0 0;
+  }
+
+  #ctz-webhook-confirmation .ctz-webhook-confirmation-buttons a {
+    margin-top: 1rem;
+    width: 100%;
+  }
 }

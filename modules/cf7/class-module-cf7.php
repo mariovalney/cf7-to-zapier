@@ -116,8 +116,31 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             $version = ctz_is_developing() ? uniqid() : CFTZ_VERSION;
 
-            wp_enqueue_style( 'ctz-admin-style', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.css', [], $version );
-            wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'jquery' ], $version );
+            wp_enqueue_style( 'ctz-select2-style', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/css/select2.min.css', [], $version );
+            wp_enqueue_style( 'ctz-admin-style', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.css', [ 'ctz-select2-style' ], $version );
+
+            wp_enqueue_script( 'ctz-select2-script', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js', [ 'jquery' ], $version );
+            wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'ctz-select2-script' ], $version );
+
+            // For developers: in your enviroment make "/docs" point to "/cf7-to-webhook-valney-dev"
+            $templates_url = ctz_is_developing() ? home_url( '/cf7-to-webhook-valney-dev/templates.json' ) : 'https://cf7-to-webhook.valney.dev/templates.json';
+            wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
+                'templates_url' => $templates_url,
+                'groups'        => array(
+                    'default' => __( 'Default', 'cf7-to-zapier' )
+                ),
+                'messages'      => array(
+                    'open_docs'         => __( 'This template has documentation. Want to open (another tab)?', 'cf7-to-zapier' ),
+                    'confirm_all'       => __( 'This action will replace "Headers" and "Body" and remove "Special Mail Tags".', 'cf7-to-zapier' ),
+                    'confirm_body'      => __( 'This action will replace "Body" and remove "Special Mail Tags" and "Headers".', 'cf7-to-zapier' ),
+                    'save_to_preview'   => __( 'Save to load preview.', 'cf7-to-zapier' ),
+                    'btn_no'            => __( 'No', 'cf7-to-zapier' ),
+                    'btn_yes'           => __( 'Yes', 'cf7-to-zapier' ),
+                    'btn_cancel'        => __( 'Cancel', 'cf7-to-zapier' ),
+                    'btn_continue'      => __( 'Continue', 'cf7-to-zapier' ),
+                    'choose_template'   => __( 'Choose a template', 'cf7-to-zapier' ),
+                ),
+            ) );
         }
 
         /**
@@ -709,6 +732,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'key'     => 'send_mail',
                     'default' => '0',
                     'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'custom_method',
+                    'default' => 'POST',
+                    'type'    => 'text',
                 ],
                 [
                     'key'     => 'files_send_content',

@@ -18,10 +18,6 @@ if ( ! function_exists( 'ctz_text_input' ) ) {
             $value = implode( ',', $value );
         }
 
-        if ( isset( $_POST[ 'ctz-webhook-' . $key ] ) && sanitize_text_field( $_POST[ 'ctz-webhook-' . $key ] ) != $value ) {
-            echo 'error';
-        }
-
         echo '<input class="large-text" type="text" id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" value="' . esc_attr( $value ) . '">';
     }
 }
@@ -49,5 +45,24 @@ if ( ! function_exists( 'ctz_textarea_input' ) ) {
         $rows = max( $rows, 4 );
 
         echo '<textarea id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" rows="' . $rows . '" class="large-text code">' . $value . '</textarea>';
+    }
+}
+
+/**
+ * Create a select input
+ */
+if ( ! function_exists( 'ctz_select_input' ) ) {
+    function ctz_select_input( $key, $value, $options ) {
+        echo '<select id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" class="select2">';
+
+        foreach ( $options as $key => $label ) {
+            if ( is_numeric( $key ) ) {
+                $key = $label;
+            }
+
+            echo '<option value="' . $key . '" ' . selected( $key, $value, false ) . '>' . $label . '</option>';
+        }
+
+        echo '</select>';
     }
 }

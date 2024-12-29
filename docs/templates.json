@@ -1,12 +1,10 @@
 {
-    "version": "1.0.0",
-    "premium": [],
-    "community": [
+    "default": [
         {
-            "name": "Example Template",
-            "author": "mariovalney",
-            "template": "\{ \"teste\": \"[TESTE]\" \}"
+            "name": "Slack Webhook",
+            "body": "{ \"text\": \"*New message!*\\n\\n__VALUES__\" }",
+            "separator": "\\n",
+            "docs": "https://api.slack.com/messaging/webhooks"
         }
     ]
-
 }
