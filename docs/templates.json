@@ -1,0 +1,12 @@
+{
+    "version": "1.0.0",
+    "premium": [],
+    "community": [
+        {
+            "name": "Example Template",
+            "author": "mariovalney",
+            "template": "\{ \"teste\": \"[TESTE]\" \}"
+        }
+    ]
+
+}
