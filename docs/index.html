@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="CF7 to Webhook">
+        <title>CF7 to Webhook</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                background-color: #ffffff;
+                color: #333;
+            }
+
+            a {
+                color: #FF4A00;
+                text-decoration: underline;
+            }
+
+            a:hover {
+                color: #E54300;
+            }
+
+            img {
+                width: 100%;
+                heigth: auto;
+            }
+
+            main {
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            main h1,
+            main h3,
+            main h5,
+            main h6 {
+                margin: 0 0 20px;
+                color: #FF4A00;
+            }
+
+            main h2 {
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+                margin: 20px 0;
+                color: #FF4A00;
+            }
+
+            main h2:after {
+              content: '';
+              display: block;
+              height: 1px;
+              width: 100%;
+              background: #dcdcde;
+              margin-left: 1rem;
+              flex-grow: 1;
+            }
+
+            main h4 {
+                font-weight: 300;
+                margin: 20px 0;
+                color: #FF4A00;
+                text-decoration: underline;
+            }
+
+            main p {
+                margin-bottom: 15px;
+            }
+
+            main hr {
+                margin-bottom: 15px;
+            }
+
+            main pre {
+                background: #272822;
+                color: #f8f8f2;
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+                font-size: 0.9rem;
+            }
+
+            main code {
+                background: #f4f4f9;
+                color: #c7254e;
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+
+            main ul,
+            main ol {
+                margin: 15px 0;
+                padding-left: 20px;
+            }
+
+            main ul li,
+            main ol li {
+                margin-bottom: 10px;
+            }
+
+            footer {
+                text-align: center;
+                margin-top: 20px;
+                color: #777;
+                font-size: 0.9rem;
+            }
+
+            footer a {
+                color: #FF4A00;
+                text-decoration: none;
+            }
+
+            footer a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://ps.w.org/cf7-to-zapier/assets/banner-1544x500.jpg" />
+        </header>
+        <main>
+            <h1 id="cf7-to-webhook">CF7 to Webhook</h1>
+            <p>
+                <strong>Contributors:</strong> mariovalney <br>
+                <strong>Donate link:</strong>
+                <a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS">https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS</a>
+                <br>
+                <strong>Tags:</strong> cf7, contact form, zapier, integration, webhook <br>
+                <strong>Requires at least:</strong> 4.7 <br>
+                <strong>Tested up to:</strong> 6.8 <br>
+                <strong>Stable tag:</strong> 4.0.0 <br>
+                <strong>Requires PHP:</strong> 7.4 <br>
+                <strong>License:</strong> GPLv2 or later <br>
+                <strong>License URI:</strong>
+                <a href="http://www.gnu.org/licenses/gpl-2.0.html">http://www.gnu.org/licenses/gpl-2.0.html</a>
+            </p>
+            <p>Use Contact Form 7 as a trigger to any webhook!</p>
+            <h2 id="description">Description</h2>
+            <p>
+                <strong>CF7 to Webhook</strong> is trusted by more than 30.000 WordPress websites and translated in languages!
+            </p>
+            <p>Thank you!</p>
+            <hr>
+            <p>
+                <a href="https://wordpress.org/plugins/contact-form-7/" title="Install it first, of course">Contact Form 7 (CF7)</a> is a awesome plugin used by 1+ million WordPress websites.
+            </p>
+            <p>Webhooks are endpoint (urls) you can send data!</p>
+            <p>Now you can join both: the best contact form plugin to WordPress and any webhook which receive JSON!</p>
+            <p>And Zapier?</p>
+            <p>
+                <a href="https://zapier.com">Zapier (Zapier)</a> is a awesome service to connect your apps and automate workflows!
+            </p>
+            <p>Just activate and configure Zapier to receive data!</p>
+            <p>Disclaimer: this plugin was created without any encouragement from Zapier or CF7 developers and any webhook/API service.</p>
+            <h3 id="how-to-use">How to Use</h3>
+            <p>Easily and quickly! Just activate &quot;Contact Form 7&quot; and &quot;CF7 to Webhook&quot; and configure a URL to send data (or go to Zapier to create your Zap).</p>
+            <h3 id="configuration">Configuration</h3>
+            <p>This is a example to integrate with Zapier:</p>
+            <ol>
+                <li>Create a Zap.</li>
+                <li>Choose your trigger as &quot;Webhooks&quot; app (Screenshot 2).</li>
+                <li>Choose &quot;Catch Hook&quot; option (Screenshot 3).</li>
+                <li>Done! Now insert the URL given (Screenshot 4) into your Contact Form configuration and activate integration.</li>
+            </ol>
+            <h3 id="creating-your-workflow">Creating your workflow</h3>
+            <p>After configuration you can send one form to create a example data into Zapier dashboard. Then you can continue creating your workflow with filters and other apps.</p>
+            <h3 id="translations">Translations</h3>
+            <p>You can <a href="https://translate.wordpress.org/projects/wp-plugins/cf7-to-zapier">translate CF7 to Webhook</a> to your language. </p>
+            <h3 id="review">Review</h3>
+            <p>We would be grateful for a <a href="https://wordpress.org/support/plugin/cf7-to-zapier/reviews/">review here</a>. </p>
+            <h3 id="support">Support</h3>
+            <ul>
+                <li>Contact Form 7 - 6.0.X</li>
+            </ul>
+            <h2 id="installation">Installation</h2>
+            <p>
+                <code>Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.</code>
+            </p>
+            <ul>
+                <li>Install &quot;CF7 to Webhook&quot; by plugins dashboard.</li>
+            </ul>
+            <p>Or</p>
+            <ul>
+                <li>Upload the entire <code>cf7-to-zapier</code> folder to the <code>/wp-content/plugins/</code> directory. </li>
+            </ul>
+            <p>Then</p>
+            <ul>
+                <li>Activate the plugin through the &#39;Plugins&#39; menu in WordPress.</li>
+            </ul>
+            <p>You will find &#39;Zapier&#39; tab into form configuration.</p>
+            <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+            <h3 id="did-you-renamed-the-plugin-">Did you renamed the plugin?</h3>
+            <p>Yes. Due to <a href="https://make.wordpress.org/plugins/2019/08/08/trademark-enforcement/">this</a>. </p>
+            <h3 id="does-it-works-with-gutenberg-">Does it works with Gutenberg?</h3>
+            <p>Yes. We support WordPress 5+ and CF7 too.</p>
+            <h3 id="does-it-works-for-forms-sent-out-of-cf7-">Does it works for forms sent out of CF7?</h3>
+            <p>Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).</p>
+            <h3 id="can-i-use-it-without-zapier-">Can I use it without Zapier?</h3>
+            <p>Yep. We are creating a integration to Zapier webhook, but you can insert any URL to receive a JSON formated data.</p>
+            <h3 id="my-sent-data-is-empty">My sent data is empty</h3>
+            <p>Please, go to <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a> to get help. </p>
+            <h3 id="how-can-i-submit-one-form-to-multiple-webhooks-">How can I submit one form to multiple webhooks?</h3>
+            <p>Just add one webhook per line in &quot;Webhook URL&quot; settings.</p>
+            <p>Please, read <a href="https://wordpress.org/support/topic/make-multiple-webhooks-optionals/">this topic</a> for more information. </p>
+            <h3 id="how-can-i-show-webhook-errors-on-form-submit-">How can I show webhook errors on form submit?</h3>
+            <p>We already show WordPress request errors. If you want to add theatment to webhook errors, please <a href="https://wordpress.org/support/topic/form-sent-to-zapier-randomly/#post-11249864">check this post</a>. </p>
+            <h3 id="how-can-i-upload-files-and-send-link-to-webhook-">How can I upload files and send link to webhook?</h3>
+            <p>If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.</p>
+            <h3 id="how-can-i-rename-a-field-to-webhook-">How can I rename a field to webhook?</h3>
+            <p>You can add a &quot;webhook&quot; option to your field on form edit tab.</p>
+            <p>It&#39;s like the &quot;class&quot; option: <code>[text your-field class:form-control id:field-id webhook:webhook-key]</code>. </p>
+            <p>This will create a text field with name &quot;your-field&quot;, class &quot;form-control&quot;, id &quot;field-id&quot; and will be sent to webhook with key &quot;webhook-key&quot;.</p>
+            <h3 id="how-i-can-get-the-free-text-value-">How I can get the free text value?</h3>
+            <p>We will replace the value for last option (which is the free_text input) with the value.</p>
+            <p>This way your webhook will receive the free text value and other options if you allow it (like in checkbox).</p>
+            <h3 id="who-is-the-developer-">Who is the developer?</h3>
+            <p>
+                <a href="https://mariovalney.com/me">Mário Valney</a>
+            </p>
+            <p>Brazilian developer who is part of <a href="https://profiles.wordpress.org/mariovalney">WordPress community</a>. </p>
+            <h3 id="can-i-help-you-">Can I help you?</h3>
+            <p>Yes! Visit <a href="https://github.com/mariovalney/cf7-to-zapier">GitHub repository</a> or <a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS">make a donation</a>. </p>
+            <h2 id="screenshots">Screenshots</h2>
+            <h4 id="1-cf7-to-webhook-configuration">1. CF7 to Webhook configuration</h4>
+            <p>
+                <img src="https://ps.w.org/cf7-to-zapier/assets/screenshot-1.png" alt="1. CF7 to Webhook configuration">
+            </p>
+            <h4 id="2-zapier-step-1-choosing-you-app-trigger">2. Zapier Step 1 - Choosing you app trigger</h4>
+            <p>
+                <img src="https://ps.w.org/cf7-to-zapier/assets/screenshot-2.png" alt="2. Zapier Step 1 - Choosing you app trigger">
+            </p>
+            <h4 id="3-zapier-step-2-choosing-catch-hook-option">3. Zapier Step 2 - Choosing Catch Hook option</h4>
+            <p>
+                <img src="https://ps.w.org/cf7-to-zapier/assets/screenshot-3.png" alt="3. Zapier Step 2 - Choosing Catch Hook option">
+            </p>
+            <h4 id="4-zapier-step-3-webhook-url-waiting-for-first-data-">4. Zapier Step 3 - Webhook URL (waiting for first data)</h4>
+            <p>
+                <img src="https://ps.w.org/cf7-to-zapier/assets/screenshot-4.png" alt="4. Zapier Step 3 - Webhook URL (waiting for first data)">
+            </p>
+            <h2 id="changelog">Changelog</h2>
+            <h3 id="4-0-0">4.0.0</h3>
+            <ul>
+                <li>New feature: advanced custom body.</li>
+                <li>New feature: error notification and status check.</li>
+                <li>New feature: send file content as base64 (props to @ozanerturk).</li>
+                <li>Settings UI renewed.</li>
+            </ul>
+            <h3 id="3-0-2">3.0.2</h3>
+            <ul>
+                <li>Avoid empty webhook URLs.</li>
+            </ul>
+            <h3 id="3-0-1">3.0.1</h3>
+            <ul>
+                <li>Just some docs and donate link.</li>
+                <li>Added &#39;ctz_remove_donation_alert&#39; filter to remove donate link.</li>
+            </ul>
+            <h3 id="3-0-0">3.0.0</h3>
+            <ul>
+                <li>New feature: placeholders in webhook URL <a href="https://wordpress.org/support/topic/use-webhook-url-placeholders">read more</a>. </li>
+                <li>Added &#39;ctz_hook_url_placeholder&#39; filter.</li>
+                <li>Tested against new CF7 and WP versions.</li>
+            </ul>
+            <h3 id="2-4-0">2.4.0</h3>
+            <ul>
+                <li>Added support to &quot; <em>raw</em>&quot; values (label value in <a href="https://contactform7.com/selectable-recipient-with-pipes/">PIPES</a>). </li>
+                <li>Added support to multiple webhook URLs.</li>
+                <li>Added &#39;ctz_trigger_webhook_errors&#39; action to allow trigger submission error after ignoring them.</li>
+                <li>Tested against new CF7 and WP versions.</li>
+            </ul>
+            <h3 id="2-3-0">2.3.0</h3>
+            <ul>
+                <li>Added Custom Header option.</li>
+                <li>Added &#39;ctz_ignore_default_webhook&#39; to allow ignore core submit.</li>
+                <li>Added more parameters to &#39;ctz_trigger_webhook&#39; action.</li>
+                <li>Added more parameters to &#39;ctz_post_request_args&#39; action.</li>
+            </ul>
+            <h3 id="2-2-5">2.2.5</h3>
+            <ul>
+                <li>Some minor adjustments.</li>
+                <li>Tested against new CF7 and WP versions.</li>
+            </ul>
+            <h3 id="2-2-4">2.2.4</h3>
+            <ul>
+                <li>Support to CF7 new way to load properties.</li>
+            </ul>
+            <h3 id="2-2-3">2.2.3</h3>
+            <ul>
+                <li>Support to CF7 multiple files upload.</li>
+                <li>Support to files with same name.</li>
+            </ul>
+            <h3 id="2-2-2">2.2.2</h3>
+            <ul>
+                <li>Support to CF7 5.2.1 changing &#39;wpcf7_special_mail_tags&#39; filter.</li>
+            </ul>
+            <h3 id="2-2-1">2.2.1</h3>
+            <ul>
+                <li>Support to CF7 5.2 changing &#39;free_text&#39; input name.</li>
+            </ul>
+            <p>Props to @brunojlt</p>
+            <h3 id="2-2-0">2.2.0</h3>
+            <ul>
+                <li>Support to free_text option on radio and checkboxes.</li>
+            </ul>
+            <h3 id="2-1-4">2.1.4</h3>
+            <ul>
+                <li>Added &#39;ctz_hook_url&#39; filter to change webhook URL</li>
+            </ul>
+            <p>Props to @shoreline-chrism</p>
+            <h3 id="2-1-2">2.1.2</h3>
+            <ul>
+                <li>Fix checkboxes.</li>
+            </ul>
+            <h3 id="2-1-1">2.1.1</h3>
+            <ul>
+                <li>Fix slashes on POST data.</li>
+            </ul>
+            <h3 id="2-1-0">2.1.0</h3>
+            <ul>
+                <li>Support to rename fields.</li>
+            </ul>
+            <h3 id="2-0-2">2.0.2</h3>
+            <ul>
+                <li>Plugin renamed.</li>
+            </ul>
+            <h3 id="2-0-0">2.0.0</h3>
+            <ul>
+                <li>Support to submit files.</li>
+            </ul>
+            <h3 id="1-4-0">1.4.0</h3>
+            <ul>
+                <li>Show form error when WordPress request fails and added support to throw or own exceptions.</li>
+                <li>Added &#39;ctz_post_request_result&#39; action after submit.</li>
+                <li>Added &#39;ctz_trigger_webhook_error_message&#39; filter to change form message error.</li>
+            </ul>
+            <h3 id="1-3-1">1.3.1</h3>
+            <ul>
+                <li>Remove PHP 7+ dependency.</li>
+                <li>It&#39;s sad... I know.</li>
+            </ul>
+            <h3 id="1-3-0">1.3.0</h3>
+            <ul>
+                <li>Added support to [Special Mail Tags] ( <a href="https://contactform7.com/special-mail-tags">https://contactform7.com/special-mail-tags</a>) on CF7. </li>
+                <li>Tested against WP 5.0.2 and CF7 version 5.1.</li>
+            </ul>
+            <h3 id="1-2-1">1.2.1</h3>
+            <ul>
+                <li>Tested against Contact Form 7 version 5.0.</li>
+            </ul>
+            <h3 id="1-2">1.2</h3>
+            <ul>
+                <li>Added support to <a href="https://contactform7.com/selectable-recipient-with-pipes">PIPE</a> on CF7. </li>
+                <li>Tested against WP 4.9.2.</li>
+            </ul>
+            <h3 id="1-1-1">1.1.1</h3>
+            <ul>
+                <li>Fixed problem with a function inside empty() prior PHP 5.5.</li>
+            </ul>
+            <h3 id="1-1">1.1</h3>
+            <ul>
+                <li>Added the &#39;application/json&#39; header by default to POST request.</li>
+                <li>Added &#39;ctz_post_request_args&#39; filter to POST request args.</li>
+                <li>Tested against WP 4.9.</li>
+            </ul>
+            <h3 id="1-0">1.0</h3>
+            <ul>
+                <li>It&#39;s alive!</li>
+                <li>Form configuration.</li>
+                <li>Integration to Zapier webhook.</li>
+                <li>Ignore or not CF7 mail sent.</li>
+            </ul>
+            <h2 id="upgrade-notice">Upgrade Notice</h2>
+            <h3 id="4-0-0">4.0.0</h3>
+            <p>We have a lot of new features and a new UI! It&#39;s not a breaking change version, but we recommend to test your form after update (we have new settings: saving the form maybe help).</p>
+            <p>New options:</p>
+            <ul>
+                <li>Advanced custom body.</li>
+                <li>Error notification and response status check.</li>
+                <li>Send file content as Base64 instead of create a link to download.</li>
+            </ul>
+            <p>More changes:</p>
+            <ul>
+                <li>Tested against new CF7 and WP versions.</li>
+                <li>Some fixes (including translations).</li>
+            </ul>
+        </main>
+        <footer>
+            <p>Generated with ❤️ by <a href="https://github.com">GitHub</a>
+            </p>
+        </footer>
+    </body>
+</html>
