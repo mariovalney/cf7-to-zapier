@@ -356,19 +356,6 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     );
 
                     /**
-                     * Filter: ctz_trigger_webhook_error_message
-                     *
-                     * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
-                     * Default is CF7 error message, but you can access exception to create your own.
-                     *
-                     * You can ignore errors returning false:
-                     * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
-                     *
-                     * @since 1.4.0
-                     */
-                    $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
-
-                    /**
                      * Filter: ctz_trigger_webhook_error_mails
                      *
                      * The 'ctz_trigger_webhook_error_mails' filter change the mails we'll notify in case of error.
@@ -436,6 +423,19 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                             $notification,
                         );
                     }
+
+                    /**
+                     * Filter: ctz_trigger_webhook_error_message
+                     *
+                     * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
+                     * Default is CF7 error message, but you can access exception to create your own.
+                     *
+                     * You can ignore errors returning false:
+                     * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
+                     *
+                     * @since 1.4.0
+                     */
+                    $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
 
                     // If empty ignore after sending notification
                     if ( empty( $error_message ) ) continue;

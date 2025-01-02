@@ -125,6 +125,29 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              */
             $result = wp_remote_request( $hook_url, apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form ) );
 
+            /**
+             * Action: ctz_post_request_result
+             *
+             * You can perform a action with the result of the request.
+             * By default we will thrown a CFTZ_Exception in webhook errors to send a notification.
+             *
+             * @since    1.4.0
+             */
+            do_action( 'ctz_post_request_result', $result, $hook_url );
+
+            /**
+             * Filter: ctz_post_request_ignore_errors
+             *
+             * The 'ctz_post_request_ignore_errors' filter can be used to ignore core error handler (notifications and success statuses).
+             *
+             * add_filter( 'ctz_post_request_ignore_errors', '__return_true' );
+             *
+             * @since    4.0.1
+             */
+            if ( apply_filters( 'ctz_post_request_ignore_errors', false, $hook_url, $result, $contact_form ) ) {
+                return;
+            }
+
             // If result is a WP Error, throw a Exception with the message.
             if ( is_wp_error( $result ) ) {
                 throw new CFTZ_Exception( $result );
@@ -137,16 +160,6 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 $error->add( $code, __( 'Webhook returned a error code.', 'cf7-to-zapier' ), [ 'result' => $result ] );
                 throw new CFTZ_Exception( $error );
             }
-
-            /**
-             * Action: ctz_post_request_result
-             *
-             * You can perform a action with the result of the request.
-             * By default we do nothing but you can throw a Exception in webhook errors.
-             *
-             * @since    1.4.0
-             */
-            do_action( 'ctz_post_request_result', $result, $hook_url );
         }
 
         /**
