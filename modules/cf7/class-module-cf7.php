@@ -377,14 +377,23 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                             - Webhook: [WEBHOOK]
                             - Error: [EXCEPTION]
 
-                            Submited data:
-                            [REQUEST]
+                            Request Method:
+                            [REQUEST_METHOD]
+
+                            Request Headers:
+                            [REQUEST_HEADERS]
+
+                            Request Body:
+                            [REQUEST_BODY]
 
                             Response Code:
                             [RESPONSE_CODE]
 
                             Response Message:
                             [RESPONSE_MESSAGE]
+
+                            Response Headers:
+                            [RESPONSE_HEADERS]
 
                             Response Body:
                             [RESPONSE_BODY]
@@ -400,18 +409,24 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                                 '[FORM]',
                                 '[WEBHOOK]',
                                 '[EXCEPTION]',
-                                '[REQUEST]',
+                                '[REQUEST_METHOD]',
+                                '[REQUEST_HEADERS]',
+                                '[REQUEST_BODY]',
                                 '[RESPONSE_CODE]',
                                 '[RESPONSE_MESSAGE]',
+                                '[RESPONSE_HEADERS]',
                                 '[RESPONSE_BODY]',
                             ),
                             array(
                                 $form,
                                 $hook_url,
                                 ( method_exists( $exception, 'get_error') ) ? json_encode( $exception->get_error() ) : $exception->getMessage(),
-                                json_encode( $data ),
+                                ( method_exists( $exception, 'get_request_method') ) ? $exception->get_request_method() : '(MAYBE) POST',
+                                ( method_exists( $exception, 'get_request_headers') ) ? json_encode( $exception->get_request_headers() ) : '',
+                                ( method_exists( $exception, 'get_request_body') ) ? json_encode( $exception->get_request_body() ) : json_encode( $data ),
                                 ( method_exists( $exception, 'get_response_code') ) ? json_encode( $exception->get_response_code() ) : '',
                                 ( method_exists( $exception, 'get_response_message') ) ? json_encode( $exception->get_response_message() ) : '',
+                                ( method_exists( $exception, 'get_response_headers') ) ? json_encode( $exception->get_response_headers() ) : '',
                                 ( method_exists( $exception, 'get_response_body') ) ? json_encode( $exception->get_response_body() ) : '',
                             ),
                             $notification
@@ -430,7 +445,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                      * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
                      * Default is CF7 error message, but you can access exception to create your own.
                      *
-                     * You can ignore errors returning false:
+                     * You can ignore errors returning a empty string:
                      * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
                      *
                      * @since 1.4.0

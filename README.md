@@ -5,7 +5,7 @@
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
 **Tested up to:** 6.8  
-**Stable tag:** 4.0.1  
+**Stable tag:** 4.0.2  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -159,6 +159,10 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ## Changelog ##
 
+### 4.0.2 ###
+
+* Improved notification (headers and method added).
+
 ### 4.0.1 ###
 
 * Fixes 'ctz_post_request_result' action not triggering on errors.
@@ -301,7 +305,7 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 4.0.1 ###
+### 4.0.2 ###
 
 We have a lot of new features and a new UI!
 The most cool new feature is templates! Take a look!

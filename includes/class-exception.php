@@ -40,6 +40,17 @@ if ( ! class_exists( 'CFTZ_Exception' ) ) {
         }
 
         /**
+         * Get the request
+         *
+         * @since    4.0.1
+         * @return   object     $request
+         */
+        public function get_request() {
+            $result = $this->error->get_error_data() ?? [];
+            return $result['request'] ?? [];
+        }
+
+        /**
          * Get the result
          *
          * @since    4.0.0
@@ -48,6 +59,36 @@ if ( ! class_exists( 'CFTZ_Exception' ) ) {
         public function get_result() {
             $result = $this->error->get_error_data() ?? [];
             return $result['result'] ?? $this->error;
+        }
+
+        /**
+         * Get the request method
+         *
+         * @since    4.0.2
+         * @return   array     $method
+         */
+        public function get_request_method() {
+            return $this->get_request()['method'] ?? '(MAYBE) POST';
+        }
+
+        /**
+         * Get the request headers
+         *
+         * @since    4.0.2
+         * @return   array     $headers
+         */
+        public function get_request_headers() {
+            return $this->get_request()['headers'] ?? [];
+        }
+
+        /**
+         * Get the request body
+         *
+         * @since    4.0.2
+         * @return   array|string     $body
+         */
+        public function get_request_body() {
+            return $this->get_request()['body'] ?? [];
         }
 
         /**
@@ -68,6 +109,16 @@ if ( ! class_exists( 'CFTZ_Exception' ) ) {
          */
         public function get_response_message() {
             return wp_remote_retrieve_response_message( $this->get_result() );
+        }
+
+        /**
+         * Get the response headers
+         *
+         * @since    4.0.0
+         * @return   object     $result
+         */
+        public function get_response_headers() {
+            return wp_remote_retrieve_headers( $this->get_result() );
         }
 
         /**

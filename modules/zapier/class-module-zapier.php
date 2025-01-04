@@ -88,22 +88,26 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 }
             }
 
+            // Prepare REQUEST
+            $args = array(
+                'redirection' => 10,
+                'timeout'     => 30,
+                'method'      => $properties['custom_method'] ?? 'POST',
+                'body'        => $body,
+                'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json ),
+            );
+
             // Check is valid GET
             if ( ! empty( $properties['custom_method'] ) && $properties['custom_method'] === 'GET') {
                 if ( ! $is_json ) {
                     $error = new WP_Error();
-                    $error->add( '0', __( 'Webhook has method GET but body is not a JSON to be passed as query params.', 'cf7-to-zapier' ), [ 'body' => $body ] );
+                    $error->add( '0', __( 'Webhook has method GET but body is not a JSON to be passed as query params.', 'cf7-to-zapier' ), [ 'request' => $args ] );
                     throw new CFTZ_Exception( $error );
                 }
 
                 $body = json_decode( $body, true );
+                $args['body'] = $body;
             }
-
-            $args = array(
-                'method'    => $properties['custom_method'] ?? 'POST',
-                'body'      => $body,
-                'headers'   => $this->create_headers( $properties['custom_headers'] ?? '', $is_json ),
-            );
 
             /**
              * Filter: ctz_hook_url
@@ -123,7 +127,8 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    1.1.0
              */
-            $result = wp_remote_request( $hook_url, apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form ) );
+            $args = apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form, $hook_url );
+            $result = wp_remote_request( $hook_url, $args );
 
             /**
              * Action: ctz_post_request_result
@@ -150,6 +155,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
 
             // If result is a WP Error, throw a Exception with the message.
             if ( is_wp_error( $result ) ) {
+                $result->add_data( [ 'request' => $args ] );
                 throw new CFTZ_Exception( $result );
             }
 
@@ -157,7 +163,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
             $code = wp_remote_retrieve_response_code( $result );
             if ( ! in_array( $code, $properties['accepted_statuses'] ) ) {
                 $error = new WP_Error();
-                $error->add( $code, __( 'Webhook returned a error code.', 'cf7-to-zapier' ), [ 'result' => $result ] );
+                $error->add( $code, __( 'Webhook returned a error code.', 'cf7-to-zapier' ), [ 'request' => $args, 'result' => $result ] );
                 throw new CFTZ_Exception( $error );
             }
         }
