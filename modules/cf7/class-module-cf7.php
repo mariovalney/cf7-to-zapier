@@ -435,7 +435,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                         wp_mail(
                             $error_mails,
                             sprintf( __( '[%s] Webhook Error on Form %s', 'cf7-to-zapier' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), $form ),
-                            $notification,
+                            $notification
                         );
                     }
 
