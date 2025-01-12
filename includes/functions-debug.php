@@ -50,3 +50,48 @@ if ( ! function_exists( 'dump' ) && cftz_activated_debug_functions() ) {
     }
 }
 
+/**
+ * Create a log table of data
+ */
+if ( ! function_exists( 'dump_table' ) && cftz_activated_debug_functions() ) {
+    function dump_table( $data, $line_limit = 100 ) {
+        if ( empty( $data ) ) {
+            dump( var_dump( $data ) );
+            return;
+        }
+
+        $max_line_length = 0;
+        $max_key_length = max( array_map( 'strlen', array_keys( $data ) ) );
+        $line_limit = max( $max_key_length, $line_limit );
+
+        $output = [];
+        foreach ( $data as $key => $value ) {
+            $value = (string) $value;
+
+            $wrapped_values = wordwrap( $value, $line_limit, PHP_EOL, true );
+            $lines = explode( PHP_EOL, $wrapped_values );
+
+            // Max line length
+            $max_line_length  = max( $max_line_length, max( array_map( 'strlen', $lines ) ) );
+
+            $row = '';
+            $middle_line = (int) floor( count( $lines ) / 2 );
+
+            foreach ( $lines as $line_key => $line ) {
+                $left_column = '';
+                if ( $line_key === $middle_line ) {
+                    $left_column = $key;
+                }
+
+                $row .= str_pad( $left_column, $max_key_length ) . ' | ' . $line . PHP_EOL;
+            }
+
+            // Separator
+            $output[] = $row;
+        }
+
+        $separator = str_repeat( '-', $max_key_length ) . ' | ' . str_repeat( '-', $max_line_length ) . PHP_EOL;
+        dump( PHP_EOL . PHP_EOL . implode( $separator, $output ) );
+    }
+}
+
