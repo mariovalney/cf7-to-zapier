@@ -369,39 +369,39 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                         $form = sprintf( '#%s - %s', $contact_form->id(), $contact_form->title() );
 
                         $notification = __( '
-                            Hey! How are you?
+Hey! How are you?
 
-                            "CF7 to Webhook" has a built-in feature that detects when a webhook fails and notifies you with this automated email.
+"CF7 to Webhook" has a built-in feature that detects when a webhook fails and notifies you with this automated email.
 
-                            - Form: [FORM]
-                            - Webhook: [WEBHOOK]
-                            - Error: [EXCEPTION]
+- Form: [FORM]
+- Webhook: [WEBHOOK]
+- Error: [EXCEPTION]
 
-                            Request Method:
-                            [REQUEST_METHOD]
+Request Method:
+[REQUEST_METHOD]
 
-                            Request Headers:
-                            [REQUEST_HEADERS]
+Request Headers:
+[REQUEST_HEADERS]
 
-                            Request Body:
-                            [REQUEST_BODY]
+Request Body:
+[REQUEST_BODY]
 
-                            Response Code:
-                            [RESPONSE_CODE]
+Response Code:
+[RESPONSE_CODE]
 
-                            Response Message:
-                            [RESPONSE_MESSAGE]
+Response Message:
+[RESPONSE_MESSAGE]
 
-                            Response Headers:
-                            [RESPONSE_HEADERS]
+Response Headers:
+[RESPONSE_HEADERS]
 
-                            Response Body:
-                            [RESPONSE_BODY]
+Response Body:
+[RESPONSE_BODY]
 
-                            --
+--
 
-                            You\'ll receive one notification for each webhook with errors.
-                            Other webhooks maybe were successful.
+You\'ll receive one notification for each webhook with errors.
+Other webhooks maybe were successful.
                         ', 'cf7-to-zapier' );
 
                         $notification = str_replace(
@@ -437,6 +437,11 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                             sprintf( __( '[%s] Webhook Error on Form %s', 'cf7-to-zapier' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), $form ),
                             $notification
                         );
+
+                        // Log in development
+                        if ( ctz_is_developing() && function_exists( 'dump' ) ) {
+                            dump( $notification );
+                        }
                     }
 
                     /**
