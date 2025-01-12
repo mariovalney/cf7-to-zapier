@@ -450,13 +450,8 @@ if ( ! empty( $custom_body ) ) {
 
     <div class="ctz-accordion-content ctz-b0">
         <ul class="faq-list">
-            <li><a target="_blank" href="https://wordpress.org/support/topic/how-templates-works/"><?php _e( 'How templates works?', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/make-multiple-webhooks-optionals/"><?php _e( 'Make multiple webhooks optionals.', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/change-data-before-send/"><?php _e( 'Change data before send.', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/use-webhook-url-placeholders/"><?php _e( 'Use webhook URL placeholders.', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/header-option-in-cf7-to-webhook-plugin/"><?php _e( 'Header Option in CF7 to Webhook Plugin.', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/how-to-get-label-from-pipe/"><?php _e( 'How to get label from PIPE?', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/support/topic/how-to-use-special-mail-tags-to-get-ip-date-and-other-data/"><?php _e( 'How to use Special Mail-Tags to get IP, date and other data?', 'cf7-to-zapier' ); ?></a></li>
+            <li><a target="_blank" href="https://github.com/mariovalney/cf7-to-zapier/issues/19"><?php _e( 'How to make multiple webhooks optionals?', 'cf7-to-zapier' ); ?></a></li>
+            <li><a target="_blank" href="https://wordpress.org/plugins/cf7-to-zapier/#faq"><?php _e( 'Check FAQ from plugin page.', 'cf7-to-zapier' ); ?></a></li>
             <li class="new-topic"><?php _e( 'Or...', 'cf7-to-zapier' ); ?> <a target="_blank" href="https://wordpress.org/support/plugin/cf7-to-zapier/#new-topic-0"><?php _e( 'ask a question!', 'cf7-to-zapier' ); ?></a></li>
         </ul>
     </div>
