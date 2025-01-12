@@ -5,7 +5,7 @@
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
 **Tested up to:** 6.8  
-**Stable tag:** 4.0.2  
+**Stable tag:** 4.0.3  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -38,19 +38,6 @@ Disclaimer: this plugin was created without any encouragement from Zapier or CF7
 
 Easily and quickly! Just activate "Contact Form 7" and "CF7 to Webhook" and configure a URL to send data (or go to Zapier to create your Zap).
 
-### Configuration ###
-
-This is a example to integrate with Zapier:
-
-1. Create a Zap.
-1. Choose your trigger as "Webhooks" app (Screenshot 2).
-1. Choose "Catch Hook" option (Screenshot 3).
-1. Done! Now insert the URL given (Screenshot 4) into your Contact Form configuration and activate integration.
-
-### Creating your workflow ###
-
-After configuration you can send one form to create a example data into Zapier dashboard. Then you can continue creating your workflow with filters and other apps.
-
 ### Translations ###
 
 You can [translate CF7 to Webhook](https://translate.wordpress.org/projects/wp-plugins/cf7-to-zapier) to your language.
@@ -62,6 +49,10 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 ### Support ###
 
 * Contact Form 7 - 6.0.X
+
+Tested with other plugins:
+
+* MultiLine files for Contact Form 7 - 2.9.1
 
 ## Installation ##
 
@@ -305,7 +296,7 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 4.0.2 ###
+### 4.0.3 ###
 
 We have a lot of new features and a new UI!
 The most cool new feature is templates! Take a look!
@@ -322,4 +313,5 @@ New options:
 More changes:
 
 * Tested against new CF7 and WP versions.
+* Added support to "MultiLine files for Contact Form 7" plugin.
 * Some fixes (including translations).

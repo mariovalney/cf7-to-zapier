@@ -523,7 +523,7 @@ It may contain sensitive data.
                 }
 
                 // Files
-                if ( $tag->basetype === 'file' && ! empty( $uploaded_files[ $tag->name ] ) ) {
+                if ( in_array( $tag->basetype, [ 'file', 'multilinefile' ] ) && ! empty( $uploaded_files[ $tag->name ] ) ) {
                     $files = $uploaded_files[ $tag->name ];
 
                     $copied_files = [];
@@ -565,20 +565,7 @@ It may contain sensitive data.
                 }
 
                 // Support to Pipes
-                $pipes = $tag->pipes;
-                if ( WPCF7_USE_PIPE && $pipes instanceof WPCF7_Pipes && ! $pipes->zero() ) {
-                    if ( is_array( $value) ) {
-                        $new_value = [];
-
-                        foreach ( $value as $v ) {
-                            $new_value[] = $pipes->do_pipe( wp_unslash( $v ) );
-                        }
-
-                        $value = $new_value;
-                    } else {
-                        $value = $pipes->do_pipe( wp_unslash( $value ) );
-                    }
-                }
+                $value = $this->get_value_from_pipes( $value, $tag );
 
                 // Support to Free Text on checkbox and radio
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
@@ -675,6 +662,45 @@ It may contain sensitive data.
             }
 
             return true;
+        }
+
+        /**
+         * Retrieve a array with data from Special Mail Tags
+         *
+         * @link https://contactform7.com/special-mail-tags
+         *
+         * @since    4.0.3
+         *
+         * @param    mixed              $value
+         * @param    obj                $atag   WPCF7_FormTag
+         * @return   mixed              $value
+         */
+        private function get_value_from_pipes( $value, $tag ) {
+            if ( ! WPCF7_USE_PIPE || ! $tag->pipes instanceof WPCF7_Pipes ) {
+                return $value;
+            }
+
+            /**
+             * Check for pipe support
+             * @see WPCF7_Submission::setup_posted_data()
+             */
+            if ( ! wpcf7_form_tag_supports( $tag->type, 'selectable-values' ) || $tag->pipes->zero() ) {
+                return $value;
+            }
+
+            // if ( wpcf7_form_tag_supports( $tag->type, 'selectable-values' ) ) {
+
+            if ( is_array( $value ) ) {
+                $new_value = [];
+
+                foreach ( $value as $v ) {
+                    $new_value[] = $tag->pipes->do_pipe( wp_unslash( $v ) );
+                }
+
+                return $new_value;
+            }
+
+            return $tag->pipes->do_pipe( wp_unslash( $value ) );
         }
 
         /**
