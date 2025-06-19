@@ -5,7 +5,7 @@
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
 **Tested up to:** 6.8  
-**Stable tag:** 4.0.3  
+**Stable tag:** 4.1.0  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -149,6 +149,14 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 
 ## Changelog ##
+
+### 4.1.0 ###
+
+* New feature: Added support for mail tags in headers!
+* Headers can now use form field values and special mail tags like [_remote_ip], [_url], [_user_agent].
+* Special mail tags are automatically available in headers without explicit configuration.
+* Added header preview functionality in admin panel.
+* Fixed URL formatting in headers (removed escaped forward slashes).
 
 ### 4.0.2 ###
 

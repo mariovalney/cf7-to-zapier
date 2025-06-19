@@ -308,7 +308,7 @@ if ( ! empty( $custom_body ) ) {
     <div class="ctz-accordion-content">
         <fieldset>
             <legend>
-                <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request.', 'The URL should point to HTTP Headers documentation in your language.', 'cf7-to-zapier' ); ?>
+                <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request. This also supports <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a>.', 'The URL should point to HTTP Headers documentation in your language.', 'cf7-to-zapier' ); ?>
             </legend>
 
             <label for="ctz-custom_headers">
@@ -319,8 +319,51 @@ if ( ! empty( $custom_body ) ) {
                     __( 'One header by line, separated by colon. Example: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
                 );
+                echo '<br>';
+                printf(
+                    __( 'You can also use mail tags in header values: %s', 'cf7-to-zapier' ),
+                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">X-User-Email: [your-email]</span>'
+                );
+                echo '<br>';
+                printf(
+                    __( 'Special mail tags are automatically available: %s', 'cf7-to-zapier' ),
+                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">X-Client-IP: [_remote_ip]</span>'
+                );
             ?></p>
         </fieldset>
+
+        <?php if ( ! empty( $custom_headers ) ): ?>
+        <fieldset class="ctz-mt3">
+            <?php
+            $header_preview = $custom_headers;
+            
+            // Get all available special mail tags (both configured and built-in)
+            $all_special_tags = array_merge(
+                array_keys($special_tags),
+                ['_remote_ip', '_url', '_user_agent', '_post_title', '_post_url', '_post_id', '_date', '_time', '_random']
+            );
+            
+            // Create preview data for all tags
+            $all_preview_data = $preview;
+            foreach ($all_special_tags as $tag) {
+                if (!isset($all_preview_data[$tag])) {
+                    $all_preview_data[$tag] = '??????';
+                }
+            }
+            
+            foreach ( $all_preview_data as $key => $value ) {
+                $value = json_encode( $value );
+                $value = preg_replace('/^"(.*)"$/', '$1', $value);
+                $header_preview = str_replace( '[' . $key . ']', $value, $header_preview );
+            }
+            ?>
+            <legend>
+                <?php _e( 'Headers preview (with mail tags replaced):', 'cf7-to-zapier' ); ?>
+            </legend>
+            <pre><?php echo esc_html( $header_preview ); ?></pre>
+            <p class="description"><?php _e( 'This shows how your headers will look with mail tags replaced by actual values.', 'cf7-to-zapier' ); ?></p>
+        </fieldset>
+        <?php endif; ?>
     </div>
 </div>
 
