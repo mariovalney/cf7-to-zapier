@@ -77,14 +77,29 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 $body = $properties['custom_body'];
 
                 foreach ( $data as $key => $value ) {
-                    $value = json_encode( $value );
-                    $value = preg_replace('/^"(.*)"$/', '$1', $value);
-
-                    $body = str_replace( '[' . $key . ']', $value, $body );
+                    // For string values, don't use json_encode to avoid escaped characters
+                    if ( is_string( $value ) ) {
+                        $body = str_replace( '[' . $key . ']', $value, $body );
+                    } else {
+                        $value = json_encode( $value );
+                        $value = preg_replace('/^"(.*)"$/', '$1', $value);
+                        $body = str_replace( '[' . $key . ']', $value, $body );
+                    }
                 }
 
                 if ( json_decode( $body ) === null ) {
                     $is_json = false;
+                }
+            }
+
+            // Prepare special mail tags for header replacement
+            $special_mail_tags = [
+                '_remote_ip', '_url', '_user_agent', '_post_title', '_post_url', '_post_id', '_date', '_time', '_random'
+            ];
+            $header_replacement_data = $data;
+            foreach ($special_mail_tags as $tag) {
+                if (!array_key_exists($tag, $header_replacement_data)) {
+                    $header_replacement_data[$tag] = apply_filters('wpcf7_special_mail_tags', '', $tag, false, null);
                 }
             }
 
@@ -94,7 +109,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 'timeout'     => 30,
                 'method'      => $properties['custom_method'] ?? 'POST',
                 'body'        => $body,
-                'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json ),
+                'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json, $header_replacement_data ),
             );
 
             // Check is valid GET
@@ -181,8 +196,12 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          * Get headers to request.
          *
          * @since    2.3.0
+         * @param    string     $custom    Custom headers string
+         * @param    bool       $is_json   Whether the request is JSON
+         * @param    array      $data      Form data for mail tag replacement
+         * @return   array      $headers   Headers array
          */
-        public function create_headers( $custom, $is_json = true ) {
+        public function create_headers( $custom, $is_json = true, $data = [] ) {
             $headers = [ 'Content-Type'  => $is_json ? 'application/json' : 'text/plain' ];
 
             $blog_charset = get_option( 'blog_charset' );
@@ -196,7 +215,23 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 $header = array_map( 'trim', $header );
 
                 if ( count( $header ) === 2 ) {
-                    $headers[ $header[0] ] = $header[1];
+                    $header_name = $header[0];
+                    $header_value = $header[1];
+
+                    if ( ! empty( $data ) ) {
+                        foreach ( $data as $key => $value ) {
+                            // For string values, don't use json_encode to avoid escaped characters in urls
+                            if ( is_string( $value ) ) {
+                                $header_value = str_replace( '[' . $key . ']', $value, $header_value );
+                            } else {
+                                $value = json_encode( $value );
+                                $value = preg_replace('/^"(.*)"$/', '$1', $value);
+                                $header_value = str_replace( '[' . $key . ']', $value, $header_value );
+                            }
+                        }
+                    }
+
+                    $headers[ $header_name ] = $header_value;
                 }
             }
 

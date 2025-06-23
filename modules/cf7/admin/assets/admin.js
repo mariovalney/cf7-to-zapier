@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
   });
 
   // Preview
-  $('#ctz-webhook-special_mail_tags, #ctz-webhook-custom_body').on('change', function(event) {
+  $('#ctz-webhook-special_mail_tags, #ctz-webhook-custom_body, #ctz-webhook-custom_headers').on('change', function(event) {
     $('#ctz-webhook-preview').html(CTZ_ADMIN.messages.save_to_preview);
   });
 });
