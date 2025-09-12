@@ -1,5 +1,7 @@
 <?php
 
+global $ctz_admin_tags_script;
+
 // If this file is called directly, call the cops.
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
@@ -63,21 +65,18 @@ if ( ! empty( $custom_body ) ) {
     $preview_is_json = ( $custom_sent_json !== null );
 }
 
-?>
+// Global footer script
+$ctz_admin_tags_script = '<script type="text/javascript">window.CTZ_ADMIN_TAGS = ' . json_encode( array_values( $form_tags ) ) . ';</script>';
 
-<script type="text/javascript">window.CTZ_ADMIN_TAGS = <?php echo json_encode( array_values( $form_tags ) ); ?></script>
-
-<?php
-    /**
-     * Filter: ctz_remove_donation_alert
-     *
-     * You can remove it returning true:
-     * add_filter( 'ctz_remove_donation_alert', '__return_true' );
-     *
-     * @since 3.0.1
-     */
-    if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) :
-?>
+/**
+ * Filter: ctz_remove_donation_alert
+ *
+ * You can remove it returning true:
+ * add_filter( 'ctz_remove_donation_alert', '__return_true' );
+ *
+ * @since 3.0.1
+ */
+if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
     <p class="donation-alert">
         <strong><?php _e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
@@ -319,7 +318,7 @@ if ( ! empty( $custom_body ) ) {
                     __( 'One header by line, separated by colon. Example: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
                 );
-                echo '<br>';
+                echo '<br><br>';
                 printf(
                     __( 'You can also use mail tags in header values: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">X-User-Email: [your-email]</span>'

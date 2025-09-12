@@ -64,6 +64,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             // Admin Hooks
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
             $this->core->add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
+            $this->core->add_action( 'admin_print_footer_scripts', [ $this, 'admin_print_footer_scripts' ] );
         }
 
         /**
@@ -141,6 +142,16 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'choose_template'   => __( 'Choose a template', 'cf7-to-zapier' ),
                 ),
             ) );
+        }
+
+        /**
+         * Action: 'admin_print_footer_scripts'
+         *
+         * @return void
+         */
+        public function admin_print_footer_scripts() {
+            global $ctz_admin_tags_script;
+            echo $ctz_admin_tags_script;
         }
 
         /**
