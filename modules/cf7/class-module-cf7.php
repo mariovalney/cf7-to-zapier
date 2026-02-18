@@ -582,6 +582,12 @@ It may contain sensitive data.
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
                     $free_text_label = end( $tag->values );
                     $free_text_name  = $tag->name . '_free_text';
+
+                    // After 5.8.6
+                    if ( ! isset( $_POST[ $free_text_name ] ) ) {
+                        $free_text_name = '_wpcf7_free_text_' . $tag->name;
+                    }
+
                     $free_text_value = ( isset( $_POST[ $free_text_name ] ) ) ? $_POST[ $free_text_name ] : '';
 
                     if ( is_array( $value ) ) {
