@@ -96,7 +96,7 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 
 Just add one webhook per line in "Webhook URL" settings.
 
-Please, read [this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/) for more information.
+Please, read [this topic](https://github.com/mariovalney/cf7-to-zapier/wiki/Make-multiple-webhooks-optionals) for more information.
 
 ### How can I show webhook errors on form submit? ###
 
@@ -169,7 +169,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 4.0.0 ###
 
-* New feature: [TEMPLATES](https://wordpress.org/support/topic/how-templates-works).
+* New feature: TEMPLATES.
 * New feature: advanced custom body.
 * New feature: error notification and status check.
 * New feature: send file content as base64 (props to @ozanerturk).
@@ -188,7 +188,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 3.0.0 ###
 
-* New feature: placeholders in webhook URL [read more](https://wordpress.org/support/topic/use-webhook-url-placeholders).
+* New feature: placeholders in webhook URL.
 * Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.
 
