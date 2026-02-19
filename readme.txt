@@ -4,8 +4,8 @@ Contributors: mariovalney
 Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
-Tested up to: 6.8
-Stable tag: 4.1.0
+Tested up to: 6.9.1
+Stable tag: 5.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,12 +48,12 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 6.1.X
+* Contact Form 7 - 6.1.5
 
 Tested with other plugins:
 
 * MultiLine files for Contact Form 7 - 2.9.1
-* Contact Form 7 Multi-Step Forms - 6.9.1
+* Contact Form 7 Multi-Step Forms - 4.6
 
 == Installation ==
 
@@ -153,7 +153,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 == Changelog ==
 
-= 4.1.0 =
+= 5.0.0 =
 
 New feature: Added support for mail tags in headers (props to @anthonypenner).
 
@@ -164,6 +164,11 @@ Support to "Contact Form 7 Multi-Step Forms" plugin.
 
 * Check FAQ.
 * Added 'ctz_get_data_from_cf7msm_posted_data' filter to deactivate this support.
+
+Note:
+
+It's not a breaking change update but we had some changes in custom header / body.
+They are very complex features that I'm not sure how everyone is using them in the wild. This is the reason we are going to 5.0.0.
 
 = 4.0.2 =
 
@@ -311,22 +316,9 @@ Props to @shoreline-chrism
 
 == Upgrade Notice ==
 
-= 4.0.3 =
+= 5.0.0 =
 
-We have a lot of new features and a new UI!
-The most cool new feature is templates! Take a look!
+It's not a breaking change update but we had some changes in custom header / body.
+They are very complex features that I'm not sure how everyone is using them in the wild. This is the reason we are going to 5.0.0.
 
-It's not a breaking change version, but we recommend to test your form after update (we have new settings: saving the form maybe help).
-
-New options:
-
-* Templates!
-* Advanced custom body.
-* Error notification and response status check.
-* Send file content as Base64 instead of create a link to download.
-
-More changes:
-
-* Tested against new CF7 and WP versions.
-* Added support to "MultiLine files for Contact Form 7" plugin.
-* Some fixes (including translations).
+Added support for replacement in headers and "Contact Form 7 Multi-Step Forms".

@@ -4,8 +4,8 @@
 **Donate link:** https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS  
 **Tags:** cf7, contact form, zapier, integration, webhook  
 **Requires at least:** 4.7  
-**Tested up to:** 6.8  
-**Stable tag:** 4.1.0  
+**Tested up to:** 6.9.1  
+**Stable tag:** 5.0.0  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -32,7 +32,7 @@ And Zapier?
 
 Just activate and configure Zapier to receive data!
 
-Disclaimer: this plugin was created without any encouragement from Zapier or CF7 developers and any webhook/API service.
+Disclaimer: this plugin was created without any encouragement from Zapier (or any webhook/API service) / CF7 (and other supported plugins) developers.
 
 ### How to Use ###
 
@@ -48,11 +48,12 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 6.0.X
+* Contact Form 7 - 6.1.5
 
 Tested with other plugins:
 
 * MultiLine files for Contact Form 7 - 2.9.1
+* Contact Form 7 Multi-Step Forms - 4.6
 
 ## Installation ##
 
@@ -96,7 +97,7 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 
 Just add one webhook per line in "Webhook URL" settings.
 
-Please, read [this topic](https://wordpress.org/support/topic/make-multiple-webhooks-optionals/) for more information.
+Please, read [this topic](https://github.com/mariovalney/cf7-to-zapier/wiki/Make-multiple-webhooks-optionals) for more information.
 
 ### How can I show webhook errors on form submit? ###
 
@@ -126,6 +127,14 @@ Templates are created by community so we're constructing this together.
 
 You still are able to add a custom header / body or you can open a ticket and propose a new template.
 
+### Support for: Contact Form 7 Multi-Step Forms ###
+
+We have native support for [Contact Form 7 Multi-Step Forms](https://wordpress.org/plugins/contact-form-7-multi-step-module/).
+
+You just have to add your webhook settings to last step and we'll get all data from all steps.
+
+We use "cf7msm_posted_data" stored by plugin so **no need for hidden inputs** (but we are not able to guarantee the data).
+
 ### Who is the developer? ###
 
 [Mário Valney](https://mariovalney.com/me)
@@ -150,13 +159,22 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ## Changelog ##
 
-### 4.1.0 ###
+### 5.0.0 ###
 
-* New feature: Added support for mail tags in headers!
-* Headers can now use form field values and special mail tags like [_remote_ip], [_url], [_user_agent].
+New feature: Added support for mail tags in headers (props to @anthonypenner).
+
+* Headers can now be replaced by all data sent to webhook.
 * Special mail tags are automatically available in headers without explicit configuration.
-* Added header preview functionality in admin panel.
-* Fixed URL formatting in headers (removed escaped forward slashes).
+
+Support to "Contact Form 7 Multi-Step Forms" plugin.
+
+* Check FAQ.
+* Added 'ctz_get_data_from_cf7msm_posted_data' filter to deactivate this support.
+
+Note:
+
+It's not a breaking change update but we had some changes in custom header / body.
+They are very complex features that I'm not sure how everyone is using them in the wild. This is the reason we are going to 5.0.0.
 
 ### 4.0.2 ###
 
@@ -169,7 +187,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 4.0.0 ###
 
-* New feature: [TEMPLATES](https://wordpress.org/support/topic/how-templates-works).
+* New feature: TEMPLATES.
 * New feature: advanced custom body.
 * New feature: error notification and status check.
 * New feature: send file content as base64 (props to @ozanerturk).
@@ -188,7 +206,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 3.0.0 ###
 
-* New feature: placeholders in webhook URL [read more](https://wordpress.org/support/topic/use-webhook-url-placeholders).
+* New feature: placeholders in webhook URL.
 * Added 'ctz_hook_url_placeholder' filter.
 * Tested against new CF7 and WP versions.
 
@@ -304,22 +322,9 @@ Props to @shoreline-chrism
 
 ## Upgrade Notice ##
 
-### 4.0.3 ###
+### 5.0.0 ###
 
-We have a lot of new features and a new UI!
-The most cool new feature is templates! Take a look!
+It's not a breaking change update but we had some changes in custom header / body.
+They are very complex features that I'm not sure how everyone is using them in the wild. This is the reason we are going to 5.0.0.
 
-It's not a breaking change version, but we recommend to test your form after update (we have new settings: saving the form maybe help).
-
-New options:
-
-* Templates!
-* Advanced custom body.
-* Error notification and response status check.
-* Send file content as Base64 instead of create a link to download.
-
-More changes:
-
-* Tested against new CF7 and WP versions.
-* Added support to "MultiLine files for Contact Form 7" plugin.
-* Some fixes (including translations).
+Added support for replacement in headers and "Contact Form 7 Multi-Step Forms".

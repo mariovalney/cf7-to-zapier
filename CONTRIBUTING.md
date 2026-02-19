@@ -43,7 +43,13 @@ It keeps the git timeline beautiful.
 
 And please, create a Issue about your PR.
 
-## Development
+## Docs
+
+Make sure `README.md` is updated to `readme.txt`.
+
+The best way is to use [wordpress-readme-to-markdown](https://github.com/claudiosanches/wordpress-readme-to-markdown) on Sublime Text.
+
+And copy from `README.md` to `docs/README.md` to update [GitHub Pages](https://github.com/mariovalney/cf7-to-zapier/settings/pages).
 
 ### Pre-commit
 
@@ -66,7 +72,7 @@ fi
 
 And run `chmod +x .git/hooks/pre-commit` to make it executable.
 
-### Templates
+## Templates
 
 Templates are Header / Body values.
 
