@@ -617,6 +617,28 @@ It may contain sensitive data.
             }
 
             /**
+             * You can return false to avoid merge data with 'cf7msm_posted_data' (previous step)
+             *
+             * @param $should_support   True
+             * @param $contact_form     ContactForm obj from 'wpcf7_mail_sent' action
+             */
+            $should_support_cf7msm = apply_filters( 'ctz_get_data_from_cf7msm_posted_data', true, $contact_form );
+            if ( $should_support_cf7msm && function_exists( 'cf7msm_get' ) ) {
+                $prev_data = cf7msm_get( 'cf7msm_posted_data', '' );
+                if ( ! empty( $prev_data ) && is_array( $prev_data ) ) {
+                    $cf7msm_pipe_flow_id = ( function_exists( 'cf7msm_pipe_flow_field_name' ) ) ? cf7msm_pipe_flow_field_name() : 'wpcf7msm_pipe_flow_id';
+                    $cf7msm_internal_keys = array(
+                        'cf7msm-no-ss',
+                        'cf7msm_options',
+                        $cf7msm_pipe_flow_id
+                    );
+
+                    $prev_data = array_diff_key( $prev_data, array_fill_keys( $cf7msm_internal_keys, 'any' ) );
+                    $data = array_merge( $prev_data, $data );
+                }
+            }
+
+            /**
              * You can filter data retrieved from Contact Form tags with 'ctz_get_data_from_contact_form'
              *
              * @param $data             Array 'field => data'

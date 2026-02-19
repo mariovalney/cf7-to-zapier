@@ -32,7 +32,7 @@ And Zapier?
 
 Just activate and configure Zapier to receive data!
 
-Disclaimer: this plugin was created without any encouragement from Zapier or CF7 developers and any webhook/API service.
+Disclaimer: this plugin was created without any encouragement from Zapier (or any webhook/API service) / CF7 (and other supported plugins) developers.
 
 ### How to Use ###
 
@@ -48,11 +48,12 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 ### Support ###
 
-* Contact Form 7 - 6.0.X
+* Contact Form 7 - 6.1.X
 
 Tested with other plugins:
 
 * MultiLine files for Contact Form 7 - 2.9.1
+* Contact Form 7 Multi-Step Forms - 6.9.1
 
 ## Installation ##
 
@@ -126,6 +127,14 @@ Templates are created by community so we're constructing this together.
 
 You still are able to add a custom header / body or you can open a ticket and propose a new template.
 
+### Support for: Contact Form 7 Multi-Step Forms ###
+
+We have native support for [Contact Form 7 Multi-Step Forms](https://wordpress.org/plugins/contact-form-7-multi-step-module/).
+
+You just have to add your webhook settings to last step and we'll get all data from all steps.
+
+We use "cf7msm_posted_data" stored by plugin so **no need for hidden inputs** (but we are not able to guarantee the data).
+
 ### Who is the developer? ###
 
 [Mário Valney](https://mariovalney.com/me)
@@ -157,6 +166,11 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 * Special mail tags are automatically available in headers without explicit configuration.
 * Added header preview functionality in admin panel.
 * Fixed URL formatting in headers (removed escaped forward slashes).
+
+Support to "Contact Form 7 Multi-Step Forms" plugin.
+
+* Check FAQ.
+* Added 'ctz_get_data_from_cf7msm_posted_data' filter to deactivate this support.
 
 ### 4.0.2 ###
 
