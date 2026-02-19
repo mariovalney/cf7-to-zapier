@@ -161,11 +161,10 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 4.1.0 ###
 
-* New feature: Added support for mail tags in headers!
-* Headers can now use form field values and special mail tags like [_remote_ip], [_url], [_user_agent].
+New feature: Added support for mail tags in headers (props to @anthonypenner).
+
+* Headers can now be replaced by all data sent to webhook.
 * Special mail tags are automatically available in headers without explicit configuration.
-* Added header preview functionality in admin panel.
-* Fixed URL formatting in headers (removed escaped forward slashes).
 
 Support to "Contact Form 7 Multi-Step Forms" plugin.
 

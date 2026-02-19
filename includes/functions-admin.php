@@ -66,3 +66,22 @@ if ( ! function_exists( 'ctz_select_input' ) ) {
         echo '</select>';
     }
 }
+
+/**
+ * Get placeholders from string
+ */
+if ( ! function_exists( 'ctz_get_string_placeholders' ) ) {
+    function ctz_get_string_placeholders( $string ) {
+        $matches = [];
+        $placeholders = [];
+
+        preg_match_all( '/\[{1}[^\[\]]+\]{1}/', $string, $matches );
+
+        foreach ( $matches[0] as $placeholder ) {
+            $placeholder = substr( $placeholder, 1, -1 );
+            $placeholders[ $placeholder ] = '[' . $placeholder . ']';
+        }
+
+        return $placeholders;
+    }
+}

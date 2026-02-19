@@ -216,7 +216,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 // Hook Urls
                 if ( $prop['type'] === 'hookurl' ) {
                     $properties[ $key ] = array_filter( array_map( function( $hook_url ) {
-                        $placeholders = self::get_hook_url_placeholders( $hook_url );
+                        $placeholders = ctz_get_string_placeholders( $hook_url );
 
                         foreach ( $placeholders as $key => $placeholder ) {
                             $hook_url = str_replace( $placeholder, '_____' . $key . '_____', $hook_url );
@@ -327,7 +327,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
                 // Try/Catch to support exception on request
                 try {
-                    $placeholders = CFTZ_Module_CF7::get_hook_url_placeholders( $hook_url );
+                    $placeholders = ctz_get_string_placeholders( $hook_url );
                     foreach ( $placeholders as $key => $placeholder ) {
                         $value = ( $data[ $key ] ?? '' );
                         if ( ! is_scalar( $value ) ) {
@@ -773,26 +773,6 @@ It may contain sensitive data.
             }
 
             return $data;
-        }
-
-        /**
-         * List placeholders from hook_url
-         *
-         * @since    3.0.0
-         * @param    string     $hook_url
-         * @return   array      $placeholders
-         */
-        public static function get_hook_url_placeholders( $hook_url ) {
-            $placeholders = [];
-
-            preg_match_all( '/\[{1}[^\[\]]+\]{1}/', $hook_url, $matches );
-
-            foreach ( $matches[0] as $placeholder ) {
-                $placeholder = substr( $placeholder, 1, -1 );
-                $placeholders[ $placeholder ] = '[' . $placeholder . ']';
-            }
-
-            return $placeholders;
         }
 
         /**

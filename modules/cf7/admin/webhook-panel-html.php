@@ -18,8 +18,8 @@ extract( CFTZ_Module_CF7::get_form_properties( $contactform ) );
  *
  * TODO: use the same codebase maybe with a empty submission
  */
-$preview = array();
-$preview_is_json = true;
+$body_preview = array();
+$body_preview_is_json = true;
 
 // Special Tags
 $special_tags = array();
@@ -45,14 +45,14 @@ $tags = array_merge( array_keys( $special_tags ), array_filter( $form_tags ) );
 
 foreach ( $tags as $tag ) {
     if ( empty( $tag ) ) continue;
-    $preview[ $tag ] = '??????';
+    $body_preview[ $tag ] = '??????';
 }
 
 // Custom Body
 if ( ! empty( $custom_body ) ) {
     $custom_preview = $custom_body;
 
-    foreach ( $preview as $key => $value ) {
+    foreach ( $body_preview as $key => $value ) {
         $value = json_encode( $value );
         $value = preg_replace('/^"(.*)"$/', '$1', $value);
 
@@ -61,8 +61,8 @@ if ( ! empty( $custom_body ) ) {
 
     $custom_sent_json = json_decode( $custom_preview );
 
-    $preview = ( $custom_sent_json === null ) ? $custom_preview : $custom_sent_json;
-    $preview_is_json = ( $custom_sent_json !== null );
+    $body_preview = ( $custom_sent_json === null ) ? $custom_preview : $custom_sent_json;
+    $body_preview_is_json = ( $custom_sent_json !== null );
 }
 
 // Global footer script
@@ -235,7 +235,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     <div class="ctz-accordion-content">
         <fieldset>
             <legend>
-                <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> or <a href="https://contactform7.com/selectable-recipient-with-pipes/" target="_blank">labels from selectable with pipes</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', 'cf7-to-zapier' ); ?>
+                <?php echo _x( 'You can add <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a> or <a href="https://contactform7.com/selectable-recipient-with-pipes/" target="_blank">value before pipe on selectables</a> to the data sent to webhook.', 'The URL should point to CF7 documentation (someday it can be translated).', 'cf7-to-zapier' ); ?>
             </legend>
 
             <label for="ctz-special_mail_tags">
@@ -305,6 +305,8 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     </div>
 
     <div class="ctz-accordion-content">
+        <p class="description ctz-mb3"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( "This can break your integration (check spaces and colons).", 'cf7-to-zapier' ) ?></p>
+
         <fieldset>
             <legend>
                 <?php echo _x( 'You can add <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP Headers</a> to your webhook request. This also supports <a href="https://contactform7.com/special-mail-tags/" target="_blank">Special Mail Tags</a>.', 'The URL should point to HTTP Headers documentation in your language.', 'cf7-to-zapier' ); ?>
@@ -318,51 +320,18 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     __( 'One header by line, separated by colon. Example: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">Authorization: Bearer 99999999999999999999</span>'
                 );
-                echo '<br><br>';
+                echo '<br>';
                 printf(
                     __( 'You can also use mail tags in header values: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">X-User-Email: [your-email]</span>'
                 );
                 echo '<br>';
                 printf(
-                    __( 'Special mail tags are automatically available: %s', 'cf7-to-zapier' ),
+                    __( 'Special mail tags are replaced without need to be added on body: %s', 'cf7-to-zapier' ),
                     '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">X-Client-IP: [_remote_ip]</span>'
                 );
             ?></p>
         </fieldset>
-
-        <?php if ( ! empty( $custom_headers ) ): ?>
-        <fieldset class="ctz-mt3">
-            <?php
-            $header_preview = $custom_headers;
-            
-            // Get all available special mail tags (both configured and built-in)
-            $all_special_tags = array_merge(
-                array_keys($special_tags),
-                ['_remote_ip', '_url', '_user_agent', '_post_title', '_post_url', '_post_id', '_date', '_time', '_random']
-            );
-            
-            // Create preview data for all tags
-            $all_preview_data = $preview;
-            foreach ($all_special_tags as $tag) {
-                if (!isset($all_preview_data[$tag])) {
-                    $all_preview_data[$tag] = '??????';
-                }
-            }
-            
-            foreach ( $all_preview_data as $key => $value ) {
-                $value = json_encode( $value );
-                $value = preg_replace('/^"(.*)"$/', '$1', $value);
-                $header_preview = str_replace( '[' . $key . ']', $value, $header_preview );
-            }
-            ?>
-            <legend>
-                <?php _e( 'Headers preview (with mail tags replaced):', 'cf7-to-zapier' ); ?>
-            </legend>
-            <pre><?php echo esc_html( $header_preview ); ?></pre>
-            <p class="description"><?php _e( 'This shows how your headers will look with mail tags replaced by actual values.', 'cf7-to-zapier' ); ?></p>
-        </fieldset>
-        <?php endif; ?>
     </div>
 </div>
 
@@ -378,28 +347,28 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
         <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( "This can break your integration (check your quotes).", 'cf7-to-zapier' ) ?></p>
         <p class="description ctz-mb3"><strong><?php _e( 'REMEMBER:', 'cf7-to-zapier' ) ?></strong> <?php printf( __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ), '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>' ); ?></p>
 
+        <p class="description"><?php _e( 'To create your own body, you can replace values like in mail body (case sensitive).', 'cf7-to-zapier' ); ?></p>
+        <p class="description"><?php _e( 'You should provide your own "quotes" for strings/text (use only the mail tag without quotes for "checkbox" and "acceptance" fields).', 'cf7-to-zapier' ); ?></p>
+        <p class="description"><?php _e( 'For example:', 'cf7-to-zapier' ); ?></p>
+        <pre>{
+    "composed-message": "Sir [your-name] from [your-city].",
+    "text-field": "[your-name]",
+    "checkbox-field": [your-checkbox],
+    "radio-field": "[your-choice]"
+}</pre>
+
+        <p class="description ctz-mt3"><?php _e( 'Enter your custom body:', 'cf7-to-zapier' ); ?></p>
         <fieldset>
             <label for="ctz-custom_body">
                 <?php ctz_textarea_input( 'custom_body', $custom_body ); ?>
             </label>
-            <p class="description"><?php _e( 'To create your own body, you can replace values like in mail body (case sensitive).', 'cf7-to-zapier' ); ?></p>
-            <p class="description"><?php
-                printf(
-                    __( 'Example: %s', 'cf7-to-zapier' ),
-                    '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">{ "message": "Sir [your-name] from [your-city]." }</span>'
-                );
-            ?></p>
         </fieldset>
 
         <fieldset class="ctz-mt3">
-            <?php
-
-            ?>
-
             <legend>
-                <?php $preview_is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
+                <?php $body_preview_is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
             </legend>
-            <pre id="ctz-webhook-preview"><?php echo $preview_is_json ? json_encode( $preview, JSON_PRETTY_PRINT ) : $preview; ?></pre>
+            <pre id="ctz-webhook-preview"><?php echo $body_preview_is_json ? json_encode( $body_preview, JSON_PRETTY_PRINT ) : $body_preview; ?></pre>
             <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
         </fieldset>
     </div>

@@ -76,30 +76,34 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
             if ( ! empty( $properties['custom_body'] ) ) {
                 $body = $properties['custom_body'];
 
+                $tags = [];
+                $scanned = $contact_form->scan_form_tags();
+                foreach ( $scanned as $tag ) {
+                    if ( empty( $tag->name ) ) continue;
+
+                    $tags[ $tag->name ] = $tag;
+                }
+
                 foreach ( $data as $key => $value ) {
-                    // For string values, don't use json_encode to avoid escaped characters
-                    if ( is_string( $value ) ) {
-                        $body = str_replace( '[' . $key . ']', $value, $body );
-                    } else {
-                        $value = json_encode( $value );
-                        $value = preg_replace('/^"(.*)"$/', '$1', $value);
-                        $body = str_replace( '[' . $key . ']', $value, $body );
+                    // Some tags should be replaced when empty values are sent
+                    if ( ! empty( $tags[$key] ) && empty( $value ) ) {
+                        if ( $tags[$key]->basetype === 'acceptance' ) {
+                            $value = 0;
+                        }
+
+                        if ( $tags[$key]->basetype === 'checkbox' ) {
+                            $value = [];
+                        }
                     }
+
+                    // We should make sure the value is JSON compatible to replace it.
+                    $value = json_encode( $value );
+                    $value = preg_replace( '/^"(.*)"$/', '$1', $value );
+                    $body = str_replace( '[' . $key . ']', $value, $body );
                 }
 
                 if ( json_decode( $body ) === null ) {
                     $is_json = false;
-                }
-            }
-
-            // Prepare special mail tags for header replacement
-            $special_mail_tags = [
-                '_remote_ip', '_url', '_user_agent', '_post_title', '_post_url', '_post_id', '_date', '_time', '_random'
-            ];
-            $header_replacement_data = $data;
-            foreach ($special_mail_tags as $tag) {
-                if (!array_key_exists($tag, $header_replacement_data)) {
-                    $header_replacement_data[$tag] = apply_filters('wpcf7_special_mail_tags', '', $tag, false, null);
                 }
             }
 
@@ -109,7 +113,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 'timeout'     => 30,
                 'method'      => $properties['custom_method'] ?? 'POST',
                 'body'        => $body,
-                'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json, $header_replacement_data ),
+                'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json, $data ),
             );
 
             // Check is valid GET
@@ -218,17 +222,17 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                     $header_name = $header[0];
                     $header_value = $header[1];
 
-                    if ( ! empty( $data ) ) {
-                        foreach ( $data as $key => $value ) {
-                            // For string values, don't use json_encode to avoid escaped characters in urls
-                            if ( is_string( $value ) ) {
-                                $header_value = str_replace( '[' . $key . ']', $value, $header_value );
-                            } else {
-                                $value = json_encode( $value );
-                                $value = preg_replace('/^"(.*)"$/', '$1', $value);
-                                $header_value = str_replace( '[' . $key . ']', $value, $header_value );
-                            }
+                    $placeholders = ctz_get_string_placeholders( $header_value );
+                    foreach ( $placeholders as $tag => $placeholder ) {
+                        $value = $data[ $tag ] ?? '';
+                        if ( is_array( $value ) ) {
+                            $value = implode( ', ', $value );
                         }
+
+                        $mail_tag = new WPCF7_MailTag( $placeholder, $tag, '' );
+                        $value = apply_filters( 'wpcf7_special_mail_tags', $value, $tag, false, $mail_tag );
+
+                        $header_value = str_replace( $placeholder, $value, $header_value );
                     }
 
                     $headers[ $header_name ] = $header_value;
