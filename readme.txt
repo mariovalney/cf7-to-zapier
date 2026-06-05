@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
 Tested up to: 6.9.1
-Stable tag: 5.0.1
+Stable tag: 5.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -166,7 +166,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 == Changelog ==
 
-= 5.0.1 =
+= 5.1.0 =
 
 Security patch release.
 
@@ -177,11 +177,16 @@ Security patch release.
 * Sensitive headers (Authorization, x-api-key, etc.) are now redacted from error notification emails.
 * Replaced `uniqid()` with `random_bytes()` for uploaded file directory names.
 * Replaced raw `<script>` echo with `wp_add_inline_script()` for admin JS data.
-* Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses.
 
 Note:
 
 If your site uses custom roles that can edit CF7 forms but do not have the `wpcf7_edit_contact_form` capability, webhook settings will no longer be saved for those users. Grant the capability explicitly or use the `wpcf7_edit_contact_form` capability in your role setup.
+
+= 5.0.1 =
+
+Security patch release.
+
+* Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses (CVE-2026-11395).
 
 = 5.0.0 =
 
@@ -346,7 +351,7 @@ Props to @shoreline-chrism
 
 == Upgrade Notice ==
 
-= 5.0.1 =
+= 5.1.0 =
 
 Security patch. Strongly recommended for all users. Fixes SSRF vulnerability introduced in 3.0.0 (placeholders in webhook URL). No breaking changes for webhooks pointing to external URLs. Internal/private IP webhooks will now be blocked by design.
 
