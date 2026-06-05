@@ -147,7 +147,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              * @since    1.1.0
              */
             $args = apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form, $hook_url );
-            $result = wp_remote_request( $hook_url, $args );
+            $result = wp_safe_remote_request( $hook_url, $args );
 
             /**
              * Action: ctz_post_request_result
