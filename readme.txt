@@ -168,7 +168,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 = 5.1.0 =
 
-Security patch release.
+Security improvements.
 
 * Fixed XSS vulnerabilities in admin panel output (body preview and form input helpers).
 * Added capability check (`wpcf7_edit_contact_form`) on webhook settings save.
@@ -183,7 +183,7 @@ If your site uses custom roles that can edit CF7 forms but do not have the `wpcf
 
 = 5.0.1 =
 
-Security patch release.
+Security improvements.
 
 * Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses (CVE-2026-11395).
 
