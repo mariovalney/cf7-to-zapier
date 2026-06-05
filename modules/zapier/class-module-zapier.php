@@ -76,10 +76,27 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 throw new CFTZ_Exception( $error );
             }
 
-            $ip = gethostbyname( $parsed['host'] );
+            $host = $parsed['host'];
 
-            // Block private, loopback, and reserved IP ranges.
-            if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ) {
+            // Strip IPv6 brackets e.g. [::1].
+            if ( substr( $host, 0, 1 ) === '[' ) {
+                $host = trim( $host, '[]' );
+            }
+
+            // If host is already a literal IP, validate it directly.
+            if ( filter_var( $host, FILTER_VALIDATE_IP ) !== false ) {
+                $ip = $host;
+            } else {
+                $ip = gethostbyname( $host );
+                // gethostbyname returns the input unchanged when resolution fails — allow the
+                // request to proceed so a temporary DNS hiccup does not block legitimate webhooks.
+                if ( $ip === $host ) {
+                    $ip = null;
+                }
+            }
+
+            // Block private, loopback, and reserved IP ranges when we could resolve the host.
+            if ( $ip !== null && filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ) {
                 $error = new WP_Error();
                 $error->add( '0', __( 'Webhook URL resolves to a private or reserved IP address, which is not allowed.', 'cf7-to-zapier' ) );
                 throw new CFTZ_Exception( $error );
