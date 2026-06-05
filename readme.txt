@@ -121,6 +121,19 @@ We will replace the value for last option (which is the free_text input) with th
 
 This way your webhook will receive the free text value and other options if you allow it (like in checkbox).
 
+= Can I send webhooks to an internal/private IP address? =
+
+By default, the plugin blocks requests to private, loopback, and link-local addresses (e.g. `192.168.x.x`, `10.x.x.x`, `127.0.0.1`, `169.254.x.x`) to prevent SSRF attacks.
+
+If you run a trusted internal service and need to reach it, you can whitelist specific hosts using WordPress's `http_request_host_is_external` filter in your theme's `functions.php` or a custom plugin:
+
+`add_filter( 'http_request_host_is_external', function( $external, $host ) {
+    $trusted = [ '192.168.1.100', '10.0.0.50' ];
+    return in_array( $host, $trusted, true ) ? true : $external;
+}, 10, 2 );`
+
+Replace the IPs in `$trusted` with the hosts you want to allow. Only use this on servers you fully control and trust.
+
 = I don't see a template for my webhook. =
 
 Templates are created by community so we're constructing this together.
