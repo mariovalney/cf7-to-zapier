@@ -350,6 +350,10 @@ Props to @shoreline-chrism
 
 = 5.1.0 =
 
+Security improvements. If your site uses custom roles to edit CF7 forms, ensure those roles have the `wpcf7_edit_contact_form` capability or webhook settings will not be saved.
+
+= 5.0.1 =
+
 Security patch. Strongly recommended for all users. Fixes SSRF vulnerability introduced in 3.0.0 (placeholders in webhook URL). No breaking changes for webhooks pointing to external URLs. Internal/private IP webhooks will now be blocked by design.
 
 = 5.0.0 =

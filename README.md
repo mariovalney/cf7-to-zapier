@@ -358,7 +358,7 @@ Props to @shoreline-chrism
 
 ### 5.1.0 ###
 
-Security patch. Strongly recommended for all users. Multiple security fixes including XSS, JSON injection, and capability checks.
+Security improvements. If your site uses custom roles to edit CF7 forms, ensure those roles have the `wpcf7_edit_contact_form` capability or webhook settings will not be saved.
 
 ### 5.0.1 ###
 
