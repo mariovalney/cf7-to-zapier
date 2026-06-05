@@ -144,11 +144,10 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                         }
                     }
 
-                    // Encode value safely. For strings, json_encode adds surrounding quotes
-                    // which must be kept so the replacement is valid JSON (prevents JSON injection).
-                    $body = str_replace( '"[' . $key . ']"', json_encode( $value ), $body );
-                    // For placeholders not wrapped in quotes (e.g. inside object keys or raw use), fall back.
-                    $body = str_replace( '[' . $key . ']', is_scalar( $value ) ? $value : json_encode( $value ), $body );
+                    // We should make sure the value is JSON compatible to replace it.
+                    $value = json_encode( $value );
+                    $value = preg_replace( '/^"(.*)"$/', '$1', $value );
+                    $body = str_replace( '[' . $key . ']', $value, $body );
                 }
 
                 if ( json_decode( $body ) === null ) {

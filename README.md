@@ -179,7 +179,6 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 Security patch release.
 
 * Fixed XSS vulnerabilities in admin panel output (body preview and form input helpers).
-* Fixed JSON injection: user-submitted values in custom body templates are now safely encoded.
 * Added capability check (`wpcf7_edit_contact_form`) on webhook settings save.
 * Added server-side HTTP method whitelist (GET, POST, PUT, PATCH, DELETE).
 * Sensitive headers (Authorization, x-api-key, etc.) are now redacted from error notification emails.
