@@ -186,6 +186,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    WPCF7_ContactForm  $contactform    Current ContactForm Obj
          */
         public function wpcf7_save_contact_form( $contact_form ) {
+            if ( ! current_user_can( 'wpcf7_edit_contact_form', $contact_form->id() ) ) {
+                return;
+            }
+
             $props = static::get_properties();
             $properties = static::get_form_properties( $contact_form );
 
@@ -429,12 +433,25 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
 
             $form = sprintf( '#%s - %s', $contact_form->id(), $contact_form->title() );
 
+            $request_headers = '';
+            if ( method_exists( $exception, 'get_request_headers' ) ) {
+                $headers = (array) $exception->get_request_headers();
+                // Redact sensitive headers to avoid leaking API keys or tokens in plaintext email.
+                $sensitive = [ 'authorization', 'x-api-key', 'api-key', 'x-auth-token', 'cookie' ];
+                foreach ( $headers as $name => $val ) {
+                    if ( in_array( strtolower( $name ), $sensitive, true ) ) {
+                        $headers[ $name ] = '***REDACTED***';
+                    }
+                }
+                $request_headers = json_encode( $headers );
+            }
+
             $data = array(
                 '[FORM]'                => $form,
                 '[WEBHOOK]'             => $hook_url,
                 '[EXCEPTION]'           => ( method_exists( $exception, 'get_error') ) ? json_encode( $exception->get_error() ) : $exception->getMessage(),
                 '[REQUEST_METHOD]'      => ( method_exists( $exception, 'get_request_method') ) ? $exception->get_request_method() : '(MAYBE) POST',
-                '[REQUEST_HEADERS]'     => ( method_exists( $exception, 'get_request_headers') ) ? json_encode( $exception->get_request_headers() ) : '',
+                '[REQUEST_HEADERS]'     => $request_headers,
                 '[REQUEST_BODY]'        => ( method_exists( $exception, 'get_request_body') ) ? json_encode( $exception->get_request_body() ) : json_encode( $data ),
                 '[RESPONSE_CODE]'       => ( method_exists( $exception, 'get_response_code') ) ? json_encode( $exception->get_response_code() ) : '',
                 '[RESPONSE_MESSAGE]'    => ( method_exists( $exception, 'get_response_message') ) ? json_encode( $exception->get_response_message() ) : '',
@@ -511,7 +528,7 @@ It may contain sensitive data.
 
             // Upload Info
             $wp_upload_dir = wp_get_upload_dir();
-            $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . uniqid();
+            $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . bin2hex( random_bytes( 16 ) );
 
             $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
             $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;

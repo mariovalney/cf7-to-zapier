@@ -18,7 +18,7 @@ if ( ! function_exists( 'ctz_text_input' ) ) {
             $value = implode( ',', $value );
         }
 
-        echo '<input class="large-text" type="text" id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" value="' . esc_attr( $value ) . '">';
+        echo '<input class="large-text" type="text" id="ctz-webhook-' . esc_attr( $key ) . '" name="ctz-webhook-' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '">';
     }
 }
 
@@ -27,7 +27,7 @@ if ( ! function_exists( 'ctz_text_input' ) ) {
  */
 if ( ! function_exists( 'ctz_checkbox_input' ) ) {
     function ctz_checkbox_input( $key, $value ) {
-        echo '<input type="checkbox" id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" value="1" ' . checked( $value, '1', false ) . '>';
+        echo '<input type="checkbox" id="ctz-webhook-' . esc_attr( $key ) . '" name="ctz-webhook-' . esc_attr( $key ) . '" value="1" ' . checked( $value, '1', false ) . '>';
     }
 }
 
@@ -44,7 +44,7 @@ if ( ! function_exists( 'ctz_textarea_input' ) ) {
         $rows = ( (int) substr_count( $value, "\n" ) ) + 2;
         $rows = max( $rows, 4 );
 
-        echo '<textarea id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" rows="' . $rows . '" class="large-text code">' . $value . '</textarea>';
+        echo '<textarea id="ctz-webhook-' . esc_attr( $key ) . '" name="ctz-webhook-' . esc_attr( $key ) . '" rows="' . $rows . '" class="large-text code">' . $value . '</textarea>';
     }
 }
 
@@ -53,14 +53,14 @@ if ( ! function_exists( 'ctz_textarea_input' ) ) {
  */
 if ( ! function_exists( 'ctz_select_input' ) ) {
     function ctz_select_input( $key, $value, $options ) {
-        echo '<select id="ctz-webhook-' . $key . '" name="ctz-webhook-' . $key . '" class="select2">';
+        echo '<select id="ctz-webhook-' . esc_attr( $key ) . '" name="ctz-webhook-' . esc_attr( $key ) . '" class="select2">';
 
-        foreach ( $options as $key => $label ) {
-            if ( is_numeric( $key ) ) {
-                $key = $label;
+        foreach ( $options as $opt_key => $label ) {
+            if ( is_numeric( $opt_key ) ) {
+                $opt_key = $label;
             }
 
-            echo '<option value="' . $key . '" ' . selected( $key, $value, false ) . '>' . $label . '</option>';
+            echo '<option value="' . esc_attr( $opt_key ) . '" ' . selected( $opt_key, $value, false ) . '>' . esc_html( $label ) . '</option>';
         }
 
         echo '</select>';

@@ -107,17 +107,24 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 }
             }
 
+            // Whitelist HTTP methods to prevent injection via stored config.
+            $allowed_methods = [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ];
+            $method = strtoupper( $properties['custom_method'] ?? 'POST' );
+            if ( ! in_array( $method, $allowed_methods, true ) ) {
+                $method = 'POST';
+            }
+
             // Prepare REQUEST
             $args = array(
                 'redirection' => 10,
                 'timeout'     => 30,
-                'method'      => $properties['custom_method'] ?? 'POST',
+                'method'      => $method,
                 'body'        => $body,
                 'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json, $data ),
             );
 
             // Check is valid GET
-            if ( ! empty( $properties['custom_method'] ) && $properties['custom_method'] === 'GET') {
+            if ( $method === 'GET' ) {
                 if ( ! $is_json ) {
                     $error = new WP_Error();
                     $error->add( '0', __( 'Webhook has method GET but body is not a JSON to be passed as query params.', 'cf7-to-zapier' ), [ 'request' => $args ] );

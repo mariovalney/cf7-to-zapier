@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
 Tested up to: 6.9.1
-Stable tag: 5.0.1
+Stable tag: 5.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -165,6 +165,19 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 3. All request methods
 
 == Changelog ==
+
+= 5.1.0 =
+
+* Fixed XSS vulnerabilities in admin panel output (body preview and form input helpers).
+* Added capability check (`wpcf7_edit_contact_form`) on webhook settings save.
+* Added server-side HTTP method whitelist (GET, POST, PUT, PATCH, DELETE).
+* Sensitive headers (Authorization, x-api-key, etc.) are now redacted from error notification emails.
+* Replaced `uniqid()` with `random_bytes()` for uploaded file directory names.
+* Replaced raw `<script>` echo with `wp_add_inline_script()` for admin JS data.
+
+Note:
+
+If your site uses custom roles that can edit CF7 forms but do not have the `wpcf7_edit_contact_form` capability, webhook settings will no longer be saved for those users. Grant the capability explicitly or use the `wpcf7_edit_contact_form` capability in your role setup.
 
 = 5.0.1 =
 
@@ -334,6 +347,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.1.0 =
+
+Security improvements. If your site uses custom roles to edit CF7 forms, ensure those roles have the `wpcf7_edit_contact_form` capability or webhook settings will not be saved.
 
 = 5.0.1 =
 
