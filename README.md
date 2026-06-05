@@ -176,8 +176,6 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 ### 5.1.0 ###
 
-Security improvements.
-
 * Fixed XSS vulnerabilities in admin panel output (body preview and form input helpers).
 * Added capability check (`wpcf7_edit_contact_form`) on webhook settings save.
 * Added server-side HTTP method whitelist (GET, POST, PUT, PATCH, DELETE).
