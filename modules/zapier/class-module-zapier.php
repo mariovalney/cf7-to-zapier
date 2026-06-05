@@ -55,54 +55,6 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          * @since    1.0.0
          * @access   private
          */
-        /**
-         * Validate that a webhook URL does not target private/internal network addresses (SSRF prevention).
-         *
-         * @param string $url
-         * @throws CFTZ_Exception
-         */
-        private function validate_webhook_url( $url ) {
-            $parsed = parse_url( $url );
-
-            if ( empty( $parsed['host'] ) ) {
-                $error = new WP_Error();
-                $error->add( '0', __( 'Webhook URL is invalid or missing a host.', 'cf7-to-zapier' ) );
-                throw new CFTZ_Exception( $error );
-            }
-
-            if ( ! in_array( $parsed['scheme'] ?? '', [ 'http', 'https' ], true ) ) {
-                $error = new WP_Error();
-                $error->add( '0', __( 'Webhook URL must use http or https.', 'cf7-to-zapier' ) );
-                throw new CFTZ_Exception( $error );
-            }
-
-            $host = $parsed['host'];
-
-            // Strip IPv6 brackets e.g. [::1].
-            if ( substr( $host, 0, 1 ) === '[' ) {
-                $host = trim( $host, '[]' );
-            }
-
-            // If host is already a literal IP, validate it directly.
-            if ( filter_var( $host, FILTER_VALIDATE_IP ) !== false ) {
-                $ip = $host;
-            } else {
-                $ip = gethostbyname( $host );
-                // gethostbyname returns the input unchanged when resolution fails — allow the
-                // request to proceed so a temporary DNS hiccup does not block legitimate webhooks.
-                if ( $ip === $host ) {
-                    $ip = null;
-                }
-            }
-
-            // Block private, loopback, and reserved IP ranges when we could resolve the host.
-            if ( $ip !== null && filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ) {
-                $error = new WP_Error();
-                $error->add( '0', __( 'Webhook URL resolves to a private or reserved IP address, which is not allowed.', 'cf7-to-zapier' ) );
-                throw new CFTZ_Exception( $error );
-            }
-        }
-
         public function pull_the_trigger( array $data, $hook_url, $properties, $contact_form ) {
             /**
              * Filter: ctz_ignore_default_webhook
@@ -192,8 +144,6 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              * @since    2.1.4
              */
             $hook_url = apply_filters( 'ctz_hook_url', $hook_url, $data );
-
-            $this->validate_webhook_url( $hook_url );
 
             /**
              * Filter: ctz_post_request_args
