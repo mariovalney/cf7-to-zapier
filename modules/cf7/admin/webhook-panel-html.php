@@ -65,8 +65,9 @@ if ( ! empty( $custom_body ) ) {
     $body_preview_is_json = ( $custom_sent_json !== null );
 }
 
-// Global footer script
-$ctz_admin_tags_script = '<script type="text/javascript">window.CTZ_ADMIN_TAGS = ' . json_encode( array_values( $form_tags ) ) . ';</script>';
+// Global footer script — registered via wp_add_inline_script to avoid raw echo of <script> blocks.
+wp_add_inline_script( 'ctz-admin-script', 'window.CTZ_ADMIN_TAGS = ' . json_encode( array_values( $form_tags ) ) . ';' );
+$ctz_admin_tags_script = '';
 
 /**
  * Filter: ctz_remove_donation_alert
@@ -368,7 +369,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             <legend>
                 <?php $body_preview_is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
             </legend>
-            <pre id="ctz-webhook-preview"><?php echo $body_preview_is_json ? json_encode( $body_preview, JSON_PRETTY_PRINT ) : $body_preview; ?></pre>
+            <pre id="ctz-webhook-preview"><?php echo $body_preview_is_json ? esc_html( json_encode( $body_preview, JSON_PRETTY_PRINT ) ) : esc_html( $body_preview ); ?></pre>
             <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
         </fieldset>
     </div>

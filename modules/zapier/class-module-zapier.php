@@ -55,6 +55,37 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
          * @since    1.0.0
          * @access   private
          */
+        /**
+         * Validate that a webhook URL does not target private/internal network addresses (SSRF prevention).
+         *
+         * @param string $url
+         * @throws CFTZ_Exception
+         */
+        private function validate_webhook_url( $url ) {
+            $parsed = parse_url( $url );
+
+            if ( empty( $parsed['host'] ) ) {
+                $error = new WP_Error();
+                $error->add( '0', __( 'Webhook URL is invalid or missing a host.', 'cf7-to-zapier' ) );
+                throw new CFTZ_Exception( $error );
+            }
+
+            if ( ! in_array( $parsed['scheme'] ?? '', [ 'http', 'https' ], true ) ) {
+                $error = new WP_Error();
+                $error->add( '0', __( 'Webhook URL must use http or https.', 'cf7-to-zapier' ) );
+                throw new CFTZ_Exception( $error );
+            }
+
+            $ip = gethostbyname( $parsed['host'] );
+
+            // Block private, loopback, and reserved IP ranges.
+            if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ) {
+                $error = new WP_Error();
+                $error->add( '0', __( 'Webhook URL resolves to a private or reserved IP address, which is not allowed.', 'cf7-to-zapier' ) );
+                throw new CFTZ_Exception( $error );
+            }
+        }
+
         public function pull_the_trigger( array $data, $hook_url, $properties, $contact_form ) {
             /**
              * Filter: ctz_ignore_default_webhook
@@ -96,10 +127,11 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                         }
                     }
 
-                    // We should make sure the value is JSON compatible to replace it.
-                    $value = json_encode( $value );
-                    $value = preg_replace( '/^"(.*)"$/', '$1', $value );
-                    $body = str_replace( '[' . $key . ']', $value, $body );
+                    // Encode value safely. For strings, json_encode adds surrounding quotes
+                    // which must be kept so the replacement is valid JSON (prevents JSON injection).
+                    $body = str_replace( '"[' . $key . ']"', json_encode( $value ), $body );
+                    // For placeholders not wrapped in quotes (e.g. inside object keys or raw use), fall back.
+                    $body = str_replace( '[' . $key . ']', is_scalar( $value ) ? $value : json_encode( $value ), $body );
                 }
 
                 if ( json_decode( $body ) === null ) {
@@ -107,17 +139,24 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                 }
             }
 
+            // Whitelist HTTP methods to prevent injection via stored config.
+            $allowed_methods = [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ];
+            $method = strtoupper( $properties['custom_method'] ?? 'POST' );
+            if ( ! in_array( $method, $allowed_methods, true ) ) {
+                $method = 'POST';
+            }
+
             // Prepare REQUEST
             $args = array(
                 'redirection' => 10,
                 'timeout'     => 30,
-                'method'      => $properties['custom_method'] ?? 'POST',
+                'method'      => $method,
                 'body'        => $body,
                 'headers'     => $this->create_headers( $properties['custom_headers'] ?? '', $is_json, $data ),
             );
 
             // Check is valid GET
-            if ( ! empty( $properties['custom_method'] ) && $properties['custom_method'] === 'GET') {
+            if ( $method === 'GET' ) {
                 if ( ! $is_json ) {
                     $error = new WP_Error();
                     $error->add( '0', __( 'Webhook has method GET but body is not a JSON to be passed as query params.', 'cf7-to-zapier' ), [ 'request' => $args ] );
@@ -137,6 +176,8 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              * @since    2.1.4
              */
             $hook_url = apply_filters( 'ctz_hook_url', $hook_url, $data );
+
+            $this->validate_webhook_url( $hook_url );
 
             /**
              * Filter: ctz_post_request_args
