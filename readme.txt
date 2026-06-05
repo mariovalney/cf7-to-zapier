@@ -183,7 +183,7 @@ If your site uses custom roles that can edit CF7 forms but do not have the `wpcf
 
 = 5.0.1 =
 
-Security improvements.
+Security patch release.
 
 * Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses (CVE-2026-11395).
 
