@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
 Tested up to: 6.9.1
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -315,6 +315,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.0.1 =
+
+Security patch. Strongly recommended for all users. Fixes SSRF vulnerability introduced in 3.0.0 (placeholders in webhook URL). No breaking changes for webhooks pointing to external URLs. Internal/private IP webhooks will now be blocked by design.
 
 = 5.0.0 =
 
