@@ -163,18 +163,7 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 Security patch release.
 
-* Fixed XSS vulnerabilities in admin panel output (body preview and form input helpers).
-* Fixed JSON injection: user-submitted values in custom body templates are now safely encoded.
-* Added capability check (`wpcf7_edit_contact_form`) on webhook settings save.
-* Added server-side HTTP method whitelist (GET, POST, PUT, PATCH, DELETE).
-* Sensitive headers (Authorization, x-api-key, etc.) are now redacted from error notification emails.
-* Replaced `uniqid()` with `random_bytes()` for uploaded file directory names.
-* Replaced raw `<script>` echo with `wp_add_inline_script()` for admin JS data.
-* Added SSRF protection: webhook URLs are validated against private/reserved IP ranges before the request is sent.
-
-Note:
-
-If your site uses custom roles that can edit CF7 forms but do not have the `wpcf7_edit_contact_form` capability, webhook settings will no longer be saved for those users. Grant the capability explicitly or use the `wpcf7_edit_contact_form` capability in your role setup.
+* Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses (CVE-2026-11395).
 
 ### 5.0.0 ###
 

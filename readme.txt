@@ -153,6 +153,12 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 == Changelog ==
 
+= 5.0.1 =
+
+Security patch release.
+
+* Added SSRF protection: outbound webhook requests now use `wp_safe_remote_request()`, blocking requests to private, loopback, and link-local addresses (CVE-2026-11395).
+
 = 5.0.0 =
 
 New feature: Added support for mail tags in headers (props to @anthonypenner).
