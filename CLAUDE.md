@@ -29,7 +29,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code or committing, and f
 
 When using them:
 
-- The skills target WordPress 7.0+, but this plugin supports WordPress 4.7+ and PHP 7.4 (`Requires at least` and `Requires PHP` in `readme.txt`). Before using an API, check the version that introduced it and add a fallback, as `scrub_utf8()` does for `wp_scrub_utf8()`.
+- The skills target WordPress 7.0+, but this plugin supports WordPress 5.0+ and PHP 7.4 (`Requires at least` and `Requires PHP` in `readme.txt`). Before using an API, check the version that introduced it and add a fallback, as `scrub_utf8()` does for `wp_scrub_utf8()`.
 - Their commands use paths like `node skills/<name>/scripts/...`. Here the scripts are in `.claude/skills/<name>/scripts/`.
 - The local WordPress in Docker has no WP-CLI, so steps that need `wp` (doctor, profile, Plugin Check) cannot run. Say so instead of reporting them as done.
 - `.claude/` is outside the build allowlist, so the skills never ship with the plugin.
@@ -87,7 +87,7 @@ The URL sections (`how-to`, `features`) say what kind of page it is; the menu an
 
 Pages include the shared parts with nginx server-side includes: `<!--# include virtual="/partials/header.html" -->`, `footer.html` and, on docs pages, `docs-nav.html`. Edit a menu or the footer once, in `partials/`, and every page gets it. `/partials/` is internal, so those files are not pages of their own. Includes only run in nginx: preview the site with the Docker image, not by opening the files.
 
-`faq.html` repeats the FAQ of `readme.txt`. When a question changes in the readme, change it in `faq.html` too, with links to this site as relative paths (`/docs/...`).
+`faq.html` is the full FAQ. `readme.txt` keeps a shorter one, with the general questions and a last "More questions?" entry linking to the site FAQ. When a question in the readme changes, change it in `faq.html` too, with links to this site as relative paths (`/docs/...`). Specific questions go only to the site, usually with a how-to.
 
 Site content is in English, like the plugin.
 

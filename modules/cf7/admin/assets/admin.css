@@ -162,35 +162,6 @@
   margin: 0 0 1rem;
 }
 
-#webhook-panel .faq-list {
-  margin: 0;
-}
-
-#webhook-panel .faq-list li {
-  margin: 0 0 0.5rem;
-}
-
-#webhook-panel .faq-list li a {
-  color: #FF4A00;
-  box-shadow: none;
-}
-
-#webhook-panel .faq-list li a:hover {
-  color: #E54300;
-}
-
-#webhook-panel .faq-list li.new-topic {
-  margin-top: 1rem;
-}
-
-#webhook-panel .faq-list li.new-topic a {
-  color: #2271b1;
-}
-
-#webhook-panel .faq-list li.new-topic a:hover {
-  color: #135e96;
-}
-
 #ctz-webhook-confirmation {
   display: none;
   position: fixed;
