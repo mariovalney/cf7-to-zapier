@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Send special mail tags | CF7 to Webhook</title>
+    <meta name="description" content="Add the post title, the visitor IP, the date and other special mail tags to the webhook data.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/special-mail-tags">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Send special mail tags</h1>
+
+                <p>Contact Form 7 has <a href="https://contactform7.com/special-mail-tags/">special mail tags</a> for data that is not a field, such as <code>[_post_title]</code>, <code>[_remote_ip]</code>, <code>[_date]</code> and <code>[_url]</code>. To send them, add them to <strong>Special Mail Tags</strong>:</p>
+<pre><code>[_post_title]
+[_remote_ip]
+[_date]</code></pre>
+                <p>Each tag arrives with its name as the key, such as <code>_remote_ip</code>. A second word sets another key:</p>
+<pre><code>[_remote_ip ip]
+[_post_title page]</code></pre>
+                <p>In headers, special mail tags work without being listed here. See <a href="/docs/how-to/headers-and-authentication">Add headers and authentication</a>.</p>
+
+                <h2>The label of a pipe option</h2>
+
+                <p>With <a href="https://contactform7.com/selectable-recipient-with-pipes/">pipes</a>, an option shows a label and sends a value:</p>
+<pre><code>[select your-plan "Basic plan|basic" "Pro plan|pro"]</code></pre>
+                <p>The webhook gets <code>basic</code>. To also send the label the visitor chose, add the field with the <code>_raw_</code> prefix to Special Mail Tags:</p>
+<pre><code>[_raw_your-plan plan-label]</code></pre>
+                <p>Now the data also has <code>plan-label</code> with <code>Basic plan</code>.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

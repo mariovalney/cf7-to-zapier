@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Templates | CF7 to Webhook</title>
+    <meta name="description" content="Fill the headers and body of a webhook from a community template.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/features/templates">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / Features</p>
+
+                <h1>Templates</h1>
+
+                <p>Templates fill <strong>Headers</strong> and <strong>Body</strong> for a service, such as Slack. Pick one in <strong>Template</strong>, under Settings in the webhook panel.</p>
+
+                <h2>What a template changes</h2>
+
+                <p>After you confirm, the template replaces the body, replaces or clears the headers and clears Special Mail Tags. Where the template has <code>__VALUES__</code>, the plugin writes the fields of your form. When the template links to documentation, the plugin offers to open it.</p>
+                <p>Nothing is saved until you save the form, and you can still edit the result. See <a href="/docs/how-to/custom-body">Create a custom body</a>.</p>
+
+                <h2>Where templates come from</h2>
+
+                <p>The list is the file <code>https://cf7-to-webhook.valney.dev/templates.json</code>. Your browser loads it when you open the form editor, so new templates show up without updating the plugin.</p>
+                <p>Missing a service? See <a href="/docs/how-to/propose-template">Propose a template</a>.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

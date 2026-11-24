@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add headers and authentication | CF7 to Webhook</title>
+    <meta name="description" content="Send HTTP headers such as Authorization or an API key with each webhook request.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/headers-and-authentication">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Add headers and authentication</h1>
+
+                <p>Write the headers in <strong>Headers</strong>, under Advanced settings, one per line, with the name and the value separated by a colon:</p>
+<pre><code>Authorization: Bearer 99999999999999999999
+X-API-Key: your-key</code></pre>
+                <p>For basic authentication, send <code>Authorization: Basic</code> followed by <code>user:password</code> encoded in base64.</p>
+
+                <h2>Form data in headers</h2>
+
+                <p>Header values accept form fields and special mail tags. Special mail tags work here without adding them to Special Mail Tags:</p>
+<pre><code>X-User-Email: [your-email]
+X-Client-IP: [_remote_ip]</code></pre>
+                <p>Since 5.2.0, line breaks in those values are replaced by spaces, so a visitor cannot add headers of their own.</p>
+
+                <h2>Content type</h2>
+
+                <p>The plugin sends <code>Content-Type: application/json</code>, or <code>text/plain</code> when the body is not JSON, with the site charset. A <code>Content-Type</code> line in Headers replaces it; write the name exactly like that.</p>
+
+                <h2>Keep the secrets safe</h2>
+
+                <p>Headers are saved in the form settings, so anyone who can edit the form can read them. Error notification emails hide the values of <code>Authorization</code>, <code>X-API-Key</code>, <code>Api-Key</code>, <code>X-Auth-Token</code> and <code>Cookie</code>; other headers appear as sent.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

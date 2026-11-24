@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create a custom body | CF7 to Webhook</title>
+    <meta name="description" content="Write the request body yourself, with form fields replaced like in Contact Form 7 mail.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/custom-body">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Create a custom body</h1>
+
+                <p>By default, the webhook gets a JSON object with every field and special mail tag. To send something else, write the body in <strong>Body</strong>, under Advanced settings.</p>
+
+                <h2>Write the body</h2>
+
+                <p>Use the fields as in a Contact Form 7 mail, between brackets. Names are case sensitive. Strings need your own quotes; checkbox and acceptance fields go without quotes, since they become a JSON array and a number:</p>
+<pre><code>{
+    "composed-message": "Sir [your-name] from [your-city].",
+    "text-field": "[your-name]",
+    "checkbox-field": [your-checkbox],
+    "radio-field": "[your-choice]"
+}</code></pre>
+                <p>The plugin escapes the values for JSON, so quotes or line breaks typed in the form do not break the body. An empty checkbox becomes <code>[]</code> and an unchecked acceptance becomes <code>0</code>.</p>
+                <p>Fields renamed with the <code>webhook</code> option are used by their new key. A name that matches no field stays in the body as written.</p>
+
+                <h2>Check the result</h2>
+
+                <p>Save the form and open <strong>Body</strong> again: the preview shows what will be sent, with example values. If the body is not valid JSON, the plugin sends it as plain text, with <code>Content-Type: text/plain</code>.</p>
+                <p>Templates fill this field for you. See <a href="/docs/features/templates">Templates</a>.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

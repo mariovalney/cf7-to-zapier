@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Send a GET request | CF7 to Webhook</title>
+    <meta name="description" content="Send the form data as URL query parameters with the GET method.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/get-requests">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Send a GET request</h1>
+
+                <p>In <strong>Method</strong>, under Advanced settings, choose GET. The data goes as query parameters in the URL instead of a body.</p>
+                <p>The body must be JSON: the default body is, and a custom body has to be a JSON object. Otherwise the request is not sent and the plugin reports the error "Webhook has method GET but body is not a JSON to be passed as query params."</p>
+                <p>Lists, such as checkbox values, go in the PHP style: <code>your-checkbox[0]=a&amp;your-checkbox[1]=b</code>, URL-encoded.</p>
+                <p>For a few fields, <a href="/docs/how-to/url-placeholders">placeholders in the webhook URL</a> may be simpler. PUT, PATCH and DELETE send the body like POST.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Use form fields in the webhook URL | CF7 to Webhook</title>
+    <meta name="description" content="Put form data in the webhook URL with placeholders, or pass the page URL parameters along.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/url-placeholders">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Use form fields in the webhook URL</h1>
+
+                <p>The webhook URL accepts the same placeholders as a mail body. Each one is replaced by the field value, URL-encoded:</p>
+<pre><code>https://example.com/hook?email=[your-email]&amp;plan=[your-plan]</code></pre>
+                <p>Checkbox values are joined with <code>|</code>. Special mail tags work too, and a placeholder that matches no field becomes empty.</p>
+                <p>Keep placeholders in the path or the query. In the domain, a visitor would choose where the data goes.</p>
+
+                <h2>Send the page URL parameters</h2>
+
+                <p>To pass a parameter of the page where the form is, such as <code>utm_source</code> in <code>https://example.com/?utm_source=example</code>, add a hidden field that takes its value from the URL:</p>
+<pre><code>[hidden utm_source default:get]</code></pre>
+                <p>The field is sent like any other, and can also go in the webhook URL as <code>[utm_source]</code>.</p>
+
+                <h2>With code</h2>
+
+                <p>The <code>ctz_hook_url_placeholder</code> filter changes how a value goes into the URL, and <code>ctz_hook_url</code> changes the final URL. Add the code as explained in <a href="/docs/how-to/add-custom-code">Add custom code</a>:</p>
+<pre><code>add_filter( 'ctz_hook_url', function( $hook_url, $data ) {
+    return add_query_arg( 'source', 'website', $hook_url );
+}, 10, 2 );</code></pre>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

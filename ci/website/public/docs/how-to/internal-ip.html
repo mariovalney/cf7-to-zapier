@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Send webhooks to an internal IP address | CF7 to Webhook</title>
+    <meta name="description" content="Allow requests to a trusted service on a private or local address.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/internal-ip">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Send webhooks to an internal IP address</h1>
+
+                <p>By default, the plugin blocks requests to private, loopback and link-local addresses (such as <code>192.168.x.x</code>, <code>10.x.x.x</code>, <code>127.0.0.1</code> and <code>169.254.x.x</code>) to prevent SSRF attacks.</p>
+                <p>To reach a trusted internal service, allow its host with the <code>http_request_host_is_external</code> filter of WordPress. Add the code as explained in <a href="/docs/how-to/add-custom-code">Add custom code</a>:</p>
+<pre><code>add_filter( 'http_request_host_is_external', function( $external, $host ) {
+    $trusted = [ '192.168.1.100', '10.0.0.50' ];
+
+    return in_array( $host, $trusted, true ) ? true : $external;
+}, 10, 2 );</code></pre>
+                <p>Replace the addresses in <code>$trusted</code> with the hosts to allow. Only do this on servers you control and trust.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Troubleshoot missing data | CF7 to Webhook</title>
+    <meta name="description" content="Check why a webhook did not arrive or arrived with empty fields.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/troubleshoot">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Troubleshoot missing data</h1>
+
+
+                <h2>Nothing arrives</h2>
+
+                <ul>
+                    <li>Check that <strong>Send to Webhook</strong> is on and the URL is saved in <strong>Webhook URL</strong>.</li>
+                    <li>The plugin sends the webhook only after Contact Form 7 accepts the submission. Validation errors, spam protection (reCAPTCHA, Akismet and others) or a failed Contact Form 7 email, when <strong>Send CF7 mail as usually</strong> is checked, stop it.</li>
+                    <li>Forms sent by other plugins are not supported, only Contact Form 7 forms.</li>
+                    <li>The site blocks requests to private and local addresses. See <a href="/docs/how-to/internal-ip">Send webhooks to an internal IP address</a>.</li>
+                    <li>If the webhook failed, the plugin emailed the error to the addresses in <strong>Errors</strong>. See <a href="/docs/how-to/handle-errors">Handle webhook errors</a>.</li>
+                </ul>
+
+                <h2>Fields arrive empty or missing</h2>
+
+                <ul>
+                    <li>In a custom body, names are case sensitive and must match the fields, or their new key when renamed with the <code>webhook</code> option.</li>
+                    <li>Strings in a custom body need quotes; checkbox and acceptance fields do not. See <a href="/docs/how-to/custom-body">Create a custom body</a>.</li>
+                    <li>With Multi-Step Forms, the settings go in the last step. See <a href="/docs/how-to/multi-step-forms">Use with Multi-Step Forms</a>.</li>
+                </ul>
+
+                <h2>See the request</h2>
+
+                <p>Point the webhook to a request inspector, such as webhook.site, and submit the form: you see exactly what the plugin sends. If you still need help, open a topic in the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a> with the error email, after removing personal data and keys.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

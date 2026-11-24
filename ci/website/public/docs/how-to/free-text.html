@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Get the free text of checkboxes and radios | CF7 to Webhook</title>
+    <meta name="description" content="Send what the visitor typed in the free text option of a checkbox or radio field.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/free-text">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Get the free text of checkboxes and radios</h1>
+
+                <p>The <code>free_text</code> option of Contact Form 7 adds a text box to the last option of a checkbox or radio field:</p>
+<pre><code>[checkbox your-options "Option 1" "Option 2" "Other" free_text]</code></pre>
+                <p>When the visitor checks "Other" and types a text, the plugin sends the text in place of "Other": <code>["Option 1", "typed text"]</code> for a checkbox and <code>"typed text"</code> for a radio. Nothing else is needed.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

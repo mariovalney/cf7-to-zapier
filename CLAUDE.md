@@ -76,14 +76,14 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 | `public/faq.html` | The FAQ from `readme.txt`, served at `/faq`. |
 | `public/404.html` | Served for any address that does not exist. |
 | `public/style.css` | The only stylesheet, shared by every page, with light and dark colors as CSS variables. |
-| `public/docs/index.html` | The docs index: one heading per section, with a card per page. |
+| `public/docs/index.html` | The docs index, grouped by topic (Get started, Form data, Requests, Files, Errors, Templates), with a card per page. |
 | `public/docs/how-to/<slug>.html` | Guides for a task, served at `/docs/how-to/<slug>`. |
 | `public/docs/features/<slug>.html` | One page per plugin feature, served at `/docs/features/<slug>`. |
 | `public/templates.json` | The webhook templates loaded by the plugin. |
 
 Routing: `/<path>` serves `<path>`, then `<path>.html`, then `<path>/index.html`, and otherwise `404.html` with status 404. A trailing slash redirects to the address without it (`/docs/` to `/docs`). Link to pages without `.html` and without a trailing slash.
 
-Sections have no page of their own: nginx sends `/docs/how-to` and `/docs/features` to their heading in the index (`/docs#how-to`). A new section needs a heading with an `id` in the index and its name in that nginx rule.
+The URL sections (`how-to`, `features`) say what kind of page it is; the menu and the index group pages by topic instead. Sections have no page of their own: nginx sends `/docs/how-to` and `/docs/features` to `/docs`.
 
 Pages include the shared parts with nginx server-side includes: `<!--# include virtual="/partials/header.html" -->`, `footer.html` and, on docs pages, `docs-nav.html`. Edit a menu or the footer once, in `partials/`, and every page gets it. `/partials/` is internal, so those files are not pages of their own. Includes only run in nginx: preview the site with the Docker image, not by opening the files.
 
@@ -104,11 +104,11 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 ### Adding a doc page
 
 1. Pick the section: `how-to` for a guide to a task, `features` for what a feature does and how it behaves. Pick a slug in lowercase with hyphens. The page will live at `/docs/<section>/<slug>`.
-2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the header, docs menu and footer includes, and the breadcrumb to `/docs` and the section.
+2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the header, docs menu and footer includes, and the breadcrumb to `/docs` followed by the section name.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
 4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
 5. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
-6. Add the page to its section in `partials/docs-nav.html` and as a card in `docs/index.html`.
+6. Add the page to its topic in `partials/docs-nav.html` and as a card in the same topic of `docs/index.html`, with the page's meta description as the card text.
 7. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
 8. Test locally (below) before pushing.
 

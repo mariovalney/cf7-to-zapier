@@ -19,29 +19,113 @@
                 <h1>Documentation</h1>
                 <p class="lead">Guides for common tasks and references for each feature. For quick answers, see the <a href="/faq">FAQ</a>.</p>
 
-                <h2 id="how-to">How-to</h2>
+                <h2 id="get-started">Get started</h2>
 
                 <div class="cards">
+                    <a class="card" href="/docs/how-to/connect-zapier">
+                        <h3>Connect a form to Zapier</h3>
+                        <p>Send Contact Form 7 submissions to a Zap with Webhooks by Zapier.</p>
+                    </a>
                     <a class="card" href="/docs/how-to/add-custom-code">
                         <h3>Add custom code</h3>
-                        <p>Where to put the PHP snippets these guides use.</p>
+                        <p>Where to put the PHP snippets that customize CF7 to Webhook: a small plugin of your own or a snippets plugin.</p>
                     </a>
-                    <a class="card" href="/docs/how-to/change-webhook-timeout">
-                        <h3>Change the webhook timeout</h3>
-                        <p>Make forms answer faster when a webhook is slow.</p>
-                    </a>
-                    <a class="card" href="/docs/how-to/make-multiple-webhooks-optionals">
-                        <h3>Make multiple webhooks optionals</h3>
-                        <p>Keep sending the next webhooks when one of them fails.</p>
+                    <a class="card" href="/docs/how-to/troubleshoot">
+                        <h3>Troubleshoot missing data</h3>
+                        <p>Check why a webhook did not arrive or arrived with empty fields.</p>
                     </a>
                 </div>
 
-                <h2 id="features">Features</h2>
+                <h2 id="form-data">Form data</h2>
 
                 <div class="cards">
+                    <a class="card" href="/docs/how-to/rename-fields">
+                        <h3>Rename the fields sent to the webhook</h3>
+                        <p>Change the keys the webhook receives with the webhook option of a form tag.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/custom-body">
+                        <h3>Create a custom body</h3>
+                        <p>Write the request body yourself, with form fields replaced like in Contact Form 7 mail.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/special-mail-tags">
+                        <h3>Send special mail tags</h3>
+                        <p>Add the post title, the visitor IP, the date and other special mail tags to the webhook data.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/free-text">
+                        <h3>Get the free text of checkboxes and radios</h3>
+                        <p>Send what the visitor typed in the free text option of a checkbox or radio field.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/change-data">
+                        <h3>Change the data before sending</h3>
+                        <p>Add, change or remove fields before the webhook request with a filter.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/multi-step-forms">
+                        <h3>Use with Multi-Step Forms</h3>
+                        <p>Send the data of every step of a Contact Form 7 Multi-Step Forms form.</p>
+                    </a>
+                </div>
+
+                <h2 id="requests">Requests</h2>
+
+                <div class="cards">
+                    <a class="card" href="/docs/how-to/headers-and-authentication">
+                        <h3>Add headers and authentication</h3>
+                        <p>Send HTTP headers such as Authorization or an API key with each webhook request.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/url-placeholders">
+                        <h3>Use form fields in the webhook URL</h3>
+                        <p>Put form data in the webhook URL with placeholders, or pass the page URL parameters along.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/get-requests">
+                        <h3>Send a GET request</h3>
+                        <p>Send the form data as URL query parameters with the GET method.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/change-webhook-timeout">
+                        <h3>Change the webhook timeout</h3>
+                        <p>Make forms answer faster when a webhook is slow by lowering the request timeout and redirects with a filter.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/internal-ip">
+                        <h3>Send webhooks to an internal IP address</h3>
+                        <p>Allow requests to a trusted service on a private or local address.</p>
+                    </a>
+                </div>
+
+                <h2 id="files">Files</h2>
+
+                <div class="cards">
+                    <a class="card" href="/docs/how-to/send-files">
+                        <h3>Send files</h3>
+                        <p>How uploaded files reach the webhook: as links or as base64 content.</p>
+                    </a>
                     <a class="card" href="/docs/features/media-library">
                         <h3>Media library</h3>
-                        <p>Keep uploaded files as private media and delete a form's files.</p>
+                        <p>Add files sent through Contact Form 7 to the WordPress media library as private media.</p>
+                    </a>
+                </div>
+
+                <h2 id="errors">Errors</h2>
+
+                <div class="cards">
+                    <a class="card" href="/docs/how-to/handle-errors">
+                        <h3>Handle webhook errors</h3>
+                        <p>What happens when a webhook fails, how to set the notification and how to change the message.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/make-multiple-webhooks-optionals">
+                        <h3>Make multiple webhooks optionals</h3>
+                        <p>How to keep triggering the next webhooks when one of them fails in CF7 to Webhook.</p>
+                    </a>
+                </div>
+
+                <h2 id="templates">Templates</h2>
+
+                <div class="cards">
+                    <a class="card" href="/docs/features/templates">
+                        <h3>Templates</h3>
+                        <p>Fill the headers and body of a webhook from a community template.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/propose-template">
+                        <h3>Propose a template</h3>
+                        <p>Add a webhook template for everyone through the GitHub repository.</p>
                     </a>
                 </div>
             </article>

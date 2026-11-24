@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rename the fields sent to the webhook | CF7 to Webhook</title>
+    <meta name="description" content="Change the keys the webhook receives with the webhook option of a form tag.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/rename-fields">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Rename the fields sent to the webhook</h1>
+
+                <p>Each field is sent with its name as the key: <code>[email* your-email]</code> arrives as <code>your-email</code>. To use another key, add a <code>webhook</code> option to the form tag:</p>
+<pre><code>[email* your-email webhook:email]</code></pre>
+                <p>Now the webhook gets <code>email</code>. The option works with the other options of the tag:</p>
+<pre><code>[text your-field class:form-control id:field-id webhook:webhook-key]</code></pre>
+                <p>This field is named <code>your-field</code> in the form and arrives as <code>webhook-key</code>.</p>
+
+                <h2>In a custom body or in headers</h2>
+
+                <p>After renaming, use the new key: <code>[email]</code>, not <code>[your-email]</code>. See <a href="/docs/how-to/custom-body">Create a custom body</a>.</p>
+
+                <h2>Special mail tags</h2>
+
+                <p>Special mail tags take the key as a second word, as in <code>[_post_title title]</code>. See <a href="/docs/how-to/special-mail-tags">Send special mail tags</a>.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Propose a template | CF7 to Webhook</title>
+    <meta name="description" content="Add a webhook template for everyone through the GitHub repository.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/propose-template">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / How-to</p>
+
+                <h1>Propose a template</h1>
+
+                <p>Templates are a list of header and body presets in <code>ci/website/public/templates.json</code>, in the <a href="https://github.com/mariovalney/cf7-to-zapier">GitHub repository</a>. Each one looks like this:</p>
+<pre><code>{
+    "name": "Slack Webhook",
+    "headers": [ "x-example: custom-value" ],
+    "body": "{ \"text\": \"*New message!*\\n\\n__VALUES__\" }",
+    "separator": "\\n",
+    "docs": "https://api.slack.com/messaging/webhooks"
+}</code></pre>
+                <ul>
+                    <li><code>name</code> and <code>body</code> are required.</li>
+                    <li><code>__VALUES__</code> in the body is replaced by the fields of the form, joined by <code>separator</code> (<code>" | "</code> by default).</li>
+                    <li><code>headers</code> is a list of headers, one per item.</li>
+                    <li><code>docs</code> links to the documentation of the service.</li>
+                </ul>
+                <p>Open a pull request adding your template to the <code>default</code> list, or an issue describing it. Once merged, every site sees it in the template selector. See <a href="/docs/features/templates">Templates</a>.</p>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

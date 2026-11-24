@@ -3,10 +3,11 @@
     --surface: #f6f7f7;
     --text: #1d2327;
     --muted: #50575e;
-    --link: #2271b1;
-    --accent: #2271b1;
+    --link: #c63a00;
+    --accent: #ff4a00;
+    --accent-hover: #e04100;
     --accent-text: #ffffff;
-    --accent-soft: #f0f6fc;
+    --accent-soft: #fff1ea;
     --code-bg: #f6f7f7;
     --border: #dcdcde;
 }
@@ -17,10 +18,11 @@
         --surface: #1d2327;
         --text: #f0f0f1;
         --muted: #a7aaad;
-        --link: #72aee6;
-        --accent: #72aee6;
-        --accent-text: #16191d;
-        --accent-soft: #1c2a38;
+        --link: #ff7a40;
+        --accent: #ff4a00;
+        --accent-hover: #ff6a26;
+        --accent-text: #ffffff;
+        --accent-soft: #2e1d14;
         --code-bg: #2c3338;
         --border: #3c434a;
     }
@@ -152,9 +154,18 @@ pre {
     color: var(--accent-text);
 }
 
-.button:hover,
+.button:hover {
+    background: var(--accent-soft);
+}
+
+.button-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
 .button:focus-visible {
-    text-decoration: underline;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .button-small {
@@ -364,6 +375,11 @@ a.card:hover h3 {
 
 .site-footer p {
     margin: 0;
+}
+
+.site-footer .footer-note {
+    flex-basis: 100%;
+    font-size: 13px;
 }
 
 .site-footer nav {
