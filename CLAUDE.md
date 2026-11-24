@@ -74,7 +74,8 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 | `public/partials/` | `header.html` (menu with Download and Donate), `footer.html` and `docs-nav.html` (the docs menu), shared by every page. |
 | `public/site.js` | Marks the current page in the menus with `aria-current`, and turns docs headings with an `id` into links that copy the section address. |
 | `public/faq.html` | The FAQ from `readme.txt`, served at `/faq`. |
-| `public/security.html` | How to report a vulnerability (GitHub private reporting) and the acknowledgments, served at `/security`. When a fix credits a reporter in the `readme.txt` changelog, add them here too, newest first. |
+| `public/security.html` | How to report a vulnerability (GitHub private reporting), served at `/security`. |
+| `public/security/acknowledgments.html` | The people who reported a vulnerability, served at `/security/acknowledgments`. When a fix credits a reporter in the `readme.txt` changelog, add a card here too, newest first, with an `id` from the name so the credit can be linked. |
 | `public/404.html` | Served for any address that does not exist. |
 | `public/style.css` | The only stylesheet, shared by every page, with light and dark colors as CSS variables. |
 

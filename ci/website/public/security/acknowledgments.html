@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Acknowledgments | CF7 to Webhook</title>
+    <meta name="description" content="The people who found a vulnerability in CF7 to Webhook and reported it responsibly.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/security/acknowledgments">
+    <link rel="stylesheet" href="/style.css?v=4">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container">
+            <section class="hero">
+                <p class="breadcrumb"><a href="/security">Security</a> / Acknowledgments</p>
+                <h1>Acknowledgments</h1>
+                <p class="lead">Thank you to the people who found a vulnerability in CF7 to Webhook and reported it responsibly. Each report was confirmed and fixed, and names are published after the fix.</p>
+            </section>
+
+            <ol class="credits">
+                <li class="credit" id="kta1kri">
+                    <span class="credit-avatar" aria-hidden="true">K</span>
+                    <div>
+                        <h2>kta1kri</h2>
+                        <p>Header injection through form fields in custom headers.</p>
+                        <p class="credit-meta">
+                            <span class="badge">Fixed in 5.2.0</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="credit" id="lucius-log">
+                    <span class="credit-avatar" aria-hidden="true">L</span>
+                    <div>
+                        <h2>Lucius-log</h2>
+                        <p>Server-side request forgery through form fields in the webhook URL host.</p>
+                        <p class="credit-meta">
+                            <span class="badge">Fixed in 5.0.1</span>
+                            <a href="https://www.cve.org/CVERecord?id=CVE-2026-11395">CVE-2026-11395</a>
+                        </p>
+                    </div>
+                </li>
+            </ol>
+
+            <section class="callout">
+                <h2>Found a vulnerability?</h2>
+                <p>Report it privately on GitHub. Only the maintainer sees the report, and your name goes here after the fix.</p>
+                <div class="actions">
+                    <a class="button button-primary" href="https://github.com/mariovalney/cf7-to-zapier/security/advisories/new">Report a vulnerability</a>
+                    <a class="button" href="/security">Security policy</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>
