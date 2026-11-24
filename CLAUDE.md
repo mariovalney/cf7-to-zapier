@@ -18,6 +18,24 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code or committing, and f
 - To change the description, FAQ, changelog, upgrade notice or header fields (`Stable tag`, `Tested up to`, etc.), edit `readme.txt` only, using the WordPress.org readme format.
 - Do not create, regenerate or edit `README.md`. The maintainer regenerates it from VS Code. When a change touches `readme.txt`, ask them to save it before committing, so both files go in the same commit.
 
+## WordPress agent skills
+
+`.claude/skills/` has four skills from [WordPress/agent-skills](https://github.com/WordPress/agent-skills) (GPL-2.0-or-later), copied from upstream commit `7374e6f` as its "Manual installation" describes. Claude Code loads them by itself:
+
+- `wp-plugin-development`: hooks, admin UI, options, cron and the security baseline (nonces paired with capability checks, sanitized input, escaped output, AJAX handlers). Upstream has no separate security skill; security lives here, in `references/security.md`.
+- `wp-plugin-directory-guidelines`: the WordPress.org guidelines, GPL compatibility, naming rules and Plugin Check. Use it before a release.
+- `wp-performance`: profiling and fixes for HTTP calls, cron, autoloaded options and database queries.
+- `wp-project-triage`: the repository detector the other skills run first.
+
+When using them:
+
+- The skills target WordPress 7.0+, but this plugin supports WordPress 4.7+ and PHP 7.4 (`Requires at least` and `Requires PHP` in `readme.txt`). Before using an API, check the version that introduced it and add a fallback, as `scrub_utf8()` does for `wp_scrub_utf8()`.
+- Their commands use paths like `node skills/<name>/scripts/...`. Here the scripts are in `.claude/skills/<name>/scripts/`.
+- The local WordPress in Docker has no WP-CLI, so steps that need `wp` (doctor, profile, Plugin Check) cannot run. Say so instead of reporting them as done.
+- `.claude/` is outside the build allowlist, so the skills never ship with the plugin.
+
+To update, copy the skill folders again from upstream `skills/` (or run `npx skills add WordPress/agent-skills --skill <name>` with the project scope), read the diff before committing, since the skills become instructions for Claude, and update the commit above.
+
 ## Releasing a version
 
 The version number lives in four places, and all of them change together:
