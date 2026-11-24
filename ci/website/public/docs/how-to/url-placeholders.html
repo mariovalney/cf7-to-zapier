@@ -22,7 +22,7 @@
 
                 <p>The webhook URL accepts the same placeholders as a mail body. Each one is replaced by the field value, URL-encoded:</p>
 <pre><code>https://example.com/hook?email=[your-email]&amp;plan=[your-plan]</code></pre>
-                <p>Checkbox values are joined with <code>|</code>. Special mail tags work too, and a placeholder that matches no field becomes empty.</p>
+                <p>Checkbox values are joined with <code>|</code>. For a select with pipes, such as <code>"Pro plan|pro"</code>, the URL gets the value: <code>pro</code>. Special mail tags work too, and a placeholder that matches no field becomes empty.</p>
                 <p>Keep placeholders in the path or the query. In the domain, a visitor would choose where the data goes.</p>
 
                 <h2>Send the page URL parameters</h2>
