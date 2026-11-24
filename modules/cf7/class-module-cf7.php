@@ -461,7 +461,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    array              $data           Data sent to the webhook, used when the exception has no request body.
          */
         private function trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception, $data = [] ) {
-            if ( empty( $error_mails ) && ! ctz_is_developing() ) {
+            if ( empty( $error_mails ) && ! cftz_activated_debug_functions() ) {
                 return;
             }
 
@@ -493,8 +493,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 '[RESPONSE_BODY]'       => ( method_exists( $exception, 'get_response_body') ) ? wp_json_encode( $exception->get_response_body() ) : '',
             );
 
-            // Log in development
-            if ( ctz_is_developing() && function_exists( 'dump_table' ) ) {
+            // Log in development, only when the debug helpers were asked for (CFTZ_ADD_DEBUG_FUNCTIONS)
+            if ( cftz_activated_debug_functions() && function_exists( 'dump_table' ) ) {
                 dump_table( $replacements );
                 return;
             }
