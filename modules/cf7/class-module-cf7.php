@@ -147,7 +147,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'btn_cancel'             => __( 'Cancel', 'cf7-to-zapier' ),
                     'btn_continue'           => __( 'Continue', 'cf7-to-zapier' ),
                     'choose_template'        => __( 'Choose a template', 'cf7-to-zapier' ),
-                    'confirm_delete_uploads' => __( 'This action will delete all files uploaded with this form and remove them from the media library.', 'cf7-to-zapier' ) . '<br>' . __( 'Links already sent to webhooks will stop working.', 'cf7-to-zapier' ),
+                    'confirm_delete_uploads' => __( 'This action will delete all files uploaded with this form since always.', 'cf7-to-zapier' ) . '<br>' . __( 'Links sent to webhook will stop working.', 'cf7-to-zapier' ),
                     'delete_uploads_error'   => __( 'The files could not be deleted. Reload the page and try again.', 'cf7-to-zapier' ),
                 ),
             ) );
