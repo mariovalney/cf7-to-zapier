@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FAQ | CF7 to Webhook</title>
+    <meta name="description" content="Frequently asked questions about CF7 to Webhook.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/faq">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content faq">
+                <h1>Frequently asked questions</h1>
+                <p class="lead">Did not find your answer? Ask in the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.</p>
+
+                <details>
+                    <summary>Did you renamed the plugin?</summary>
+                    <p>Yes. Due to <a href="https://make.wordpress.org/plugins/2019/08/08/trademark-enforcement/">this</a>.</p>
+                </details>
+                <details>
+                    <summary>Does it works with Gutenberg?</summary>
+                    <p>Yes. We support WordPress 5+ and CF7 too.</p>
+                </details>
+                <details>
+                    <summary>Does it works for forms sent out of CF7?</summary>
+                    <p>Nope. The intention here is to integrate CF7 to Zapier (and another webhooks).</p>
+                </details>
+                <details>
+                    <summary>Can I use it without Zapier?</summary>
+                    <p>Yep. We are creating a integration to Zapier webhook, but you can insert any URL to receive a JSON formated data.</p>
+                </details>
+                <details>
+                    <summary>My sent data is empty</summary>
+                    <p>Please, go to <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a> to get help.</p>
+                </details>
+                <details>
+                    <summary>How can I submit one form to multiple webhooks?</summary>
+                    <p>Just add one webhook per line in "Webhook URL" settings.</p>
+                    <p>Please, read <a href="/docs/how-to/make-multiple-webhooks-optionals">this topic</a> for more information.</p>
+                </details>
+                <details>
+                    <summary>How can I show webhook errors on form submit?</summary>
+                    <p>We already show WordPress request errors. If you want to add theatment to webhook errors, please <a href="https://wordpress.org/support/topic/form-sent-to-zapier-randomly/#post-11249864">check this post</a>.</p>
+                </details>
+                <details>
+                    <summary>How can I upload files and send link to webhook?</summary>
+                    <p>If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.</p>
+                    <p>You can also add the files to the media library, as private media, with "Add to Library" in "Media", under Advanced settings. Read more in the <a href="/docs/features/media-library">media library documentation</a>.</p>
+                </details>
+                <details>
+                    <summary>How can I delete uploaded files?</summary>
+                    <p>Use "Delete all files" in "Media", under Advanced settings. It deletes every file uploaded with the form, including the ones in the media library. Links already sent to webhooks stop working. Only administrators can use it.</p>
+                </details>
+                <details>
+                    <summary>How can I rename a field to webhook?</summary>
+                    <p>You can add a "webhook" option to your field on form edit tab.</p>
+                    <p>It's like the "class" option: <code>[text your-field class:form-control id:field-id webhook:webhook-key]</code>.</p>
+                    <p>This will create a text field with name "your-field", class "form-control", id "field-id" and will be sent to webhook with key "webhook-key".</p>
+                </details>
+                <details>
+                    <summary>How I can get the free text value?</summary>
+                    <p>We will replace the value for last option (which is the free_text input) with the value.</p>
+                    <p>This way your webhook will receive the free text value and other options if you allow it (like in checkbox).</p>
+                </details>
+                <details>
+                    <summary>Can I send webhooks to an internal/private IP address?</summary>
+                    <p>By default, the plugin blocks requests to private, loopback, and link-local addresses (e.g. <code>192.168.x.x</code>, <code>10.x.x.x</code>, <code>127.0.0.1</code>, <code>169.254.x.x</code>) to prevent SSRF attacks.</p>
+                    <p>If you run a trusted internal service and need to reach it, you can whitelist specific hosts using WordPress's <code>http_request_host_is_external</code> filter. Add this code as explained in <a href="/docs/how-to/add-custom-code">Add custom code</a>:</p>
+<pre><code>add_filter( 'http_request_host_is_external', function( $external, $host ) {
+    $trusted = [ '192.168.1.100', '10.0.0.50' ];
+    return in_array( $host, $trusted, true ) ? true : $external;
+}, 10, 2 );</code></pre>
+                    <p>Replace the IPs in <code>$trusted</code> with the hosts you want to allow. Only use this on servers you fully control and trust.</p>
+                </details>
+                <details>
+                    <summary>I don't see a template for my webhook.</summary>
+                    <p>Templates are created by community so we're constructing this together.</p>
+                    <p>You still are able to add a custom header / body or you can open a ticket and propose a new template.</p>
+                </details>
+                <details>
+                    <summary>Support for: Contact Form 7 Multi-Step Forms</summary>
+                    <p>We have native support for <a href="https://wordpress.org/plugins/contact-form-7-multi-step-module/">Contact Form 7 Multi-Step Forms</a>.</p>
+                    <p>You just have to add your webhook settings to last step and we'll get all data from all steps.</p>
+                    <p>We use "cf7msm_posted_data" stored by plugin so <strong>no need for hidden inputs</strong> (but we are not able to guarantee the data).</p>
+                </details>
+                <details>
+                    <summary>Who is the developer?</summary>
+                    <p><a href="https://mariovalney.com/me">Mário Valney</a></p>
+                    <p>Brazilian developer who is part of <a href="https://profiles.wordpress.org/mariovalney">WordPress community</a>.</p>
+                </details>
+                <details>
+                    <summary>Can I help you?</summary>
+                    <p>Yes! Visit <a href="https://github.com/mariovalney/cf7-to-zapier">GitHub repository</a> or <a href="https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS">make a donation</a>.</p>
+                </details>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>

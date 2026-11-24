@@ -68,12 +68,15 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 | Path | What it is |
 |---|---|
 | `ci/website/Dockerfile` | `nginx-unprivileged` image, port 8080. The build context is the **repository root**, so `COPY` paths start with `ci/website/`. |
-| `ci/website/nginx/default.conf` | Routing, the CORS header for `templates.json`, the 404 page and `/healthz`. |
+| `ci/website/nginx/default.conf` | Routing, server-side includes, the CORS header for `templates.json`, the 404 page and `/healthz`. |
 | `ci/website/public/` | The site root. Every file here is published as is. |
-| `public/index.html` | Home: links to the repository and to the docs. |
+| `public/index.html` | Home: what the plugin does, how to start, and the Download, docs and GitHub links. |
+| `public/partials/` | `header.html` (menu with Download and Donate), `footer.html` and `docs-nav.html` (the docs menu), shared by every page. |
+| `public/site.js` | Marks the current page in the menus with `aria-current`. |
+| `public/faq.html` | The FAQ from `readme.txt`, served at `/faq`. |
 | `public/404.html` | Served for any address that does not exist. |
 | `public/style.css` | The only stylesheet, shared by every page, with light and dark colors as CSS variables. |
-| `public/docs/index.html` | The docs index: one heading per section, with its pages listed below. |
+| `public/docs/index.html` | The docs index: one heading per section, with a card per page. |
 | `public/docs/how-to/<slug>.html` | Guides for a task, served at `/docs/how-to/<slug>`. |
 | `public/docs/features/<slug>.html` | One page per plugin feature, served at `/docs/features/<slug>`. |
 | `public/templates.json` | The webhook templates loaded by the plugin. |
@@ -81,6 +84,10 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 Routing: `/<path>` serves `<path>`, then `<path>.html`, then `<path>/index.html`, and otherwise `404.html` with status 404. A trailing slash redirects to the address without it (`/docs/` to `/docs`). Link to pages without `.html` and without a trailing slash.
 
 Sections have no page of their own: nginx sends `/docs/how-to` and `/docs/features` to their heading in the index (`/docs#how-to`). A new section needs a heading with an `id` in the index and its name in that nginx rule.
+
+Pages include the shared parts with nginx server-side includes: `<!--# include virtual="/partials/header.html" -->`, `footer.html` and, on docs pages, `docs-nav.html`. Edit a menu or the footer once, in `partials/`, and every page gets it. `/partials/` is internal, so those files are not pages of their own. Includes only run in nginx: preview the site with the Docker image, not by opening the files.
+
+`faq.html` repeats the FAQ of `readme.txt`. When a question changes in the readme, change it in `faq.html` too, with links to this site as relative paths (`/docs/...`).
 
 Site content is in English, like the plugin.
 
@@ -97,11 +104,11 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 ### Adding a doc page
 
 1. Pick the section: `how-to` for a guide to a task, `features` for what a feature does and how it behaves. Pick a slug in lowercase with hyphens. The page will live at `/docs/<section>/<slug>`.
-2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the breadcrumb back to `/` and `/docs`, and the support forum footer.
+2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the header, docs menu and footer includes, and the breadcrumb to `/docs` and the section.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
 4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
 5. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
-6. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
+6. Add the page to its section in `partials/docs-nav.html` and as a card in `docs/index.html`.
 7. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
 8. Test locally (below) before pushing.
 

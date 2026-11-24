@@ -9,26 +9,45 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <main>
-        <p class="breadcrumb"><a href="/">CF7 to Webhook</a></p>
+    <!--# include virtual="/partials/header.html" -->
 
-        <h1>Documentation</h1>
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
 
-        <h2 id="how-to">How-to</h2>
-        <ul>
-            <li><a href="/docs/how-to/add-custom-code">Add custom code</a></li>
-            <li><a href="/docs/how-to/change-webhook-timeout">Change the webhook timeout</a></li>
-            <li><a href="/docs/how-to/make-multiple-webhooks-optionals">Make multiple webhooks optionals</a></li>
-        </ul>
+            <article class="content">
+                <h1>Documentation</h1>
+                <p class="lead">Guides for common tasks and references for each feature. For quick answers, see the <a href="/faq">FAQ</a>.</p>
 
-        <h2 id="features">Features</h2>
-        <ul>
-            <li><a href="/docs/features/media-library">Media library</a></li>
-        </ul>
+                <h2 id="how-to">How-to</h2>
 
-        <footer>
-            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
-        </footer>
+                <div class="cards">
+                    <a class="card" href="/docs/how-to/add-custom-code">
+                        <h3>Add custom code</h3>
+                        <p>Where to put the PHP snippets these guides use.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/change-webhook-timeout">
+                        <h3>Change the webhook timeout</h3>
+                        <p>Make forms answer faster when a webhook is slow.</p>
+                    </a>
+                    <a class="card" href="/docs/how-to/make-multiple-webhooks-optionals">
+                        <h3>Make multiple webhooks optionals</h3>
+                        <p>Keep sending the next webhooks when one of them fails.</p>
+                    </a>
+                </div>
+
+                <h2 id="features">Features</h2>
+
+                <div class="cards">
+                    <a class="card" href="/docs/features/media-library">
+                        <h3>Media library</h3>
+                        <p>Keep uploaded files as private media and delete a form's files.</p>
+                    </a>
+                </div>
+            </article>
+        </div>
     </main>
+
+    <!--# include virtual="/partials/footer.html" -->
 </body>
 </html>

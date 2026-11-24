@@ -4,19 +4,65 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CF7 to Webhook</title>
-    <meta name="description" content="Use Contact Form 7 as a trigger to any webhook!">
+    <meta name="description" content="Send Contact Form 7 submissions to Zapier or any webhook as JSON.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <main class="centered">
-        <h1>CF7 to Webhook</h1>
-        <p class="lead">Use Contact Form 7 as a trigger to any webhook!</p>
+    <!--# include virtual="/partials/header.html" -->
 
-        <div class="actions">
-            <a class="button button-primary" href="https://github.com/mariovalney/cf7-to-zapier">View repository</a>
-            <a class="button" href="/docs">View documentation</a>
+    <main class="site-main">
+        <div class="container">
+            <section class="hero">
+                <h1>CF7 to Webhook</h1>
+                <p class="lead">Send Contact Form 7 submissions to Zapier or any webhook as JSON. Free and open source, used on more than 30,000 WordPress sites.</p>
+
+                <div class="actions">
+                    <a class="button button-primary" href="https://wordpress.org/plugins/cf7-to-zapier/">Download</a>
+                    <a class="button" href="/docs">Documentation</a>
+                    <a class="button" href="https://github.com/mariovalney/cf7-to-zapier">View on GitHub</a>
+                </div>
+            </section>
+
+            <h2 class="section-title">What it does</h2>
+
+            <ul class="cards">
+                <li class="card">
+                    <h3>Any webhook</h3>
+                    <p>One or more URLs per form, with GET, POST, PUT, PATCH or DELETE.</p>
+                </li>
+                <li class="card">
+                    <h3>Your own body and headers</h3>
+                    <p>Build the request body and headers with the form fields, as in Contact Form 7 mail.</p>
+                </li>
+                <li class="card">
+                    <h3>Templates</h3>
+                    <p>Start from templates made by the community, such as Slack.</p>
+                </li>
+                <li class="card">
+                    <h3>Files</h3>
+                    <p>Send uploads as links or as base64 content, and keep them in the <a href="/docs/features/media-library">media library</a>.</p>
+                </li>
+                <li class="card">
+                    <h3>Error notifications</h3>
+                    <p>Get an email with the request and the response when a webhook fails.</p>
+                </li>
+                <li class="card">
+                    <h3>Multi-step forms</h3>
+                    <p>Works with Contact Form 7 Multi-Step Forms and sends the data of every step.</p>
+                </li>
+            </ul>
+
+            <h2 class="section-title">Get started</h2>
+
+            <ol class="steps">
+                <li>Install and activate <a href="https://wordpress.org/plugins/contact-form-7/">Contact Form 7</a> and <a href="https://wordpress.org/plugins/cf7-to-zapier/">CF7 to Webhook</a>.</li>
+                <li>Edit a form and open the <strong>Webhook</strong> tab.</li>
+                <li>Check <strong>Send to Webhook</strong>, paste your webhook URL and save.</li>
+            </ol>
         </div>
     </main>
+
+    <!--# include virtual="/partials/footer.html" -->
 </body>
 </html>

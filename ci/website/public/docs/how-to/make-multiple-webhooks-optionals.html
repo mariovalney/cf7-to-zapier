@@ -9,26 +9,32 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <main>
-        <p class="breadcrumb"><a href="/">CF7 to Webhook</a> / <a href="/docs">Documentation</a></p>
+    <!--# include virtual="/partials/header.html" -->
 
-        <h1>Make multiple webhooks optionals</h1>
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
 
-        <p>Since <strong>2.4.0</strong> we accept multiple webhooks in every contact form: just add one webhook per line in “Webhook URL” settings.</p>
+            <article class="content">
+                <p class="breadcrumb"><a href="/docs">Documentation</a> / <a href="/docs#how-to">How-to</a></p>
 
-        <p><strong>We will trigger one webhook by time.<br>If one of them fail, the next WILL NOT be trigged.</strong></p>
+                <h1>Make multiple webhooks optionals</h1>
 
-        <p>To make webhooks optionals (not stop when fails) you should:</p>
+                <p>Since <strong>2.4.0</strong> we accept multiple webhooks in every contact form: just add one webhook per line in “Webhook URL” settings.</p>
 
-        <p>Not sure where to put the code? See <a href="/docs/how-to/add-custom-code">Add custom code</a>.</p>
+                <p><strong>We will trigger one webhook by time.<br>If one of them fail, the next WILL NOT be trigged.</strong></p>
 
-        <ol>
-            <li>
-                <p>Return any error messages:</p>
+                <p>To make webhooks optionals (not stop when fails) you should:</p>
+
+                <p>Not sure where to put the code? See <a href="/docs/how-to/add-custom-code">Add custom code</a>.</p>
+
+                <ol>
+                    <li>
+                        <p>Return any error messages:</p>
 <pre><code>add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );</code></pre>
-            </li>
-            <li>
-                <p>Trigger errors at end (optional):</p>
+                    </li>
+                    <li>
+                        <p>Trigger errors at end (optional):</p>
 <pre><code>add_action( 'ctz_trigger_webhook_errors', 'example_ctz_trigger_webhook_errors', 10, 2 );
 
 function example_ctz_trigger_webhook_errors( $errors, $contact_form ) {
@@ -39,12 +45,12 @@ function example_ctz_trigger_webhook_errors( $errors, $contact_form ) {
     $submission-&gt;set_status( 'mail_failed' );
     $submission-&gt;set_response( $contact_form-&gt;message( 'mail_sent_ng' ) );
 }</code></pre>
-            </li>
-        </ol>
-
-        <footer>
-            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
-        </footer>
+                    </li>
+                </ol>
+            </article>
+        </div>
     </main>
+
+    <!--# include virtual="/partials/footer.html" -->
 </body>
 </html>
