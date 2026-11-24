@@ -1,7 +1,5 @@
 <?php
 
-global $ctz_admin_tags_script;
-
 // If this file is called directly, call the cops.
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
@@ -65,9 +63,8 @@ if ( ! empty( $custom_body ) ) {
     $body_preview_is_json = ( $custom_sent_json !== null );
 }
 
-// Global footer script — registered via wp_add_inline_script to avoid raw echo of <script> blocks.
-wp_add_inline_script( 'ctz-admin-script', 'window.CTZ_ADMIN_TAGS = ' . json_encode( array_values( $form_tags ) ) . ';' );
-$ctz_admin_tags_script = '';
+// Form tags for the templates. admin.js is printed in the footer, so this is still added in time.
+wp_add_inline_script( 'ctz-admin-script', 'window.CTZ_ADMIN_TAGS = ' . wp_json_encode( array_values( $form_tags ) ) . ';', 'before' );
 
 /**
  * Filter: ctz_remove_donation_alert
