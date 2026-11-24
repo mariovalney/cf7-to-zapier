@@ -485,42 +485,13 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
 <h1 class="ctz-section-title"><?php esc_html_e( 'Help', 'cf7-to-zapier' ) ?></h1>
 
-<div class="ctz-accordion-wrapper">
-    <div class="ctz-accordion-trigger">
-        <div>
-            <h2><?php esc_html_e( 'URL Params', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php esc_html_e( 'Send data in your URL.', 'cf7-to-zapier' ); ?></p>
-        </div>
-    </div>
-
-    <div class="ctz-accordion-content">
-        <fieldset>
-            <legend>
-                <?php echo _x( 'You can add URL parameters using <a href="https://contactform7.com/hidden-field/" target="_blank">Hidden Fields</a> with <a href="https://contactform7.com/getting-default-values-from-the-context/" target="_blank">default values</a> in your form.', 'The URL should point to CF7 documentation.', 'cf7-to-zapier' ); ?>
-            </legend>
-
-            <pre><?php
-                esc_html_e( 'To get utm_source: https://example.com/?utm_source=example', 'cf7-to-zapier' );
-                echo "\n";
-                esc_html_e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
-            ?></pre>
-        </fieldset>
-    </div>
-</div>
-
-<div class="ctz-accordion-wrapper">
-    <div class="ctz-accordion-trigger">
-        <div>
-            <h2><?php esc_html_e( 'FAQ', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php esc_html_e( 'You can check more information or search for help.', 'cf7-to-zapier' ); ?></p>
-        </div>
-    </div>
-
-    <div class="ctz-accordion-content ctz-b0">
-        <ul class="faq-list">
-            <li><a target="_blank" href="https://github.com/mariovalney/cf7-to-zapier/issues/19"><?php esc_html_e( 'How to make multiple webhooks optionals?', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/plugins/cf7-to-zapier/#faq"><?php esc_html_e( 'Check FAQ from plugin page.', 'cf7-to-zapier' ); ?></a></li>
-            <li class="new-topic"><?php esc_html_e( 'Or...', 'cf7-to-zapier' ); ?> <a target="_blank" href="https://wordpress.org/support/plugin/cf7-to-zapier/#new-topic-0"><?php esc_html_e( 'ask a question!', 'cf7-to-zapier' ); ?></a></li>
-        </ul>
-    </div>
-</div>
+<p class="description ctz-pb3">
+    <?php
+    printf(
+        /* translators: 1: link to the documentation website, 2: link to the support forum */
+        esc_html__( 'Check the %1$s or %2$s.', 'cf7-to-zapier' ),
+        '<a href="https://cf7-to-webhook.valney.dev/docs" target="_blank" rel="noopener">' . esc_html__( 'website', 'cf7-to-zapier' ) . '</a>',
+        '<a href="https://wordpress.org/support/plugin/cf7-to-zapier/#new-topic-0" target="_blank" rel="noopener">' . esc_html__( 'ask a question', 'cf7-to-zapier' ) . '</a>'
+    );
+    ?>
+</p>
