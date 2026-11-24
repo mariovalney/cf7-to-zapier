@@ -552,10 +552,34 @@ It may contain sensitive data.
                 if ( in_array( $tag->basetype, [ 'file', 'multilinefile' ] ) && ! empty( $uploaded_files[ $tag->name ] ) ) {
                     $files = $uploaded_files[ $tag->name ];
 
+                    $send_content   = ! empty( $properties['files_send_content'] );
+                    $add_to_library = ! empty( $properties['add_to_library'] );
+
                     $copied_files = [];
                     foreach ( (array) $files as $file ) {
+                        // CF7 deletes its upload at the end of the request, so links and the media library need a copy.
+                        $copy = '';
+                        if ( ! $send_content || $add_to_library ) {
+                            wp_mkdir_p( $upload_dir );
+                            $this->protect_upload_dirs( array(
+                                $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR,
+                                $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR . '/' . $contact_form->id(),
+                                $upload_dir,
+                            ) );
+
+                            $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
+
+                            if ( copy( $file, $upload_dir . '/' . $filename ) ) {
+                                $copy = $upload_dir . '/' . $filename;
+                            }
+                        }
+
+                        if ( $copy && $add_to_library ) {
+                            $this->add_file_to_library( $copy, $contact_form, $tag->name );
+                        }
+
                         // Send file content
-                        if ( ! empty( $properties['files_send_content'] ) ) {
+                        if ( $send_content ) {
                             $file_content = file_get_contents( $file );
                             $file_content = base64_encode( $file_content );
 
@@ -568,16 +592,7 @@ It may contain sensitive data.
                         }
 
                         // Send file link
-                        wp_mkdir_p( $upload_dir );
-                        $this->protect_upload_dirs( array(
-                            $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR,
-                            $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR . '/' . $contact_form->id(),
-                            $upload_dir,
-                        ) );
-
-                        $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
-
-                        if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
+                        if ( ! $copy ) {
                             $submission = WPCF7_Submission::get_instance();
                             $submission->set_status( 'mail_failed' );
                             $submission->set_response( $contact_form->message( 'upload_failed' ) );
@@ -763,6 +778,59 @@ It may contain sensitive data.
         }
 
         /**
+         * Add a copied upload to the media library as a private attachment.
+         *
+         * WordPress would create resized copies and a "-scaled" or "-rotated" version next to
+         * the file, and point the attachment to them. The filters turn that off, so the
+         * attachment keeps the same file and URL sent to the webhook.
+         *
+         * @since    5.2.0
+         *
+         * @param    string             $path           Absolute path of the copied file
+         * @param    WPCF7_ContactForm  $contact_form   ContactForm Obj
+         * @param    string             $field          Name of the file field
+         * @return   int                $attachment_id  Attachment ID or 0 if it was not added
+         */
+        private function add_file_to_library( $path, $contact_form, $field ) {
+            // Every file type goes in: the file is already public in the uploads folder. CF7 has
+            // renamed risky extensions (svg, html, js, php...) to ".txt". The content check gives
+            // the real type, and a file whose content does not match its extension, or that
+            // WordPress does not know, is stored as a generic binary file.
+            $filetype  = wp_check_filetype_and_ext( $path, basename( $path ), wp_get_mime_types() );
+            $mime_type = ! empty( $filetype['type'] ) ? $filetype['type'] : 'application/octet-stream';
+
+            $attachment_id = wp_insert_attachment( array(
+                'post_title'     => sanitize_text_field( pathinfo( $path, PATHINFO_FILENAME ) ),
+                'post_mime_type' => $mime_type,
+                'post_status'    => 'private',
+            ), $path, 0, true );
+
+            if ( is_wp_error( $attachment_id ) ) {
+                return 0;
+            }
+
+            update_post_meta( $attachment_id, '_ctz_contact_form_id', $contact_form->id() );
+            update_post_meta( $attachment_id, '_ctz_field', $field );
+
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+
+            add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array', 999 );
+            add_filter( 'fallback_intermediate_image_sizes', '__return_empty_array', 999 );
+            add_filter( 'big_image_size_threshold', '__return_false', 999 );
+            add_filter( 'wp_image_maybe_exif_rotate', '__return_false', 999 );
+
+            wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $path ) );
+
+            remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array', 999 );
+            remove_filter( 'fallback_intermediate_image_sizes', '__return_empty_array', 999 );
+            remove_filter( 'big_image_size_threshold', '__return_false', 999 );
+            remove_filter( 'wp_image_maybe_exif_rotate', '__return_false', 999 );
+
+            return $attachment_id;
+        }
+
+        /**
          * Add an empty index.php to upload folders.
          *
          * A server with directory listing on would show every submission from the base
@@ -884,6 +952,11 @@ It may contain sensitive data.
                 ],
                 [
                     'key'     => 'files_send_content',
+                    'default' => '0',
+                    'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'add_to_library',
                     'default' => '0',
                     'type'    => 'checkbox',
                 ],

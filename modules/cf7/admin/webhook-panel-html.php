@@ -219,6 +219,8 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                 </tbody>
             </table>
         </fieldset>
+
+        <p class="description ctz-mt3"><?php _e( 'More options for files in "Media", under Advanced settings.', 'cf7-to-zapier' ) ?></p>
     </div>
 </div>
 
@@ -368,6 +370,40 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             </legend>
             <pre id="ctz-webhook-preview"><?php echo $body_preview_is_json ? esc_html( json_encode( $body_preview, JSON_PRETTY_PRINT ) ) : esc_html( $body_preview ); ?></pre>
             <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
+        </fieldset>
+    </div>
+</div>
+
+<div class="ctz-accordion-wrapper">
+    <div class="ctz-accordion-trigger">
+        <div>
+            <h2><?php _e( 'Media', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php _e( 'When you need to keep uploaded files.', 'cf7-to-zapier' ) ?></p>
+        </div>
+    </div>
+
+    <div class="ctz-accordion-content">
+        <fieldset>
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <label>
+                                <?php _e( 'Add to Library', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <label for="ctz-webhook-add_to_library">
+                                    <?php ctz_checkbox_input( 'add_to_library', $add_to_library ); ?>
+                                    <?php _e( 'Check to add files to library', 'cf7-to-zapier' ) ?>
+                                </label>
+                            </p>
+                            <p class="description"><?php _e( 'Files are added as private media (only administrators and editors see them in the library), even when sending file content. Their URLs are public (but hard to guess), like the links sent to the webhook.', 'cf7-to-zapier' ) ?> <a href="https://cf7-to-webhook.valney.dev/docs/features/media-library" target="_blank" rel="noopener"><?php _e( 'Read more', 'cf7-to-zapier' ) ?></a></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </fieldset>
     </div>
 </div>
