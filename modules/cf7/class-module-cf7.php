@@ -92,13 +92,13 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 return;
             }
 
-            if ( file_exists( ABSPATH . PLUGINDIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+            if ( file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
                 $url = 'plugins.php';
             } else {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", "cf7-to-zapier" ) . '</a></p>';
+            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( 'Do it now?', 'cf7-to-zapier' ) . '</a></p>';
             echo '</div>';
         }
 

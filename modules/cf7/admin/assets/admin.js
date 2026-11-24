@@ -99,7 +99,8 @@ jQuery(document).ready(function($) {
         const fields = (window.CTZ_ADMIN_TAGS || []).map((tag) => `[${tag}]`).join(template.separator || ' | ');
         $('#ctz-webhook-custom_body').html(template.body.replace('__VALUES__', fields)).trigger('change');
 
-        if (! (template?.docs || false)) {
+        // The link comes from the remote templates file: open only web addresses.
+        if (! /^https?:\/\//i.test(template?.docs || '')) {
           return;
         }
 
