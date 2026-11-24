@@ -47,30 +47,7 @@ And please, create a Issue about your PR.
 
 Make sure `README.md` is updated to `readme.txt`.
 
-The best way is to use [wordpress-readme-to-markdown](https://github.com/claudiosanches/wordpress-readme-to-markdown) on Sublime Text.
-
-And copy from `README.md` to `docs/README.md` to update [GitHub Pages](https://github.com/mariovalney/cf7-to-zapier/settings/pages).
-
-### Pre-commit
-
-Run `nano .git/hooks/pre-commit` to create a pre-commit file and past the content:
-
-```
-#!/bin/bash
-
-SOURCE_FILE="README.md"
-DESTINATION_FILE="docs/README.md"
-
-if [ -f "$SOURCE_FILE" ]; then
-    cp "$SOURCE_FILE" "$DESTINATION_FILE"
-    git add "$DESTINATION_FILE"
-else
-    echo "Erro: $SOURCE_FILE not found."
-    exit 1
-fi
-```
-
-And run `chmod +x .git/hooks/pre-commit` to make it executable.
+The best way is to use [WP Readme to Markdown](https://github.com/mariovalney/vscode-wordpress-readme-to-markdown) on VS Code. It converts `readme.txt` to `README.md` every time you save, so never edit `README.md` directly.
 
 ## Templates
 
