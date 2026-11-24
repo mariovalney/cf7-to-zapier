@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Security | CF7 to Webhook</title>
+    <meta name="description" content="How to report a vulnerability in CF7 to Webhook, and the people who reported one responsibly.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/security">
+    <link rel="stylesheet" href="/style.css?v=3">
+</head>
+<body>
+    <!--# include virtual="/partials/header.html" -->
+
+    <main class="site-main">
+        <div class="container docs-layout">
+            <!--# include virtual="/partials/docs-nav.html" -->
+
+            <article class="content">
+                <h1>Security</h1>
+                <p class="lead">How to report a vulnerability in CF7 to Webhook, and the people who reported one responsibly.</p>
+
+                <h2 id="report-a-vulnerability">Report a vulnerability</h2>
+
+                <p>Report it privately on GitHub, in <a href="https://github.com/mariovalney/cf7-to-zapier/security/advisories/new">Report a vulnerability</a>. Only the maintainer sees the report. Do not open a public issue or a topic in the support forum: anyone could use the details before the fix is released.</p>
+
+                <p>Include the plugin version, the steps to reproduce and what an attacker can do with it. Say how you want to be credited.</p>
+
+                <p>Fixes go out as a new version on WordPress.org, and only the latest version gets them. The changelog of that version credits the reporter.</p>
+
+                <h2 id="acknowledgments">Acknowledgments</h2>
+
+                <p>People who reported a vulnerability responsibly. Each report was confirmed and fixed, and names are published after the fix.</p>
+
+                <ul>
+                    <li><strong>kta1kri</strong>: header injection through form fields in custom headers. Fixed in 5.2.0.</li>
+                    <li><strong>Lucius-log</strong>: server-side request forgery through form fields in the webhook URL host (<a href="https://www.cve.org/CVERecord?id=CVE-2026-11395">CVE-2026-11395</a>). Fixed in 5.0.1.</li>
+                </ul>
+            </article>
+        </div>
+    </main>
+
+    <!--# include virtual="/partials/footer.html" -->
+</body>
+</html>
