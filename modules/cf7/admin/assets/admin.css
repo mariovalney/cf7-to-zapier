@@ -14,6 +14,10 @@
   margin-bottom: 1rem !important;
 }
 
+#webhook-panel .ctz-pb3 {
+  padding-bottom: 1rem !important;
+}
+
 #webhook-panel .ctz-color-red {
   color: #AA0000;
 }

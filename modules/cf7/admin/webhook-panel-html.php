@@ -485,7 +485,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
 <h1 class="ctz-section-title"><?php esc_html_e( 'Help', 'cf7-to-zapier' ) ?></h1>
 
-<p class="description">
+<p class="description ctz-pb3">
     <?php
     printf(
         /* translators: 1: link to the documentation website, 2: link to the support forum */
