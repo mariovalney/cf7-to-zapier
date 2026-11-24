@@ -97,7 +97,7 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 
 Just add one webhook per line in "Webhook URL" settings.
 
-Please, read [this topic](https://cf7-to-webhook.valney.dev/docs/make-multiple-webhooks-optionals) for more information.
+Please, read [this topic](https://cf7-to-webhook.valney.dev/docs/how-to/make-multiple-webhooks-optionals) for more information.
 
 ### How can I show webhook errors on form submit?
 
