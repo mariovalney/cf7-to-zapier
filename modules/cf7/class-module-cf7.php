@@ -321,7 +321,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $smt_data = $this->get_data_from_special_mail_tags( $contact_form );
             $cf_data = $this->get_data_from_contact_form( $contact_form );
 
-            $data = array_merge( $smt_data, $cf_data );
+            // We read $_POST directly, so invalid UTF-8 is still here and would break the JSON body.
+            $data = $this->scrub_utf8( array_merge( $smt_data, $cf_data ) );
             $errors = [];
 
             foreach ( (array) $properties['hook_url'] as $hook_url ) {
@@ -380,7 +381,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                      */
                     $error_mails =  apply_filters( 'ctz_trigger_webhook_error_mails', $properties['error_mails'], $exception );
 
-                    $this->trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception );
+                    $this->trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception, $data );
 
                     /**
                      * Filter: ctz_trigger_webhook_error_message
@@ -425,8 +426,9 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          *
          * @since    4.0.3
          * @param    obj                $contact_form   ContactForm Obj
+         * @param    array              $data           Data sent to the webhook, used when the exception has no request body.
          */
-        private function trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception ) {
+        private function trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception, $data = [] ) {
             if ( empty( $error_mails ) && ! ctz_is_developing() ) {
                 return;
             }
@@ -443,25 +445,25 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                         $headers[ $name ] = '***REDACTED***';
                     }
                 }
-                $request_headers = json_encode( $headers );
+                $request_headers = wp_json_encode( $headers );
             }
 
-            $data = array(
+            $replacements = array(
                 '[FORM]'                => $form,
                 '[WEBHOOK]'             => $hook_url,
-                '[EXCEPTION]'           => ( method_exists( $exception, 'get_error') ) ? json_encode( $exception->get_error() ) : $exception->getMessage(),
+                '[EXCEPTION]'           => ( method_exists( $exception, 'get_error') ) ? wp_json_encode( $exception->get_error() ) : $exception->getMessage(),
                 '[REQUEST_METHOD]'      => ( method_exists( $exception, 'get_request_method') ) ? $exception->get_request_method() : '(MAYBE) POST',
                 '[REQUEST_HEADERS]'     => $request_headers,
-                '[REQUEST_BODY]'        => ( method_exists( $exception, 'get_request_body') ) ? json_encode( $exception->get_request_body() ) : json_encode( $data ),
-                '[RESPONSE_CODE]'       => ( method_exists( $exception, 'get_response_code') ) ? json_encode( $exception->get_response_code() ) : '',
-                '[RESPONSE_MESSAGE]'    => ( method_exists( $exception, 'get_response_message') ) ? json_encode( $exception->get_response_message() ) : '',
-                '[RESPONSE_HEADERS]'    => ( method_exists( $exception, 'get_response_headers') ) ? json_encode( $exception->get_response_headers() ) : '',
-                '[RESPONSE_BODY]'       => ( method_exists( $exception, 'get_response_body') ) ? json_encode( $exception->get_response_body() ) : '',
+                '[REQUEST_BODY]'        => ( method_exists( $exception, 'get_request_body') ) ? wp_json_encode( $exception->get_request_body() ) : wp_json_encode( $data ),
+                '[RESPONSE_CODE]'       => ( method_exists( $exception, 'get_response_code') ) ? wp_json_encode( $exception->get_response_code() ) : '',
+                '[RESPONSE_MESSAGE]'    => ( method_exists( $exception, 'get_response_message') ) ? wp_json_encode( $exception->get_response_message() ) : '',
+                '[RESPONSE_HEADERS]'    => ( method_exists( $exception, 'get_response_headers') ) ? wp_json_encode( $exception->get_response_headers() ) : '',
+                '[RESPONSE_BODY]'       => ( method_exists( $exception, 'get_response_body') ) ? wp_json_encode( $exception->get_response_body() ) : '',
             );
 
             // Log in development
             if ( ctz_is_developing() && function_exists( 'dump_table' ) ) {
-                dump_table( $data );
+                dump_table( $replacements );
                 return;
             }
 
@@ -504,7 +506,7 @@ Please, be careful sharing this data (even in WordPress official support forum).
 It may contain sensitive data.
             ', 'cf7-to-zapier' );
 
-            $notification = str_replace( array_keys( $data ), array_values( $data ), $notification );
+            $notification = str_replace( array_keys( $replacements ), array_values( $replacements ), $notification );
             $subject = sprintf( __( '[%s] Webhook Error on Form %s', 'cf7-to-zapier' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), $form );
 
             wp_mail( $error_mails, $subject, $notification );
@@ -757,6 +759,44 @@ It may contain sensitive data.
             }
 
             return $tag->pipes->do_pipe( wp_unslash( $value ) );
+        }
+
+        /**
+         * Replace invalid UTF-8 sequences in a value (or array of values).
+         *
+         * Contact Form 7 does it to its posted data, but we read $_POST directly
+         * and json_encode() fails on invalid UTF-8. See issue #23.
+         *
+         * @since    5.1.1
+         *
+         * @param    mixed              $value
+         * @return   mixed              $value
+         */
+        private function scrub_utf8( $value ) {
+            if ( is_array( $value ) ) {
+                foreach ( $value as $key => $v ) {
+                    $value[ $key ] = $this->scrub_utf8( $v );
+                }
+
+                return $value;
+            }
+
+            if ( ! is_string( $value ) ) {
+                return $value;
+            }
+
+            // Replaces each invalid sequence with U+FFFD. Since WordPress 6.9.
+            if ( function_exists( 'wp_scrub_utf8' ) ) {
+                return wp_scrub_utf8( $value );
+            }
+
+            // Replaces each invalid sequence with "?".
+            if ( function_exists( 'mb_convert_encoding' ) ) {
+                return mb_convert_encoding( $value, 'UTF-8', 'UTF-8' );
+            }
+
+            // Last resort: empties the value if it is not valid UTF-8.
+            return wp_check_invalid_utf8( $value );
         }
 
         /**
