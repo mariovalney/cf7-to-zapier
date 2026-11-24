@@ -138,9 +138,11 @@ New feature: Add uploaded files to the media library (props to @Zodiac1978 for t
 * Fixed templates not filling the body with the form fields since 5.1.0.
 * Fixed the template selector staying empty on sites with WP_DEBUG on.
 * Fixed the form editor asking to confirm leaving the page without changes.
+* Fixed header injection through form fields in custom headers (props to @kta1kri for the responsible disclosure).
 * Documentation moved to [cf7-to-webhook.valney.dev/docs](https://cf7-to-webhook.valney.dev/docs), with new guides and a FAQ. The Help section of the webhook panel now points there.
 * Requires WordPress 5.0 or later.
-* Reviewed the plugin with the [WordPress agent skills](https://github.com/WordPress/agent-skills) and made some improvements, including a fix for header injection through form fields in custom headers. Debug helpers now need CFTZ_ADD_DEBUG_FUNCTIONS.
+* Reviewed the plugin with the [WordPress agent skills](https://github.com/WordPress/agent-skills) and made some improvements.
+* Debug helpers now need CFTZ_ADD_DEBUG_FUNCTIONS.
 
 = 5.1.1 =
 
