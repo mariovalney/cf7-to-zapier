@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Make multiple webhooks optionals | CF7 to Webhook</title>
+    <meta name="description" content="How to keep triggering the next webhooks when one of them fails in CF7 to Webhook.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/make-multiple-webhooks-optionals">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main>
+        <p class="breadcrumb"><a href="/">CF7 to Webhook</a> / <a href="/docs">Documentation</a></p>
+
+        <h1>Make multiple webhooks optionals</h1>
+
+        <p>Since <strong>2.4.0</strong> we accept multiple webhooks in every contact form: just add one webhook per line in “Webhook URL” settings.</p>
+
+        <p><strong>We will trigger one webhook by time.<br>If one of them fail, the next WILL NOT be trigged.</strong></p>
+
+        <p>To make webhooks optionals (not stop when fails) you should:</p>
+
+        <ol>
+            <li>
+                <p>Return any error messages:</p>
+<pre><code>add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );</code></pre>
+            </li>
+            <li>
+                <p>Trigger errors at end (optional):</p>
+<pre><code>add_action( 'ctz_trigger_webhook_errors', 'example_ctz_trigger_webhook_errors', 10, 2 );
+
+function example_ctz_trigger_webhook_errors( $errors, $contact_form ) {
+    // Here you can use $errors to get exception messages
+    // $errors is a array of 'webhook' (the URL) and 'exception' (the catched one)
+
+    $submission = WPCF7_Submission::get_instance();
+    $submission-&gt;set_status( 'mail_failed' );
+    $submission-&gt;set_response( $contact_form-&gt;message( 'mail_sent_ng' ) );
+}</code></pre>
+            </li>
+        </ol>
+
+        <footer>
+            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
+        </footer>
+    </main>
+</body>
+</html>
