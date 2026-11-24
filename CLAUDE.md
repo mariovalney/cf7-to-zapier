@@ -25,6 +25,22 @@ The version number lives in four places, and all of them change together:
 - `cf7-to-zapier.php`: the `Version:` header and the `CFTZ_VERSION` constant.
 - `readme.txt`: `Stable tag`, a new entry at the top of `== Changelog ==` and, when users need a reason to update, one in `== Upgrade Notice ==`.
 
+Releases always come from `master`, after the release changes are merged and pushed. Run `./ci/build.sh` (it takes no arguments). It builds `master` into `ci/build/` (ignored by git):
+
+- `cf7-to-zapier/`: the plugin files.
+- `cf7-to-zapier-<version>.zip`: the same files, installable from the WordPress admin.
+
+The build stops when local `master` differs from `origin/master` or when the four version places disagree, and it needs a changelog entry for the version. It packs committed files only, from an allowlist (`FILES`); when the plugin gets a new top-level file or folder, add it there.
+
+With `SVN_DIR` set (environment variable or `ci/.env`, see `ci/.env.example`) pointing to the local checkout of `https://plugins.svn.wordpress.org/cf7-to-zapier`, the script then releases to SVN:
+
+1. Runs `svn update` and asks before going on if the checkout already has uncommitted changes.
+2. Asks before going on if the version is not higher than the one in `trunk`, or if `tags/<version>` already exists.
+3. Replaces the contents of `trunk/` and `tags/<version>/` with the build, schedules removed files for deletion (`svn rm`) and runs `svn add * --force`.
+4. Shows `svn status` and asks before running `svn ci -m "v<version>"`.
+
+Never run the SVN commit for the maintainer: the script asks them, and the commit publishes the release to every site.
+
 ## Website (cf7-to-webhook.valney.dev)
 
 `https://cf7-to-webhook.valney.dev` is a static site served by nginx, built from `ci/website`. It hosts the plugin documentation and the webhook templates. It replaced GitHub Pages and the GitHub wiki, so new docs go here, never to the wiki.
