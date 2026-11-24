@@ -23,6 +23,15 @@ if ( ! function_exists( 'ctz_text_input' ) ) {
 }
 
 /**
+ * Create a number input (whole numbers from 0)
+ */
+if ( ! function_exists( 'ctz_number_input' ) ) {
+    function ctz_number_input( $key, $value, $disabled = false ) {
+        echo '<input class="small-text" type="number" min="0" step="1" id="ctz-webhook-' . esc_attr( $key ) . '" name="ctz-webhook-' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" ' . disabled( $disabled, true, false ) . '>';
+    }
+}
+
+/**
  * Create a checkbox input
  */
 if ( ! function_exists( 'ctz_checkbox_input' ) ) {

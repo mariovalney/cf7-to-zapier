@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Media library | CF7 to Webhook</title>
-    <meta name="description" content="Add files sent through Contact Form 7 to the WordPress media library as private media.">
+    <meta name="description" content="Add files sent through Contact Form 7 to the WordPress media library as private media, and delete old files.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/features/media-library">
     <link rel="stylesheet" href="/style.css?v=2">
 </head>
@@ -24,7 +24,7 @@
 
                 <h2>What gets stored</h2>
 
-                <p>When files are sent as links, each uploaded file is copied to <code>wp-content/uploads/cf7-to-webhook-uploads/&lt;form ID&gt;/&lt;random folder&gt;/</code>, with one random folder per submission. With Add to Library checked, each copy also becomes an attachment that points to that same file, so its URL is the link the webhook gets.</p>
+                <p>When files are sent as links, each uploaded file is copied to <code>wp-content/uploads/cf7-to-webhook-uploads/&lt;form ID&gt;/&lt;date&gt;_&lt;random&gt;/</code>, with one folder per submission, named with the submission date (UTC) and a random part, such as <code>20261124_4f1c…</code>. With Add to Library checked, each copy also becomes an attachment that points to that same file, so its URL is the link the webhook gets.</p>
 
                 <p>With <strong>Send content</strong> checked (in the Files section), the webhook gets the file content in base64 and the plugin keeps no copy: Contact Form 7 deletes its own temporary file at the end of the request. Add to Library keeps a copy in that case too, so the file stays in the library.</p>
 
@@ -32,7 +32,7 @@
 
                 <p>The attachments are private. In the media library, only users who can read private posts see them, which by default means administrators and editors.</p>
 
-                <p>WordPress does not protect the file itself: anyone with its URL can open it, as with the links sent to the webhook. The URLs are hard to guess because of the random folder, and the upload folders have an empty <code>index.php</code>, so a server with directory listing on does not list submissions or files.</p>
+                <p>WordPress does not protect the file itself: anyone with its URL can open it, as with the links sent to the webhook. The URLs are hard to guess because of the random part of the folder name, and the upload folders have an empty <code>index.php</code>, so a server with directory listing on does not list submissions or files.</p>
 
                 <h2>No resized copies</h2>
 
@@ -46,7 +46,13 @@
 
                 <h2>Deleting files</h2>
 
-                <p>To delete everything uploaded with a form, use <strong>Delete all files</strong> under Advanced settings &gt; Media, which also shows how many files the form has and their size. It deletes the form folder in <code>cf7-to-webhook-uploads</code>, with the files of every submission, sent as links or not, and the form's attachments in the media library. Links already sent to webhooks stop working. Only administrators can use it.</p>
+                <p>Two options under Advanced settings &gt; Media delete the files of a form, sent as links or not, with their attachments in the media library. Links already sent to webhooks stop working. Only administrators can change them.</p>
+
+                <p><strong>Delete after</strong>, since 5.3.0, sets a number of days. Once a day, the plugin deletes the files of that form older than that number of days. Days are whole days from midnight UTC, the date in the folder name, so a file stays for at least that many days and at most one more. The default, 0, keeps the files. Folders created before 5.3.0 have no date in the name, so the plugin uses their modification time.</p>
+
+                <p>The daily check runs with WP-Cron, which needs a visit to the site to start. On a site with few visits, it may run later than planned.</p>
+
+                <p><strong>Delete all files</strong> deletes everything uploaded with the form at once: the form folder in <code>cf7-to-webhook-uploads</code> and its attachments. The button also shows how many files the form has and their size.</p>
 
                 <p>Deleting a single attachment in the media library deletes its file. The submission folder stays, with its <code>index.php</code>.</p>
 
@@ -58,6 +64,8 @@
                     <li><code>_ctz_contact_form_id</code>: the ID of the form that received the file.</li>
                     <li><code>_ctz_field</code>: the name of the file field.</li>
                 </ul>
+
+                <p>The daily check is the WP-Cron event <code>ctz_delete_expired_uploads</code>. With WP-CLI, <code>wp cron event run ctz_delete_expired_uploads</code> runs it now.</p>
 
                 <p>To list the attachments of form 123 (see <a href="/docs/how-to/add-custom-code">Add custom code</a> for where to put it):</p>
 <pre><code>$attachments = get_posts( array(
