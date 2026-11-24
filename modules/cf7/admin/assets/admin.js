@@ -93,12 +93,10 @@ jQuery(document).ready(function($) {
     Confirm(
       ( has_headers ? CTZ_ADMIN.messages.confirm_all : CTZ_ADMIN.messages.confirm_body ),
       function() {
-        console.log('triggered');
-
         $('#ctz-webhook-special_mail_tags').html('').trigger('change');
         $('#ctz-webhook-custom_headers').html( has_headers ? template.headers.join('\n') : '' ).trigger('change');
 
-        const fields = (CTZ_ADMIN_TAGS || []).map((tag) => `[${tag}]`).join(template.separator || ' | ');
+        const fields = (window.CTZ_ADMIN_TAGS || []).map((tag) => `[${tag}]`).join(template.separator || ' | ');
         $('#ctz-webhook-custom_body').html(template.body.replace('__VALUES__', fields)).trigger('change');
 
         if (! (template?.docs || false)) {

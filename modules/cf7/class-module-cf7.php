@@ -64,7 +64,6 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             // Admin Hooks
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
             $this->core->add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
-            $this->core->add_action( 'admin_print_footer_scripts', [ $this, 'admin_print_footer_scripts' ] );
         }
 
         /**
@@ -121,10 +120,16 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             wp_enqueue_style( 'ctz-admin-style', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.css', [ 'ctz-select2-style' ], $version );
 
             wp_enqueue_script( 'ctz-select2-script', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js', [ 'jquery' ], $version );
-            wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'ctz-select2-script' ], $version );
+            // In the footer: the webhook panel adds CTZ_ADMIN_TAGS to it with wp_add_inline_script()
+            // while rendering, and a script printed in the header would have gone out without it.
+            wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'ctz-select2-script' ], $version, true );
 
-            // For developers: in your enviroment make "/ci/website/public" point to "/cf7-to-webhook-valney-dev"
-            $templates_url = ctz_is_developing() ? home_url( '/cf7-to-webhook-valney-dev/templates.json' ) : 'https://cf7-to-webhook.valney.dev/templates.json';
+            // A repository checkout loads the templates from the website files, so changes show up before deploy.
+            // Released copies do not ship ci/ and always load the published file, even with WP_DEBUG on.
+            $templates_url = 'https://cf7-to-webhook.valney.dev/templates.json';
+            if ( ctz_is_developing() && file_exists( CFTZ_PLUGIN_PATH . '/ci/website/public/templates.json' ) ) {
+                $templates_url = CFTZ_PLUGIN_URL . '/ci/website/public/templates.json';
+            }
             wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
                 'templates_url' => $templates_url,
                 'groups'        => array(
@@ -142,16 +147,6 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                     'choose_template'   => __( 'Choose a template', 'cf7-to-zapier' ),
                 ),
             ) );
-        }
-
-        /**
-         * Action: 'admin_print_footer_scripts'
-         *
-         * @return void
-         */
-        public function admin_print_footer_scripts() {
-            global $ctz_admin_tags_script;
-            echo $ctz_admin_tags_script;
         }
 
         /**

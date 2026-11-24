@@ -71,7 +71,7 @@ Every installed copy of the plugin loads `https://cf7-to-webhook.valney.dev/temp
 - It stays valid JSON. Check with `python3 -m json.tool ci/website/public/templates.json`.
 - nginx keeps `Access-Control-Allow-Origin: *` on it (the `location = /templates.json` block). Without it the browser blocks the response and the template selector breaks on every site.
 
-With `WP_DEBUG` on (`ctz_is_developing()`), the plugin loads the file from `home_url( '/cf7-to-webhook-valney-dev/templates.json' )` instead, so a local WordPress can map that path to `ci/website/public`.
+With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin loads `ci/website/public/templates.json` straight from the plugin folder, so template changes can be tested before deploying the site. Released copies do not ship `ci/`, so they always load the published file.
 
 ### Adding a doc page
 
