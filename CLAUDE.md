@@ -100,9 +100,10 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the breadcrumb back to `/` and `/docs`, and the support forum footer.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
 4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
-5. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
-6. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
-7. Test locally (below) before pushing.
+5. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
+6. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
+7. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
+8. Test locally (below) before pushing.
 
 Write in English, in a technical register: the page states what happens and what the reader can do, with real paths, option names and code. A feature page says which version introduced it ("Since 5.2.0"). The site deploys from `master`, so a page about an unreleased feature goes live with the merge. When the maintainer's `escrita-sem-sotaque` skill is available, pass the prose through it.
 
