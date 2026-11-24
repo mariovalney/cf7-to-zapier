@@ -131,7 +131,7 @@ This way your webhook will receive the free text value and other options if you 
 
 By default, the plugin blocks requests to private, loopback, and link-local addresses (e.g. `192.168.x.x`, `10.x.x.x`, `127.0.0.1`, `169.254.x.x`) to prevent SSRF attacks.
 
-If you run a trusted internal service and need to reach it, you can whitelist specific hosts using WordPress's `http_request_host_is_external` filter in your theme's `functions.php` or a custom plugin:
+If you run a trusted internal service and need to reach it, you can whitelist specific hosts using WordPress's `http_request_host_is_external` filter. Add this code as explained in [Add custom code](https://cf7-to-webhook.valney.dev/docs/how-to/add-custom-code):
 
 `add_filter( 'http_request_host_is_external', function( $external, $host ) {
     $trusted = [ '192.168.1.100', '10.0.0.50' ];
@@ -186,6 +186,7 @@ New feature: Add uploaded files to the media library (props to @Zodiac1978 for t
 * Fixed the template selector staying empty on sites with WP_DEBUG on.
 * Fixed the form editor asking to confirm leaving the page without changes.
 * Documentation moved to [cf7-to-webhook.valney.dev/docs](https://cf7-to-webhook.valney.dev/docs).
+* Reviewed the plugin with the [WordPress agent skills](https://github.com/WordPress/agent-skills) and made some improvements, including a fix for header injection through form fields in custom headers. Debug helpers now need CFTZ_ADD_DEBUG_FUNCTIONS.
 
 ### 5.1.1
 
