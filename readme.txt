@@ -48,12 +48,12 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 6.1.5
+* Contact Form 7 - 6.2.6
 
 Tested with other plugins:
 
 * MultiLine files for Contact Form 7 - 2.9.1
-* Contact Form 7 Multi-Step Forms - 4.6
+* Contact Form 7 Multi-Step Forms - 4.8.1
 
 == Installation ==
 
