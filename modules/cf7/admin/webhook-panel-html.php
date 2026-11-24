@@ -402,12 +402,29 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                             <p class="description"><?php esc_html_e( 'Files are added as private media (only administrators and editors see them in the library), even when sending file content. Their URLs are public (but hard to guess), like the links sent to the webhook.', 'cf7-to-zapier' ) ?> <a href="https://cf7-to-webhook.valney.dev/docs/features/media-library" target="_blank" rel="noopener"><?php esc_html_e( 'Read more', 'cf7-to-zapier' ) ?></a></p>
                         </td>
                     </tr>
-                    <?php if ( $contactform->id() ) : ?>
                     <tr class="ctz-row-notice">
                         <td colspan="2">
-                            <p class="description"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( 'Deletes the files of every submission of this form, sent as links or added to the media library.', 'cf7-to-zapier' ) ?></p>
+                            <p class="description"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( 'The options below delete files, including media library items, and can break the links sent to the webhook.', 'cf7-to-zapier' ) ?></p>
+                            <?php if ( ! current_user_can( 'manage_options' ) ) : ?>
+                            <p class="description"><?php esc_html_e( 'Only administrators can delete files.', 'cf7-to-zapier' ) ?></p>
+                            <?php endif; ?>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="ctz-webhook-delete_files_after">
+                                <?php esc_html_e( 'Delete after', 'cf7-to-zapier' ) ?>
+                            </label>
+                        </th>
+                        <td>
+                            <p>
+                                <?php ctz_number_input( 'delete_files_after', $delete_files_after, ! current_user_can( 'manage_options' ) ); ?>
+                                <?php echo esc_html_x( 'days', 'Delete files after this number of days', 'cf7-to-zapier' ) ?>
+                            </p>
+                            <p class="description"><?php esc_html_e( 'Files older than this are deleted once a day. Use 0 to keep them.', 'cf7-to-zapier' ) ?></p>
+                        </td>
+                    </tr>
+                    <?php if ( $contactform->id() ) : ?>
                     <tr>
                         <th scope="row">
                             <label>
@@ -418,9 +435,6 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                             <p>
                                 <button type="button" class="button ctz-button-destructive" id="ctz-webhook-delete-uploads" data-form-id="<?php echo esc_attr( $contactform->id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'ctz_delete_uploads_' . $contactform->id() ) ); ?>" <?php disabled( ! current_user_can( 'manage_options' ) ); ?>><?php esc_html_e( 'Delete all files', 'cf7-to-zapier' ) ?></button>
                             </p>
-                            <?php if ( ! current_user_can( 'manage_options' ) ) : ?>
-                            <p class="description"><?php esc_html_e( 'Only administrators can delete files.', 'cf7-to-zapier' ) ?></p>
-                            <?php endif; ?>
                             <p class="description" id="ctz-webhook-uploads-summary"><?php echo esc_html( CFTZ_Module_CF7::get_uploads_summary_text( $contactform->id() ) ); ?></p>
                         </td>
                     </tr>

@@ -37,6 +37,13 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
         const METADATA = 'ctz_zapier';
 
         /**
+         * Daily event that deletes the uploads older than the "Delete after" option of each form
+         *
+         * @since    5.3.0
+         */
+        const CRON_DELETE_UPLOADS = 'ctz_delete_expired_uploads';
+
+        /**
          * Define the core functionalities into plugin.
          *
          * @since    1.0.0
@@ -65,6 +72,10 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
             $this->core->add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
             $this->core->add_action( 'wp_ajax_ctz_delete_uploads', [ $this, 'wp_ajax_ctz_delete_uploads' ] );
+
+            // Cron
+            $this->core->add_action( 'admin_init', [ $this, 'schedule_delete_expired_uploads' ] );
+            $this->core->add_action( self::CRON_DELETE_UPLOADS, [ $this, 'delete_expired_uploads' ] );
         }
 
         /**
@@ -175,15 +186,58 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 wp_send_json_error( null, 404 );
             }
 
-            foreach ( self::get_upload_attachments( $form_id ) as $attachment_id ) {
-                wp_delete_attachment( $attachment_id, true );
-            }
-
-            self::delete_upload_dir( $form_id );
+            self::delete_uploads( $form_id );
 
             wp_send_json_success( array(
                 'summary' => self::get_uploads_summary_text( $form_id ),
             ) );
+        }
+
+        /**
+         * Action: 'admin_init'
+         *
+         * Schedule the daily event that deletes old uploads. It runs even when no form
+         * uses "Delete after", and then does nothing.
+         *
+         * @since    5.3.0
+         *
+         * @return void
+         */
+        public function schedule_delete_expired_uploads() {
+            if ( ! wp_next_scheduled( self::CRON_DELETE_UPLOADS ) ) {
+                wp_schedule_event( time(), 'daily', self::CRON_DELETE_UPLOADS );
+            }
+        }
+
+        /**
+         * Action: 'ctz_delete_expired_uploads'
+         *
+         * Delete the uploads of each form older than its "Delete after" days.
+         * Days are counted from midnight UTC, like the date in the submission folder name,
+         * so files are kept for at least that many days.
+         *
+         * @since    5.3.0
+         *
+         * @return void
+         */
+        public function delete_expired_uploads() {
+            if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
+                return;
+            }
+
+            $now   = time();
+            $today = $now - ( $now % DAY_IN_SECONDS );
+
+            foreach ( WPCF7_ContactForm::find() as $contact_form ) {
+                $properties = self::get_form_properties( $contact_form );
+                $days       = absint( $properties['delete_files_after'] );
+
+                if ( $days < 1 ) {
+                    continue;
+                }
+
+                self::delete_uploads( $contact_form->id(), $today - $days * DAY_IN_SECONDS );
+            }
         }
 
         /**
@@ -230,6 +284,17 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 $name = 'ctz-webhook-' . $key;
 
                 $value = ( isset( $_POST[ $name ] ) ) ? $_POST[ $name ] : null;
+
+                // Only administrators, like "Delete all files": the field is disabled for other users, so it is not sent.
+                if ( $key === 'delete_files_after' && ! current_user_can( 'manage_options' ) ) {
+                    continue;
+                }
+
+                // Number
+                if ( $prop['type'] === 'number' ) {
+                    $properties[ $key ] = (string) max( 0, intval( $value ) );
+                    continue;
+                }
 
                 // Checkbox
                 if ( $prop['type'] === 'checkbox' ) {
@@ -560,9 +625,10 @@ It may contain sensitive data.
             $submission = WPCF7_Submission::get_instance();
             $uploaded_files = ( ! empty( $submission ) ) ? $submission->uploaded_files() : [];
 
-            // Upload Info
+            // Upload Info: the folder name starts with the date (UTC), used by "Delete after".
             $wp_upload_dir = wp_get_upload_dir();
-            $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . bin2hex( random_bytes( 16 ) );
+            $upload_time = time();
+            $upload_path = CFTZ_UPLOAD_DIR . '/' . $contact_form->id() . '/' . gmdate( 'Ymd', $upload_time ) . '_' . bin2hex( random_bytes( 16 ) );
 
             $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
             $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;
@@ -611,7 +677,7 @@ It may contain sensitive data.
                         }
 
                         if ( $copy && $add_to_library ) {
-                            $this->add_file_to_library( $copy, $contact_form, $tag->name );
+                            $this->add_file_to_library( $copy, $contact_form, $tag->name, $upload_time );
                         }
 
                         // Send file content
@@ -825,9 +891,10 @@ It may contain sensitive data.
          * @param    string             $path           Absolute path of the copied file
          * @param    WPCF7_ContactForm  $contact_form   ContactForm Obj
          * @param    string             $field          Name of the file field
+         * @param    int                $time           Submission time, the same as the folder date
          * @return   int                $attachment_id  Attachment ID or 0 if it was not added
          */
-        private function add_file_to_library( $path, $contact_form, $field ) {
+        private function add_file_to_library( $path, $contact_form, $field, $time ) {
             // Every file type goes in: the file is already public in the uploads folder. CF7 has
             // renamed risky extensions (svg, html, js, php...) to ".txt". The content check gives
             // the real type, and a file whose content does not match its extension, or that
@@ -835,10 +902,15 @@ It may contain sensitive data.
             $filetype  = wp_check_filetype_and_ext( $path, basename( $path ), wp_get_mime_types() );
             $mime_type = ! empty( $filetype['type'] ) ? $filetype['type'] : 'application/octet-stream';
 
+            // The date comes from the folder, so "Delete after" removes the attachment and its folder on the same day.
+            $date_gmt = gmdate( 'Y-m-d H:i:s', $time );
+
             $attachment_id = wp_insert_attachment( array(
                 'post_title'     => sanitize_text_field( pathinfo( $path, PATHINFO_FILENAME ) ),
                 'post_mime_type' => $mime_type,
                 'post_status'    => 'private',
+                'post_date'      => get_date_from_gmt( $date_gmt ),
+                'post_date_gmt'  => $date_gmt,
             ), $path, 0, true );
 
             if ( is_wp_error( $attachment_id ) ) {
@@ -884,17 +956,98 @@ It may contain sensitive data.
          * @since    5.2.0
          *
          * @param    int                $form_id    Contact form ID
+         * @param    int                $before     Optional. Only attachments created before this timestamp. Since 5.3.0.
          * @return   array
          */
-        public static function get_upload_attachments( $form_id ) {
-            return get_posts( array(
+        public static function get_upload_attachments( $form_id, $before = 0 ) {
+            $args = array(
                 'post_type'   => 'attachment',
                 'post_status' => array( 'inherit', 'private', 'trash' ),
                 'numberposts' => -1,
                 'fields'      => 'ids',
                 'meta_key'    => '_ctz_contact_form_id',
                 'meta_value'  => absint( $form_id ),
-            ) );
+            );
+
+            if ( ! empty( $before ) ) {
+                $args['date_query'] = array(
+                    array(
+                        'column' => 'post_date_gmt',
+                        'before' => gmdate( 'Y-m-d H:i:s', $before ),
+                    ),
+                );
+            }
+
+            return get_posts( $args );
+        }
+
+        /**
+         * Delete files uploaded with a form: its media library attachments and its submission
+         * folders, with everything inside.
+         *
+         * @since    5.3.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @param    int                $before     Optional. Only submissions before this timestamp. Default deletes all.
+         * @return   void
+         */
+        public static function delete_uploads( $form_id, $before = 0 ) {
+            $dir = self::get_upload_dir( $form_id );
+
+            // Everything: the form folder.
+            $expired = array( $dir );
+
+            // Before a date: the submission folders. Listed before deleting the attachments,
+            // which changes the modification time of older folders.
+            if ( ! empty( $before ) ) {
+                $expired = array();
+
+                if ( is_dir( $dir ) ) {
+                    foreach ( new DirectoryIterator( $dir ) as $item ) {
+                        if ( $item->isDot() || $item->isLink() || ! $item->isDir() ) {
+                            continue;
+                        }
+
+                        if ( self::get_submission_time( $item->getPathname() ) < $before ) {
+                            $expired[] = $item->getPathname();
+                        }
+                    }
+                }
+            }
+
+            foreach ( self::get_upload_attachments( $form_id, $before ) as $attachment_id ) {
+                wp_delete_attachment( $attachment_id, true );
+            }
+
+            foreach ( $expired as $expired_dir ) {
+                self::delete_upload_dir( $expired_dir );
+            }
+        }
+
+        /**
+         * When a submission folder was created.
+         *
+         * The folder name starts with the date (UTC), and this returns its midnight. Folders
+         * created before 5.3.0 have only the random part, so it returns their modification
+         * time, which does not change after the submission.
+         *
+         * @since    5.3.0
+         *
+         * @param    string             $dir        Absolute path of a submission folder
+         * @return   int                Timestamp, or PHP_INT_MAX when unknown, so the folder is kept
+         */
+        private static function get_submission_time( $dir ) {
+            if ( preg_match( '/^(\d{8})_/', basename( $dir ), $matches ) ) {
+                $date = DateTime::createFromFormat( '!Ymd', $matches[1], new DateTimeZone( 'UTC' ) );
+
+                if ( $date ) {
+                    return $date->getTimestamp();
+                }
+            }
+
+            $time = filemtime( $dir );
+
+            return ( false === $time ) ? PHP_INT_MAX : $time;
         }
 
         /**
@@ -956,19 +1109,19 @@ It may contain sensitive data.
         }
 
         /**
-         * Delete a form's upload folder with everything inside.
+         * Delete an upload folder (of a form or a submission) with everything inside.
          *
          * The real path must be inside the plugin upload folder, so a wrong path or a link
          * cannot delete anything else.
          *
          * @since    5.2.0
          *
-         * @param    int                $form_id    Contact form ID
+         * @param    string             $dir        Absolute path of the folder
          * @return   void
          */
-        private static function delete_upload_dir( $form_id ) {
+        private static function delete_upload_dir( $dir ) {
             $base = realpath( wp_get_upload_dir()['basedir'] . '/' . CFTZ_UPLOAD_DIR );
-            $dir  = realpath( self::get_upload_dir( $form_id ) );
+            $dir  = realpath( $dir );
 
             if ( empty( $base ) || empty( $dir ) || 0 !== strpos( $dir, $base . DIRECTORY_SEPARATOR ) ) {
                 return;
@@ -1120,6 +1273,11 @@ It may contain sensitive data.
                     'key'     => 'add_to_library',
                     'default' => '0',
                     'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'delete_files_after',
+                    'default' => '0',
+                    'type'    => 'number',
                 ],
                 [
                     'key'     => 'special_mail_tags',

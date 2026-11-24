@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 5.0
 Tested up to: 7.1.5
-Stable tag: 5.2.0
+Stable tag: 5.3.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -95,7 +95,7 @@ Add one URL per line in "Webhook URL". If one of them fails, the next ones are n
 
 = How can I send uploaded files? =
 
-The plugin copies each file before Contact Form 7 deletes it and sends its link, or sends the file content. You can also keep the files in the media library. See [Send files](https://cf7-to-webhook.valney.dev/docs/how-to/send-files).
+The plugin copies each file before Contact Form 7 deletes it and sends its link, or sends the file content. You can also keep the files in the media library and delete them after a number of days. See [Send files](https://cf7-to-webhook.valney.dev/docs/how-to/send-files).
 
 = My data arrives empty or does not arrive. =
 
@@ -120,6 +120,13 @@ See the [FAQ](https://cf7-to-webhook.valney.dev/faq) and the [documentation](htt
 3. All request methods
 
 == Changelog ==
+
+= 5.3.0 =
+
+New feature: Delete uploaded files after a number of days (props to @Zodiac1978 for the suggestion).
+
+* New "Delete after" option, in "Media" under Advanced settings: once a day, deletes the files of the form older than that number of days, including their media library attachments. Only administrators can change it.
+* Upload folders now start with the submission date (UTC).
 
 = 5.2.0 =
 
@@ -322,6 +329,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.3.0 =
+
+Adds an option to delete uploaded files after a number of days.
 
 = 5.2.0 =
 
