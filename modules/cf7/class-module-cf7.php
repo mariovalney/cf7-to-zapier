@@ -123,8 +123,12 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             wp_enqueue_script( 'ctz-select2-script', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js', [ 'jquery' ], $version );
             wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'ctz-select2-script' ], $version );
 
-            // For developers: in your enviroment make "/ci/website/public" point to "/cf7-to-webhook-valney-dev"
-            $templates_url = ctz_is_developing() ? home_url( '/cf7-to-webhook-valney-dev/templates.json' ) : 'https://cf7-to-webhook.valney.dev/templates.json';
+            // A repository checkout loads the templates from the website files, so changes show up before deploy.
+            // Released copies do not ship ci/ and always load the published file, even with WP_DEBUG on.
+            $templates_url = 'https://cf7-to-webhook.valney.dev/templates.json';
+            if ( ctz_is_developing() && file_exists( CFTZ_PLUGIN_PATH . '/ci/website/public/templates.json' ) ) {
+                $templates_url = CFTZ_PLUGIN_URL . '/ci/website/public/templates.json';
+            }
             wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
                 'templates_url' => $templates_url,
                 'groups'        => array(
