@@ -55,11 +55,14 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 | `public/index.html` | Home: links to the repository and to the docs. |
 | `public/404.html` | Served for any address that does not exist. |
 | `public/style.css` | The only stylesheet, shared by every page, with light and dark colors as CSS variables. |
-| `public/docs/index.html` | The list of doc pages. |
-| `public/docs/<slug>.html` | One doc page each, served at `/docs/<slug>`. |
+| `public/docs/index.html` | The docs index: one heading per section, with its pages listed below. |
+| `public/docs/how-to/<slug>.html` | Guides for a task, served at `/docs/how-to/<slug>`. |
+| `public/docs/features/<slug>.html` | One page per plugin feature, served at `/docs/features/<slug>`. |
 | `public/templates.json` | The webhook templates loaded by the plugin. |
 
 Routing: `/<path>` serves `<path>`, then `<path>.html`, then `<path>/index.html`, and otherwise `404.html` with status 404. A trailing slash redirects to the address without it (`/docs/` to `/docs`). Link to pages without `.html` and without a trailing slash.
+
+Sections have no page of their own: nginx sends `/docs/how-to` and `/docs/features` to their heading in the index (`/docs#how-to`). A new section needs a heading with an `id` in the index and its name in that nginx rule.
 
 Site content is in English, like the plugin.
 
@@ -75,15 +78,26 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 
 ### Adding a doc page
 
-1. Pick a slug in lowercase with hyphens. The page will live at `/docs/<slug>`.
-2. Create `ci/website/public/docs/<slug>.html` by copying an existing doc page, such as `make-multiple-webhooks-optionals.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the breadcrumb back to `/` and `/docs`, and the support forum footer.
+1. Pick the section: `how-to` for a guide to a task, `features` for what a feature does and how it behaves. Pick a slug in lowercase with hyphens. The page will live at `/docs/<section>/<slug>`.
+2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the breadcrumb back to `/` and `/docs`, and the support forum footer.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
-4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` is the usual case.
-5. Add a link to the new page in `ci/website/public/docs/index.html`.
-6. If the plugin FAQ should point to it, change the link in `readme.txt` (see "Never edit README.md").
+4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
+5. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
+6. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
 7. Test locally (below) before pushing.
 
+Write in English, in a technical register: the page states what happens and what the reader can do, with real paths, option names and code. A feature page says which version introduced it ("Since 5.2.0"). The site deploys from `master`, so a page about an unreleased feature goes live with the merge. When the maintainer's `escrita-sem-sotaque` skill is available, pass the prose through it.
+
 Other pages work the same way: `public/<name>.html` is served at `/<name>`.
+
+### Moving or renaming a doc page
+
+Released readme files and plugin versions link to doc addresses and cannot be changed, so an old address must keep working:
+
+1. Move the file with `git mv` and update its canonical URL.
+2. Add a `301` from the old address (with and without `.html`) to the new one in `ci/website/nginx/default.conf`, next to the existing `make-multiple-webhooks-optionals` rule.
+3. Update the links in `docs/index.html`, `readme.txt` and the plugin code.
+4. Test that the old address answers `301` with the new `Location`.
 
 ### Testing locally
 
@@ -97,7 +111,7 @@ docker run --rm -p 8080:8080 cf7-to-webhook-website
 Then check every page that changed, plus:
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/docs/<slug>   # 200
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/docs/<section>/<slug>   # 200
 curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/nao-existe     # 404, never 200
 curl -s -D - -o /dev/null http://localhost:8080/templates.json | grep -i access-control   # Access-Control-Allow-Origin: *
 curl -s http://localhost:8080/healthz                                         # ok

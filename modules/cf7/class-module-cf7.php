@@ -64,6 +64,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             // Admin Hooks
             $this->core->add_action( 'admin_notices', [ $this, 'check_cf7_plugin' ] );
             $this->core->add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
+            $this->core->add_action( 'wp_ajax_ctz_delete_uploads', [ $this, 'wp_ajax_ctz_delete_uploads' ] );
         }
 
         /**
@@ -130,22 +131,58 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             if ( ctz_is_developing() && file_exists( CFTZ_PLUGIN_PATH . '/ci/website/public/templates.json' ) ) {
                 $templates_url = CFTZ_PLUGIN_URL . '/ci/website/public/templates.json';
             }
+
             wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
                 'templates_url' => $templates_url,
                 'groups'        => array(
                     'default' => __( 'Default', 'cf7-to-zapier' )
                 ),
                 'messages'      => array(
-                    'open_docs'         => __( 'This template has documentation. Want to open (another tab)?', 'cf7-to-zapier' ),
-                    'confirm_all'       => __( 'This action will replace "Headers" and "Body" and remove "Special Mail Tags".', 'cf7-to-zapier' ),
-                    'confirm_body'      => __( 'This action will replace "Body" and remove "Special Mail Tags" and "Headers".', 'cf7-to-zapier' ),
-                    'save_to_preview'   => __( 'Save to load preview.', 'cf7-to-zapier' ),
-                    'btn_no'            => __( 'No', 'cf7-to-zapier' ),
-                    'btn_yes'           => __( 'Yes', 'cf7-to-zapier' ),
-                    'btn_cancel'        => __( 'Cancel', 'cf7-to-zapier' ),
-                    'btn_continue'      => __( 'Continue', 'cf7-to-zapier' ),
-                    'choose_template'   => __( 'Choose a template', 'cf7-to-zapier' ),
+                    'open_docs'              => __( 'This template has documentation.', 'cf7-to-zapier' ) . '<br>' . __( 'Open in another tab?', 'cf7-to-zapier' ),
+                    'confirm_all'            => __( 'This action will replace "Headers" and "Body" and remove "Special Mail Tags".', 'cf7-to-zapier' ),
+                    'confirm_body'           => __( 'This action will replace "Body" and remove "Special Mail Tags" and "Headers".', 'cf7-to-zapier' ),
+                    'save_to_preview'        => __( 'Save to load preview.', 'cf7-to-zapier' ),
+                    'btn_no'                 => __( 'No', 'cf7-to-zapier' ),
+                    'btn_yes'                => __( 'Yes', 'cf7-to-zapier' ),
+                    'btn_cancel'             => __( 'Cancel', 'cf7-to-zapier' ),
+                    'btn_continue'           => __( 'Continue', 'cf7-to-zapier' ),
+                    'choose_template'        => __( 'Choose a template', 'cf7-to-zapier' ),
+                    'confirm_delete_uploads' => __( 'This action will delete all files uploaded with this form since always.', 'cf7-to-zapier' ) . '<br>' . __( 'Links sent to webhook will stop working.', 'cf7-to-zapier' ),
+                    'delete_uploads_error'   => __( 'The files could not be deleted. Reload the page and try again.', 'cf7-to-zapier' ),
                 ),
+            ) );
+        }
+
+        /**
+         * Action: 'wp_ajax_ctz_delete_uploads'
+         *
+         * Delete every file uploaded with a form: its media library attachments and its
+         * folder in the uploads, with everything inside.
+         *
+         * @since    5.2.0
+         *
+         * @return void
+         */
+        public function wp_ajax_ctz_delete_uploads() {
+            $form_id = absint( $_POST['form_id'] ?? 0 );
+
+            // Only administrators: it deletes files that other users and webhooks may still need.
+            if ( ! check_ajax_referer( 'ctz_delete_uploads_' . $form_id, 'nonce', false ) || ! current_user_can( 'manage_options' ) ) {
+                wp_send_json_error( null, 403 );
+            }
+
+            if ( empty( $form_id ) || ! wpcf7_contact_form( $form_id ) ) {
+                wp_send_json_error( null, 404 );
+            }
+
+            foreach ( self::get_upload_attachments( $form_id ) as $attachment_id ) {
+                wp_delete_attachment( $attachment_id, true );
+            }
+
+            self::delete_upload_dir( $form_id );
+
+            wp_send_json_success( array(
+                'summary' => self::get_uploads_summary_text( $form_id ),
             ) );
         }
 
@@ -551,10 +588,34 @@ It may contain sensitive data.
                 if ( in_array( $tag->basetype, [ 'file', 'multilinefile' ] ) && ! empty( $uploaded_files[ $tag->name ] ) ) {
                     $files = $uploaded_files[ $tag->name ];
 
+                    $send_content   = ! empty( $properties['files_send_content'] );
+                    $add_to_library = ! empty( $properties['add_to_library'] );
+
                     $copied_files = [];
                     foreach ( (array) $files as $file ) {
+                        // CF7 deletes its upload at the end of the request, so links and the media library need a copy.
+                        $copy = '';
+                        if ( ! $send_content || $add_to_library ) {
+                            wp_mkdir_p( $upload_dir );
+                            $this->protect_upload_dirs( array(
+                                $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR,
+                                $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR . '/' . $contact_form->id(),
+                                $upload_dir,
+                            ) );
+
+                            $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
+
+                            if ( copy( $file, $upload_dir . '/' . $filename ) ) {
+                                $copy = $upload_dir . '/' . $filename;
+                            }
+                        }
+
+                        if ( $copy && $add_to_library ) {
+                            $this->add_file_to_library( $copy, $contact_form, $tag->name );
+                        }
+
                         // Send file content
-                        if ( ! empty( $properties['files_send_content'] ) ) {
+                        if ( $send_content ) {
                             $file_content = file_get_contents( $file );
                             $file_content = base64_encode( $file_content );
 
@@ -567,11 +628,7 @@ It may contain sensitive data.
                         }
 
                         // Send file link
-                        wp_mkdir_p( $upload_dir );
-
-                        $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
-
-                        if ( ! copy( $file, $upload_dir . '/' . $filename ) ) {
+                        if ( ! $copy ) {
                             $submission = WPCF7_Submission::get_instance();
                             $submission->set_status( 'mail_failed' );
                             $submission->set_response( $contact_form->message( 'upload_failed' ) );
@@ -757,6 +814,205 @@ It may contain sensitive data.
         }
 
         /**
+         * Add a copied upload to the media library as a private attachment.
+         *
+         * WordPress would create resized copies and a "-scaled" or "-rotated" version next to
+         * the file, and point the attachment to them. The filters turn that off, so the
+         * attachment keeps the same file and URL sent to the webhook.
+         *
+         * @since    5.2.0
+         *
+         * @param    string             $path           Absolute path of the copied file
+         * @param    WPCF7_ContactForm  $contact_form   ContactForm Obj
+         * @param    string             $field          Name of the file field
+         * @return   int                $attachment_id  Attachment ID or 0 if it was not added
+         */
+        private function add_file_to_library( $path, $contact_form, $field ) {
+            // Every file type goes in: the file is already public in the uploads folder. CF7 has
+            // renamed risky extensions (svg, html, js, php...) to ".txt". The content check gives
+            // the real type, and a file whose content does not match its extension, or that
+            // WordPress does not know, is stored as a generic binary file.
+            $filetype  = wp_check_filetype_and_ext( $path, basename( $path ), wp_get_mime_types() );
+            $mime_type = ! empty( $filetype['type'] ) ? $filetype['type'] : 'application/octet-stream';
+
+            $attachment_id = wp_insert_attachment( array(
+                'post_title'     => sanitize_text_field( pathinfo( $path, PATHINFO_FILENAME ) ),
+                'post_mime_type' => $mime_type,
+                'post_status'    => 'private',
+            ), $path, 0, true );
+
+            if ( is_wp_error( $attachment_id ) ) {
+                return 0;
+            }
+
+            update_post_meta( $attachment_id, '_ctz_contact_form_id', $contact_form->id() );
+            update_post_meta( $attachment_id, '_ctz_field', $field );
+
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+
+            add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array', 999 );
+            add_filter( 'fallback_intermediate_image_sizes', '__return_empty_array', 999 );
+            add_filter( 'big_image_size_threshold', '__return_false', 999 );
+            add_filter( 'wp_image_maybe_exif_rotate', '__return_false', 999 );
+
+            wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $path ) );
+
+            remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array', 999 );
+            remove_filter( 'fallback_intermediate_image_sizes', '__return_empty_array', 999 );
+            remove_filter( 'big_image_size_threshold', '__return_false', 999 );
+            remove_filter( 'wp_image_maybe_exif_rotate', '__return_false', 999 );
+
+            return $attachment_id;
+        }
+
+        /**
+         * Absolute path of the folder with the files uploaded with a form.
+         *
+         * @since    5.2.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @return   string
+         */
+        public static function get_upload_dir( $form_id ) {
+            return wp_get_upload_dir()['basedir'] . '/' . CFTZ_UPLOAD_DIR . '/' . absint( $form_id );
+        }
+
+        /**
+         * IDs of the media library attachments created from a form's uploads.
+         *
+         * @since    5.2.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @return   array
+         */
+        public static function get_upload_attachments( $form_id ) {
+            return get_posts( array(
+                'post_type'   => 'attachment',
+                'post_status' => array( 'inherit', 'private', 'trash' ),
+                'numberposts' => -1,
+                'fields'      => 'ids',
+                'meta_key'    => '_ctz_contact_form_id',
+                'meta_value'  => absint( $form_id ),
+            ) );
+        }
+
+        /**
+         * Files, total size and media library attachments uploaded with a form.
+         *
+         * @since    5.2.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @return   array              { files, size, attachments }
+         */
+        public static function get_uploads_summary( $form_id ) {
+            $files = 0;
+            $size  = 0;
+            $dir   = self::get_upload_dir( $form_id );
+
+            if ( is_dir( $dir ) ) {
+                $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS ) );
+
+                foreach ( $iterator as $file ) {
+                    // The index.php files only protect the folders.
+                    if ( ! $file->isFile() || 'index.php' === $file->getFilename() ) {
+                        continue;
+                    }
+
+                    $files++;
+                    $size += $file->getSize();
+                }
+            }
+
+            return array(
+                'files'       => $files,
+                'size'        => $size,
+                'attachments' => count( self::get_upload_attachments( $form_id ) ),
+            );
+        }
+
+        /**
+         * Text for the webhook panel with the summary of a form's uploads.
+         *
+         * @since    5.2.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @return   string
+         */
+        public static function get_uploads_summary_text( $form_id ) {
+            $summary = self::get_uploads_summary( $form_id );
+
+            if ( empty( $summary['files'] ) && empty( $summary['attachments'] ) ) {
+                return __( 'No files uploaded with this form.', 'cf7-to-zapier' );
+            }
+
+            return sprintf(
+                /* translators: 1: number of files, 2: total size, 3: number of media library items */
+                __( '%1$s (%2$s), %3$s in the media library.', 'cf7-to-zapier' ),
+                sprintf( _n( '%s file', '%s files', $summary['files'], 'cf7-to-zapier' ), number_format_i18n( $summary['files'] ) ),
+                size_format( $summary['size'] ),
+                number_format_i18n( $summary['attachments'] )
+            );
+        }
+
+        /**
+         * Delete a form's upload folder with everything inside.
+         *
+         * The real path must be inside the plugin upload folder, so a wrong path or a link
+         * cannot delete anything else.
+         *
+         * @since    5.2.0
+         *
+         * @param    int                $form_id    Contact form ID
+         * @return   void
+         */
+        private static function delete_upload_dir( $form_id ) {
+            $base = realpath( wp_get_upload_dir()['basedir'] . '/' . CFTZ_UPLOAD_DIR );
+            $dir  = realpath( self::get_upload_dir( $form_id ) );
+
+            if ( empty( $base ) || empty( $dir ) || 0 !== strpos( $dir, $base . DIRECTORY_SEPARATOR ) ) {
+                return;
+            }
+
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS ),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ( $iterator as $item ) {
+                if ( $item->isDir() && ! $item->isLink() ) {
+                    rmdir( $item->getPathname() );
+                    continue;
+                }
+
+                wp_delete_file( $item->getPathname() );
+            }
+
+            rmdir( $dir );
+        }
+
+        /**
+         * Add an empty index.php to upload folders.
+         *
+         * A server with directory listing on would show every submission from the base
+         * and form folders, and every file of a submission from its own folder.
+         *
+         * @since    5.2.0
+         *
+         * @param    array              $dirs       Absolute folder paths
+         * @return   void
+         */
+        private function protect_upload_dirs( $dirs ) {
+            foreach ( $dirs as $dir ) {
+                $index = $dir . '/index.php';
+
+                if ( is_dir( $dir ) && ! file_exists( $index ) ) {
+                    file_put_contents( $index, "<?php\n// Silence is golden.\n" );
+                }
+            }
+        }
+
+        /**
          * Replace invalid UTF-8 sequences in a value (or array of values).
          *
          * Contact Form 7 does it to its posted data, but we read $_POST directly
@@ -857,6 +1113,11 @@ It may contain sensitive data.
                 ],
                 [
                     'key'     => 'files_send_content',
+                    'default' => '0',
+                    'type'    => 'checkbox',
+                ],
+                [
+                    'key'     => 'add_to_library',
                     'default' => '0',
                     'type'    => 'checkbox',
                 ],

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Media library | CF7 to Webhook</title>
+    <meta name="description" content="Add files sent through Contact Form 7 to the WordPress media library as private media.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/features/media-library">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main>
+        <p class="breadcrumb"><a href="/">CF7 to Webhook</a> / <a href="/docs">Documentation</a></p>
+
+        <h1>Media library</h1>
+
+        <p>Since <strong>5.2.0</strong>, files sent through a form can also be added to the WordPress media library. Turn it on for each form in the webhook panel, under Advanced settings &gt; Media &gt; <strong>Add to Library</strong>.</p>
+
+        <h2>What gets stored</h2>
+
+        <p>When files are sent as links, each uploaded file is copied to <code>wp-content/uploads/cf7-to-webhook-uploads/&lt;form ID&gt;/&lt;random folder&gt;/</code>, with one random folder per submission. With Add to Library checked, each copy also becomes an attachment that points to that same file, so its URL is the link the webhook gets.</p>
+
+        <p>With <strong>Send content</strong> checked (in the Files section), the webhook gets the file content in base64 and the plugin keeps no copy: Contact Form 7 deletes its own temporary file at the end of the request. Add to Library keeps a copy in that case too, so the file stays in the library.</p>
+
+        <h2>Who can see the files</h2>
+
+        <p>The attachments are private. In the media library, only users who can read private posts see them, which by default means administrators and editors.</p>
+
+        <p>WordPress does not protect the file itself: anyone with its URL can open it, as with the links sent to the webhook. The URLs are hard to guess because of the random folder, and the upload folders have an empty <code>index.php</code>, so a server with directory listing on does not list submissions or files.</p>
+
+        <h2>No resized copies</h2>
+
+        <p>For images, WordPress usually creates thumbnails, a <code>-scaled</code> version of large images and a <code>-rotated</code> version of photos with an EXIF orientation, and then points the attachment to the new version. The plugin turns this off for its attachments, so each one keeps the original file and URL. WordPress still saves the dimensions, the EXIF data and, for audio and video, the duration.</p>
+
+        <h2>File types</h2>
+
+        <p>Every file the form accepts goes to the library. The type comes from the file content: when WordPress does not know the type, or the content does not match the extension, the attachment is saved as <code>application/octet-stream</code>.</p>
+
+        <p>Before storing a file, Contact Form 7 renames extensions outside its own safe list: <code>photo.svg</code> becomes <code>photo.svg_.txt</code>, and the same happens to <code>html</code>, <code>js</code>, <code>php</code>, <code>json</code> and others. The server sends these files as plain text, so a script inside them does not run in the browser. A site that changes file names with the <code>wpcf7_upload_file_name</code> filter can undo this rename.</p>
+
+        <h2>Deleting files</h2>
+
+        <p>To delete everything uploaded with a form, use <strong>Delete all files</strong> under Advanced settings &gt; Media, which also shows how many files the form has and their size. It deletes the form folder in <code>cf7-to-webhook-uploads</code>, with the files of every submission, sent as links or not, and the form's attachments in the media library. Links already sent to webhooks stop working. Only administrators can use it.</p>
+
+        <p>Deleting a single attachment in the media library deletes its file. The submission folder stays, with its <code>index.php</code>.</p>
+
+        <h2>For developers</h2>
+
+        <p>Each attachment has two meta fields:</p>
+
+        <ul>
+            <li><code>_ctz_contact_form_id</code>: the ID of the form that received the file.</li>
+            <li><code>_ctz_field</code>: the name of the file field.</li>
+        </ul>
+
+        <p>To list the attachments of form 123:</p>
+<pre><code>$attachments = get_posts( array(
+    'post_type'   =&gt; 'attachment',
+    'post_status' =&gt; 'private',
+    'numberposts' =&gt; -1,
+    'meta_key'    =&gt; '_ctz_contact_form_id',
+    'meta_value'  =&gt; 123,
+) );</code></pre>
+
+        <footer>
+            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
+        </footer>
+    </main>
+</body>
+</html>

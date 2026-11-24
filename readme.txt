@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
 Tested up to: 7.1.5
-Stable tag: 5.1.1
+Stable tag: 5.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,12 +48,12 @@ We would be grateful for a [review here](https://wordpress.org/support/plugin/cf
 
 = Support =
 
-* Contact Form 7 - 6.1.5
+* Contact Form 7 - 6.2.6
 
 Tested with other plugins:
 
 * MultiLine files for Contact Form 7 - 2.9.1
-* Contact Form 7 Multi-Step Forms - 4.6
+* Contact Form 7 Multi-Step Forms - 4.8.1
 
 == Installation ==
 
@@ -97,7 +97,7 @@ Please, go to [support forum](https://wordpress.org/support/plugin/cf7-to-zapier
 
 Just add one webhook per line in "Webhook URL" settings.
 
-Please, read [this topic](https://cf7-to-webhook.valney.dev/docs/make-multiple-webhooks-optionals) for more information.
+Please, read [this topic](https://cf7-to-webhook.valney.dev/docs/how-to/make-multiple-webhooks-optionals) for more information.
 
 = How can I show webhook errors on form submit? =
 
@@ -106,6 +106,12 @@ We already show WordPress request errors. If you want to add theatment to webhoo
 = How can I upload files and send link to webhook? =
 
 If you send a form with file, we will copy this to a directory before CF7 remove it and send the link to Zapier.
+
+You can also add the files to the media library, as private media, with "Add to Library" in "Media", under Advanced settings. Read more in the [media library documentation](https://cf7-to-webhook.valney.dev/docs/features/media-library).
+
+= How can I delete uploaded files? =
+
+Use "Delete all files" in "Media", under Advanced settings. It deletes every file uploaded with the form, including the ones in the media library. Links already sent to webhooks stop working. Only administrators can use it.
 
 = How can I rename a field to webhook? =
 
@@ -166,9 +172,21 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 
 == Changelog ==
 
+= 5.2.0 =
+
+New feature: Add uploaded files to the media library (props to @Zodiac1978 for the suggestion).
+
+* New "Add to Library" option, in "Media" under Advanced settings: each uploaded file becomes a private attachment, even when sending file content.
+* New "Delete all files" button to delete every file uploaded with a form, including its media library attachments. Only administrators can use it.
+* Upload folders now get an empty index.php, so servers with directory listing on do not list submissions.
+* Fixed templates not filling the body with the form fields since 5.1.0.
+* Fixed the template selector staying empty on sites with WP_DEBUG on.
+* Fixed the form editor asking to confirm leaving the page without changes.
+* Documentation moved to [cf7-to-webhook.valney.dev/docs](https://cf7-to-webhook.valney.dev/docs).
+
 = 5.1.1 =
 
-* Fixed webhooks not being sent when the submitted data has invalid UTF-8. Invalid sequences are now replaced, as Contact Form 7 does (props to @Zodiac1978).
+* Fixed webhooks not being sent when the submitted data has invalid UTF-8. Invalid sequences are now replaced, as Contact Form 7 does (props to @Zodiac1978 for a suggestion).
 * Fixed fields with invalid UTF-8 being sent empty when using a custom body.
 * Fixed a PHP warning ("Undefined variable $data") in error notifications.
 
@@ -353,6 +371,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.2.0 =
+
+Adds uploaded files to the media library and a button to delete them. Fixes templates not filling the body since 5.1.0.
 
 = 5.1.1 =
 
