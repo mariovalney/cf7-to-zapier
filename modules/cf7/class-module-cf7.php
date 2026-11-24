@@ -130,6 +130,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             if ( ctz_is_developing() && file_exists( CFTZ_PLUGIN_PATH . '/ci/website/public/templates.json' ) ) {
                 $templates_url = CFTZ_PLUGIN_URL . '/ci/website/public/templates.json';
             }
+
             wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
                 'templates_url' => $templates_url,
                 'groups'        => array(
@@ -568,6 +569,11 @@ It may contain sensitive data.
 
                         // Send file link
                         wp_mkdir_p( $upload_dir );
+                        $this->protect_upload_dirs( array(
+                            $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR,
+                            $wp_upload_dir['basedir'] . '/' . CFTZ_UPLOAD_DIR . '/' . $contact_form->id(),
+                            $upload_dir,
+                        ) );
 
                         $filename = wp_unique_filename( $upload_dir, $tag->name . '-' . basename( $file ) );
 
@@ -754,6 +760,27 @@ It may contain sensitive data.
             }
 
             return $tag->pipes->do_pipe( wp_unslash( $value ) );
+        }
+
+        /**
+         * Add an empty index.php to upload folders.
+         *
+         * A server with directory listing on would show every submission from the base
+         * and form folders, and every file of a submission from its own folder.
+         *
+         * @since    5.2.0
+         *
+         * @param    array              $dirs       Absolute folder paths
+         * @return   void
+         */
+        private function protect_upload_dirs( $dirs ) {
+            foreach ( $dirs as $dir ) {
+                $index = $dir . '/index.php';
+
+                if ( is_dir( $dir ) && ! file_exists( $index ) ) {
+                    file_put_contents( $index, "<?php\n// Silence is golden.\n" );
+                }
+            }
         }
 
         /**
