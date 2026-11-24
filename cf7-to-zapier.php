@@ -12,6 +12,10 @@
  * Author URI:        http://mariovalney.com/me
  * Text Domain:       cf7-to-zapier
  * Domain Path:       /languages
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Requires at least: 4.7
+ * Requires PHP:      7.4
  *
  */
 
@@ -66,7 +70,8 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @since    1.0.0
          */
         public function on_activation() {
-            flush_rewrite_rules();
+            // The plugin registers no rewrite rules yet. Flush again only after adding some.
+            // flush_rewrite_rules();
         }
 
         /**

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add custom code | CF7 to Webhook</title>
+    <meta name="description" content="Where to put the PHP snippets that customize CF7 to Webhook: a small plugin of your own or a snippets plugin.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/add-custom-code">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main>
+        <p class="breadcrumb"><a href="/">CF7 to Webhook</a> / <a href="/docs">Documentation</a></p>
+
+        <h1>Add custom code</h1>
+
+        <p>Some guides in this documentation use PHP snippets that hook into the plugin with <a href="https://developer.wordpress.org/plugins/hooks/filters/">filters</a> and actions. Do not add them to the plugin files: every update replaces those files and your code is lost.</p>
+
+        <p>There are two places for this code: a small plugin of your own, which is what WordPress recommends, or a snippets plugin, if you prefer not to edit files.</p>
+
+        <h2>A plugin of your own</h2>
+
+        <p>Create the folder <code>wp-content/plugins/cf7-to-webhook-custom/</code> and, inside it, the file <code>cf7-to-webhook-custom.php</code>:</p>
+<pre><code>&lt;?php
+/**
+ * Plugin Name: CF7 to Webhook customizations
+ * Description: Custom code for CF7 to Webhook.
+ * Version:     1.0.0
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+// Add your snippets below this line.</code></pre>
+
+        <p>Then activate "CF7 to Webhook customizations" in Plugins. The comment block at the top is what makes WordPress recognize the file as a plugin, as explained in <a href="https://developer.wordpress.org/plugins/plugin-basics/">Plugin Basics</a>.</p>
+
+        <p>To keep the code from being deactivated by mistake, put the same file in <code>wp-content/mu-plugins/</code> instead. WordPress loads <a href="https://developer.wordpress.org/advanced-administration/plugins/mu-plugins/">must-use plugins</a> on its own, and they cannot be deactivated in the admin.</p>
+
+        <p>The theme's <code>functions.php</code> also runs PHP, but the code goes away when you switch themes or a theme update replaces the file.</p>
+
+        <h2>A snippets plugin</h2>
+
+        <p>A plugin like <a href="https://wordpress.org/plugins/code-snippets/">Code Snippets</a> lets you add PHP from the admin, without editing files. Create a snippet, paste the code without the opening <code>&lt;?php</code> and set it to run everywhere: forms are sent outside the admin, so a snippet limited to the admin area does not run for them.</p>
+
+        <h2>Before you save</h2>
+
+        <p>An error in PHP code can take the site down. Test the snippet on a staging copy first. If the site breaks, rename the plugin folder over FTP to deactivate it, or use the safe mode of your snippets plugin.</p>
+
+        <footer>
+            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
+        </footer>
+    </main>
+</body>
+</html>

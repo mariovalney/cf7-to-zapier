@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Change the webhook timeout | CF7 to Webhook</title>
+    <meta name="description" content="Make forms answer faster when a webhook is slow by lowering the request timeout and redirects with a filter.">
+    <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/change-webhook-timeout">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main>
+        <p class="breadcrumb"><a href="/">CF7 to Webhook</a> / <a href="/docs">Documentation</a></p>
+
+        <h1>Change the webhook timeout</h1>
+
+        <p>The plugin sends the webhooks while the form is being submitted, one after the other, and waits for each answer. It needs the answer to know whether the webhook worked: when it fails, the form shows an error and the plugin sends the error notification. The visitor only sees the result after every webhook answers.</p>
+
+        <p>By default, each request waits up to <strong>30 seconds</strong> and follows up to <strong>10 redirects</strong>. A slow webhook makes the form slow by the same amount, and with several webhooks the times add up.</p>
+
+        <h2>Lower the timeout</h2>
+
+        <p>The <code>ctz_post_request_args</code> filter changes the request before it is sent. Add this code as explained in <a href="/docs/how-to/add-custom-code">Add custom code</a>:</p>
+<pre><code>add_filter( 'ctz_post_request_args', function( $args ) {
+    $args['timeout']     = 10; // Seconds to wait for an answer.
+    $args['redirection'] = 3;  // Redirects to follow.
+
+    return $args;
+} );</code></pre>
+
+        <p>Pick a timeout above the time your webhook usually takes to answer, or it will fail on a normal day.</p>
+
+        <h2>Only for one webhook</h2>
+
+        <p>The filter also receives the webhook URL, so you can change only the slow one:</p>
+<pre><code>add_filter( 'ctz_post_request_args', function( $args, $properties, $contact_form, $hook_url ) {
+    if ( false !== strpos( $hook_url, 'hooks.zapier.com' ) ) {
+        $args['timeout'] = 10;
+    }
+
+    return $args;
+}, 10, 4 );</code></pre>
+
+        <h2>When the time runs out</h2>
+
+        <p>A webhook that does not answer in time counts as an error: the form shows its error message, the plugin sends the error notification and the next webhooks of the form are not sent. To keep the form working when a webhook fails, see <a href="/docs/how-to/make-multiple-webhooks-optionals">Make multiple webhooks optionals</a>.</p>
+
+        <footer>
+            Need help? Go to the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a>.
+        </footer>
+    </main>
+</body>
+</html>

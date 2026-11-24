@@ -18,6 +18,24 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code or committing, and f
 - To change the description, FAQ, changelog, upgrade notice or header fields (`Stable tag`, `Tested up to`, etc.), edit `readme.txt` only, using the WordPress.org readme format.
 - Do not create, regenerate or edit `README.md`. The maintainer regenerates it from VS Code. When a change touches `readme.txt`, ask them to save it before committing, so both files go in the same commit.
 
+## WordPress agent skills
+
+`.claude/skills/` has four skills from [WordPress/agent-skills](https://github.com/WordPress/agent-skills) (GPL-2.0-or-later), copied from upstream commit `7374e6f` as its "Manual installation" describes. Claude Code loads them by itself:
+
+- `wp-plugin-development`: hooks, admin UI, options, cron and the security baseline (nonces paired with capability checks, sanitized input, escaped output, AJAX handlers). Upstream has no separate security skill; security lives here, in `references/security.md`.
+- `wp-plugin-directory-guidelines`: the WordPress.org guidelines, GPL compatibility, naming rules and Plugin Check. Use it before a release.
+- `wp-performance`: profiling and fixes for HTTP calls, cron, autoloaded options and database queries.
+- `wp-project-triage`: the repository detector the other skills run first.
+
+When using them:
+
+- The skills target WordPress 7.0+, but this plugin supports WordPress 4.7+ and PHP 7.4 (`Requires at least` and `Requires PHP` in `readme.txt`). Before using an API, check the version that introduced it and add a fallback, as `scrub_utf8()` does for `wp_scrub_utf8()`.
+- Their commands use paths like `node skills/<name>/scripts/...`. Here the scripts are in `.claude/skills/<name>/scripts/`.
+- The local WordPress in Docker has no WP-CLI, so steps that need `wp` (doctor, profile, Plugin Check) cannot run. Say so instead of reporting them as done.
+- `.claude/` is outside the build allowlist, so the skills never ship with the plugin.
+
+To update, copy the skill folders again from upstream `skills/` (or run `npx skills add WordPress/agent-skills --skill <name>` with the project scope), read the diff before committing, since the skills become instructions for Claude, and update the commit above.
+
 ## Releasing a version
 
 The version number lives in four places, and all of them change together:
@@ -82,9 +100,10 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the breadcrumb back to `/` and `/docs`, and the support forum footer.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
 4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
-5. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
-6. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
-7. Test locally (below) before pushing.
+5. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
+6. Add a link to the new page under its section in `ci/website/public/docs/index.html`.
+7. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
+8. Test locally (below) before pushing.
 
 Write in English, in a technical register: the page states what happens and what the reader can do, with real paths, option names and code. A feature page says which version introduced it ("Since 5.2.0"). The site deploys from `master`, so a page about an unreleased feature goes live with the merge. When the maintainer's `escrita-sem-sotaque` skill is available, pass the prose through it.
 

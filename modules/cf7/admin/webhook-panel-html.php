@@ -77,7 +77,7 @@ wp_add_inline_script( 'ctz-admin-script', 'window.CTZ_ADMIN_TAGS = ' . wp_json_e
 if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
     <p class="donation-alert">
-        <strong><?php _e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
+        <strong><?php esc_html_e( 'Give your support!', 'cf7-to-zapier' ); ?></strong>
         <?php
             printf(
                 __( 'You can %s or %s.', 'cf7-to-zapier' ),
@@ -89,12 +89,12 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
 <?php endif; ?>
 
-<h1 class="ctz-section-title" class="ctz-section-title"><?php _e( 'Webhook', 'cf7-to-zapier' ) ?></h1>
+<h1 class="ctz-section-title" class="ctz-section-title"><?php esc_html_e( 'Webhook', 'cf7-to-zapier' ) ?></h1>
 
 <fieldset>
     <legend>
-        <p><?php _e( 'In these options you can activate or deactivate Webhook integration.', 'cf7-to-zapier' ); ?></p>
-        <p><?php _e( 'To integrate you should insert your webhook URL below. For example, into Zapier you can create a trigger using "Webhooks" app and choose "Catch Hook" option.', 'cf7-to-zapier' ); ?></p>
+        <p><?php esc_html_e( 'In these options you can activate or deactivate Webhook integration.', 'cf7-to-zapier' ); ?></p>
+        <p><?php esc_html_e( 'To integrate you should insert your webhook URL below. For example, into Zapier you can create a trigger using "Webhooks" app and choose "Catch Hook" option.', 'cf7-to-zapier' ); ?></p>
     </legend>
 
     <table class="form-table">
@@ -102,14 +102,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Integrate', 'cf7-to-zapier' ) ?>
+                        <?php esc_html_e( 'Integrate', 'cf7-to-zapier' ) ?>
                     </label>
                 </th>
                 <td>
                     <p>
                         <label for="ctz-webhook-activate">
                             <?php ctz_checkbox_input( 'activate', $activate ); ?>
-                            <?php _e( 'Send to Webhook', 'cf7-to-zapier' ) ?>
+                            <?php esc_html_e( 'Send to Webhook', 'cf7-to-zapier' ) ?>
                         </label>
                     </p>
                 </td>
@@ -117,7 +117,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Webhook URL', 'cf7-to-zapier' ) ?>
+                        <?php esc_html_e( 'Webhook URL', 'cf7-to-zapier' ) ?>
                     </label>
                 </th>
                 <td>
@@ -128,12 +128,12 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     </p>
                     <?php if ( $activate && empty( $hook_url ) ): ?>
                         <p class="description" style="color: #D00;">
-                            <?php _e( 'You should insert webhook URL here to finish configuration.' ); ?>
+                            <?php esc_html_e( 'You should insert webhook URL here to finish configuration.' ); ?>
                         </p>
                     <?php else: ?>
                         <p class="description">
                             <?php
-                                _e( 'You can add multiple webhook: one per line' );
+                                esc_html_e( 'You can add multiple webhook: one per line' );
 
                                 echo '<br>';
 
@@ -150,7 +150,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     </table>
 </fieldset>
 
-<h1 class="ctz-section-title"><?php _e( 'Settings', 'cf7-to-zapier' ) ?></h1>
+<h1 class="ctz-section-title"><?php esc_html_e( 'Settings', 'cf7-to-zapier' ) ?></h1>
 
 <fieldset>
     <table class="form-table">
@@ -158,14 +158,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Send Mail', 'cf7-to-zapier' ) ?>
+                        <?php esc_html_e( 'Send Mail', 'cf7-to-zapier' ) ?>
                     </label>
                 </th>
                 <td>
                     <p>
                         <label for="ctz-webhook-send_mail">
                             <?php ctz_checkbox_input( 'send_mail', $send_mail ); ?>
-                            <?php _e( 'Send CF7 mail as usually', 'cf7-to-zapier' ) ?>
+                            <?php esc_html_e( 'Send CF7 mail as usually', 'cf7-to-zapier' ) ?>
                         </label>
                     </p>
                 </td>
@@ -173,14 +173,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             <tr>
                 <th scope="row">
                     <label>
-                        <?php _e( 'Template', 'cf7-to-zapier' ) ?>
+                        <?php esc_html_e( 'Template', 'cf7-to-zapier' ) ?>
                     </label>
                 </th>
                 <td>
                     <p>
                         <label for="ctz-webhook-template">
                             <select id="ctz-webhook-template" class="ctz-template-select"><option value="" selected></option></select>
-                            <p class="description"><?php _e( 'You can choose a template from community to update your header/body settings.', 'cf7-to-zapier' ) ?></p>
+                            <p class="description"><?php esc_html_e( 'You can choose a template from community to update your header/body settings.', 'cf7-to-zapier' ) ?></p>
                         </label>
                     </p>
                 </td>
@@ -192,8 +192,8 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Files', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'Define how you want to send files.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Files', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'Define how you want to send files.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
@@ -204,14 +204,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Send content', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Send content', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
                             <p>
                                 <label for="ctz-webhook-files_send_content">
                                     <?php ctz_checkbox_input( 'files_send_content', $files_send_content ); ?>
-                                    <?php _e( 'Check to send file content insted of a link', 'cf7-to-zapier' ) ?>
+                                    <?php esc_html_e( 'Check to send file content insted of a link', 'cf7-to-zapier' ) ?>
                                 </label>
                             </p>
                         </td>
@@ -220,15 +220,15 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             </table>
         </fieldset>
 
-        <p class="description ctz-mt3"><?php _e( 'More options for files in "Media", under Advanced settings.', 'cf7-to-zapier' ) ?></p>
+        <p class="description ctz-mt3"><?php esc_html_e( 'More options for files in "Media", under Advanced settings.', 'cf7-to-zapier' ) ?></p>
     </div>
 </div>
 
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Special Mail Tags', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you need more information.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Special Mail Tags', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'When you need more information.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
@@ -258,18 +258,18 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     </div>
 </div>
 
-<h1 class="ctz-section-title"><?php _e( 'Advanced settings', 'cf7-to-zapier' ) ?></h1>
+<h1 class="ctz-section-title"><?php esc_html_e( 'Advanced settings', 'cf7-to-zapier' ) ?></h1>
 
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Method', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you are not making a POST.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Method', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'When you are not making a POST.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
     <div class="ctz-accordion-content">
-        <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( 'If you select GET, we will send your data as "query params" (if your body is not a valid JSON we will trigger a error).', 'cf7-to-zapier' ) ?></p>
+        <p class="description"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( 'If you select GET, we will send your data as "query params" (if your body is not a valid JSON we will trigger a error).', 'cf7-to-zapier' ) ?></p>
 
         <fieldset>
             <table class="form-table">
@@ -277,14 +277,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Method', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Method', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
                             <p>
                                 <label for="ctz-custom_method">
                                     <?php ctz_select_input( 'custom_method', $custom_method, [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ] ); ?>
-                                    <p class="description"><?php _e( 'Choose a HTTP method. In general, you should not change this.', 'cf7-to-zapier' ); ?></p>
+                                    <p class="description"><?php esc_html_e( 'Choose a HTTP method. In general, you should not change this.', 'cf7-to-zapier' ); ?></p>
                                 </label>
                             </p>
                         </td>
@@ -299,13 +299,13 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Headers', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you need authentication/authorization.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Headers', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'When you need authentication/authorization.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
     <div class="ctz-accordion-content">
-        <p class="description ctz-mb3"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( "This can break your integration (check spaces and colons).", 'cf7-to-zapier' ) ?></p>
+        <p class="description ctz-mb3"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( "This can break your integration (check spaces and colons).", 'cf7-to-zapier' ) ?></p>
 
         <fieldset>
             <legend>
@@ -338,18 +338,18 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Body', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you need customize your request.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Body', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'When you need customize your request.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
     <div class="ctz-accordion-content">
-        <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( "This can break your integration (check your quotes).", 'cf7-to-zapier' ) ?></p>
-        <p class="description ctz-mb3"><strong><?php _e( 'REMEMBER:', 'cf7-to-zapier' ) ?></strong> <?php printf( __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ), '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>' ); ?></p>
+        <p class="description"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( "This can break your integration (check your quotes).", 'cf7-to-zapier' ) ?></p>
+        <p class="description ctz-mb3"><strong><?php esc_html_e( 'REMEMBER:', 'cf7-to-zapier' ) ?></strong> <?php printf( __( 'You can change field name with webhook config: %s', 'cf7-to-zapier' ), '<span style="font-family: monospace; font-size: 12px; font-weight: bold;">[email* your_email webhook:email]</span>' ); ?></p>
 
-        <p class="description"><?php _e( 'To create your own body, you can replace values like in mail body (case sensitive).', 'cf7-to-zapier' ); ?></p>
-        <p class="description"><?php _e( 'You should provide your own "quotes" for strings/text (use only the mail tag without quotes for "checkbox" and "acceptance" fields).', 'cf7-to-zapier' ); ?></p>
-        <p class="description"><?php _e( 'For example:', 'cf7-to-zapier' ); ?></p>
+        <p class="description"><?php esc_html_e( 'To create your own body, you can replace values like in mail body (case sensitive).', 'cf7-to-zapier' ); ?></p>
+        <p class="description"><?php esc_html_e( 'You should provide your own "quotes" for strings/text (use only the mail tag without quotes for "checkbox" and "acceptance" fields).', 'cf7-to-zapier' ); ?></p>
+        <p class="description"><?php esc_html_e( 'For example:', 'cf7-to-zapier' ); ?></p>
         <pre>{
     "composed-message": "Sir [your-name] from [your-city].",
     "text-field": "[your-name]",
@@ -357,7 +357,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     "radio-field": "[your-choice]"
 }</pre>
 
-        <p class="description ctz-mt3"><?php _e( 'Enter your custom body:', 'cf7-to-zapier' ); ?></p>
+        <p class="description ctz-mt3"><?php esc_html_e( 'Enter your custom body:', 'cf7-to-zapier' ); ?></p>
         <fieldset>
             <label for="ctz-custom_body">
                 <?php ctz_textarea_input( 'custom_body', $custom_body ); ?>
@@ -366,10 +366,10 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 
         <fieldset class="ctz-mt3">
             <legend>
-                <?php $body_preview_is_json ? _e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : _e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
+                <?php $body_preview_is_json ? esc_html_e( 'We will send your form data as JSON:', 'cf7-to-zapier' ) : esc_html_e( 'We will send your form data as plain/text:', 'cf7-to-zapier' ); ?>
             </legend>
             <pre id="ctz-webhook-preview"><?php echo $body_preview_is_json ? esc_html( json_encode( $body_preview, JSON_PRETTY_PRINT ) ) : esc_html( $body_preview ); ?></pre>
-            <p class="description"><?php _e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
+            <p class="description"><?php esc_html_e( 'This is just a example of field names and will not reflect data or customizations.', 'cf7-to-zapier' ); ?></p>
         </fieldset>
     </div>
 </div>
@@ -377,8 +377,8 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Media', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'When you need to keep uploaded files.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Media', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'When you need to keep uploaded files.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
@@ -389,37 +389,37 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Add to Library', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Add to Library', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
                             <p>
                                 <label for="ctz-webhook-add_to_library">
                                     <?php ctz_checkbox_input( 'add_to_library', $add_to_library ); ?>
-                                    <?php _e( 'Check to add files to library', 'cf7-to-zapier' ) ?>
+                                    <?php esc_html_e( 'Check to add files to library', 'cf7-to-zapier' ) ?>
                                 </label>
                             </p>
-                            <p class="description"><?php _e( 'Files are added as private media (only administrators and editors see them in the library), even when sending file content. Their URLs are public (but hard to guess), like the links sent to the webhook.', 'cf7-to-zapier' ) ?> <a href="https://cf7-to-webhook.valney.dev/docs/features/media-library" target="_blank" rel="noopener"><?php _e( 'Read more', 'cf7-to-zapier' ) ?></a></p>
+                            <p class="description"><?php esc_html_e( 'Files are added as private media (only administrators and editors see them in the library), even when sending file content. Their URLs are public (but hard to guess), like the links sent to the webhook.', 'cf7-to-zapier' ) ?> <a href="https://cf7-to-webhook.valney.dev/docs/features/media-library" target="_blank" rel="noopener"><?php esc_html_e( 'Read more', 'cf7-to-zapier' ) ?></a></p>
                         </td>
                     </tr>
                     <?php if ( $contactform->id() ) : ?>
                     <tr class="ctz-row-notice">
                         <td colspan="2">
-                            <p class="description"><strong class="ctz-color-red"><?php _e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php _e( 'Deletes the files of every submission of this form, sent as links or added to the media library.', 'cf7-to-zapier' ) ?></p>
+                            <p class="description"><strong class="ctz-color-red"><?php esc_html_e( 'BE CAREFUL!', 'cf7-to-zapier' ) ?></strong> <?php esc_html_e( 'Deletes the files of every submission of this form, sent as links or added to the media library.', 'cf7-to-zapier' ) ?></p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Delete files', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Delete files', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
                             <p>
-                                <button type="button" class="button ctz-button-destructive" id="ctz-webhook-delete-uploads" data-form-id="<?php echo esc_attr( $contactform->id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'ctz_delete_uploads_' . $contactform->id() ) ); ?>" <?php disabled( ! current_user_can( 'manage_options' ) ); ?>><?php _e( 'Delete all files', 'cf7-to-zapier' ) ?></button>
+                                <button type="button" class="button ctz-button-destructive" id="ctz-webhook-delete-uploads" data-form-id="<?php echo esc_attr( $contactform->id() ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'ctz_delete_uploads_' . $contactform->id() ) ); ?>" <?php disabled( ! current_user_can( 'manage_options' ) ); ?>><?php esc_html_e( 'Delete all files', 'cf7-to-zapier' ) ?></button>
                             </p>
                             <?php if ( ! current_user_can( 'manage_options' ) ) : ?>
-                            <p class="description"><?php _e( 'Only administrators can delete files.', 'cf7-to-zapier' ) ?></p>
+                            <p class="description"><?php esc_html_e( 'Only administrators can delete files.', 'cf7-to-zapier' ) ?></p>
                             <?php endif; ?>
                             <p class="description" id="ctz-webhook-uploads-summary"><?php echo esc_html( CFTZ_Module_CF7::get_uploads_summary_text( $contactform->id() ) ); ?></p>
                         </td>
@@ -434,8 +434,8 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'Errors', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'How we handle errors.', 'cf7-to-zapier' ) ?></p>
+            <h2><?php esc_html_e( 'Errors', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'How we handle errors.', 'cf7-to-zapier' ) ?></p>
         </div>
     </div>
 
@@ -446,7 +446,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Notification', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Notification', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
@@ -456,14 +456,14 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                                 </label>
                             </p>
                             <p class="description">
-                                <?php _e( 'One or more emails (separated by comma) to be notified on webhook error.', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'One or more emails (separated by comma) to be notified on webhook error.', 'cf7-to-zapier' ) ?>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">
                             <label>
-                                <?php _e( 'Success Codes', 'cf7-to-zapier' ) ?>
+                                <?php esc_html_e( 'Success Codes', 'cf7-to-zapier' ) ?>
                             </label>
                         </th>
                         <td>
@@ -483,13 +483,13 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
     </div>
 </div>
 
-<h1 class="ctz-section-title"><?php _e( 'Help', 'cf7-to-zapier' ) ?></h1>
+<h1 class="ctz-section-title"><?php esc_html_e( 'Help', 'cf7-to-zapier' ) ?></h1>
 
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'URL Params', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'Send data in your URL.', 'cf7-to-zapier' ); ?></p>
+            <h2><?php esc_html_e( 'URL Params', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'Send data in your URL.', 'cf7-to-zapier' ); ?></p>
         </div>
     </div>
 
@@ -500,9 +500,9 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
             </legend>
 
             <pre><?php
-                _e( 'To get utm_source: https://example.com/?utm_source=example', 'cf7-to-zapier' );
+                esc_html_e( 'To get utm_source: https://example.com/?utm_source=example', 'cf7-to-zapier' );
                 echo "\n";
-                _e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
+                esc_html_e( 'Use this shortcode: [hidden utm_source default:get]', 'cf7-to-zapier' );
             ?></pre>
         </fieldset>
     </div>
@@ -511,16 +511,16 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
 <div class="ctz-accordion-wrapper">
     <div class="ctz-accordion-trigger">
         <div>
-            <h2><?php _e( 'FAQ', 'cf7-to-zapier' ) ?></h2>
-            <p class="description"><?php _e( 'You can check more information or search for help.', 'cf7-to-zapier' ); ?></p>
+            <h2><?php esc_html_e( 'FAQ', 'cf7-to-zapier' ) ?></h2>
+            <p class="description"><?php esc_html_e( 'You can check more information or search for help.', 'cf7-to-zapier' ); ?></p>
         </div>
     </div>
 
     <div class="ctz-accordion-content ctz-b0">
         <ul class="faq-list">
-            <li><a target="_blank" href="https://github.com/mariovalney/cf7-to-zapier/issues/19"><?php _e( 'How to make multiple webhooks optionals?', 'cf7-to-zapier' ); ?></a></li>
-            <li><a target="_blank" href="https://wordpress.org/plugins/cf7-to-zapier/#faq"><?php _e( 'Check FAQ from plugin page.', 'cf7-to-zapier' ); ?></a></li>
-            <li class="new-topic"><?php _e( 'Or...', 'cf7-to-zapier' ); ?> <a target="_blank" href="https://wordpress.org/support/plugin/cf7-to-zapier/#new-topic-0"><?php _e( 'ask a question!', 'cf7-to-zapier' ); ?></a></li>
+            <li><a target="_blank" href="https://github.com/mariovalney/cf7-to-zapier/issues/19"><?php esc_html_e( 'How to make multiple webhooks optionals?', 'cf7-to-zapier' ); ?></a></li>
+            <li><a target="_blank" href="https://wordpress.org/plugins/cf7-to-zapier/#faq"><?php esc_html_e( 'Check FAQ from plugin page.', 'cf7-to-zapier' ); ?></a></li>
+            <li class="new-topic"><?php esc_html_e( 'Or...', 'cf7-to-zapier' ); ?> <a target="_blank" href="https://wordpress.org/support/plugin/cf7-to-zapier/#new-topic-0"><?php esc_html_e( 'ask a question!', 'cf7-to-zapier' ); ?></a></li>
         </ul>
     </div>
 </div>

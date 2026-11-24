@@ -22,8 +22,13 @@ if ( ! function_exists( 'ctz_is_developing' ) ) {
     }
 }
 
+/**
+ * The debug helpers below have generic names that other libraries also use (dd, dump),
+ * so they only exist when a developer asks for them with CFTZ_ADD_DEBUG_FUNCTIONS.
+ * With them on, webhook errors are logged with dump_table() instead of emailed.
+ */
 function cftz_activated_debug_functions() {
-    return ctz_is_developing() && ! ( defined( 'CFTZ_REMOVE_DEBUG_FUNCTIONS' ) && CFTZ_REMOVE_DEBUG_FUNCTIONS );
+    return ctz_is_developing() && defined( 'CFTZ_ADD_DEBUG_FUNCTIONS' ) && CFTZ_ADD_DEBUG_FUNCTIONS;
 }
 
 /**

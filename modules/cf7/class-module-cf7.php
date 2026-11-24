@@ -92,13 +92,13 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 return;
             }
 
-            if ( file_exists( ABSPATH . PLUGINDIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+            if ( file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
                 $url = 'plugins.php';
             } else {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", "cf7-to-zapier" ) . '</a></p>';
+            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( 'Do it now?', 'cf7-to-zapier' ) . '</a></p>';
             echo '</div>';
         }
 
@@ -461,7 +461,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
          * @param    array              $data           Data sent to the webhook, used when the exception has no request body.
          */
         private function trigger_error_notification( $error_mails, $contact_form, $hook_url, $exception, $data = [] ) {
-            if ( empty( $error_mails ) && ! ctz_is_developing() ) {
+            if ( empty( $error_mails ) && ! cftz_activated_debug_functions() ) {
                 return;
             }
 
@@ -493,8 +493,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                 '[RESPONSE_BODY]'       => ( method_exists( $exception, 'get_response_body') ) ? wp_json_encode( $exception->get_response_body() ) : '',
             );
 
-            // Log in development
-            if ( ctz_is_developing() && function_exists( 'dump_table' ) ) {
+            // Log in development, only when the debug helpers were asked for (CFTZ_ADD_DEBUG_FUNCTIONS)
+            if ( cftz_activated_debug_functions() && function_exists( 'dump_table' ) ) {
                 dump_table( $replacements );
                 return;
             }

@@ -263,6 +263,9 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
                         $mail_tag = new WPCF7_MailTag( $placeholder, $tag, '' );
                         $value = apply_filters( 'wpcf7_special_mail_tags', $value, $tag, false, $mail_tag );
 
+                        // Form data must not add lines to the request: a line break would start a new header.
+                        $value = preg_replace( '/[\x00-\x1F\x7F]+/', ' ', (string) $value );
+
                         $header_value = str_replace( $placeholder, $value, $header_value );
                     }
 
