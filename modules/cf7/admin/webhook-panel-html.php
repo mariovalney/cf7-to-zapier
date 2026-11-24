@@ -179,7 +179,7 @@ if ( ! apply_filters( 'ctz_remove_donation_alert', false ) ) : ?>
                 <td>
                     <p>
                         <label for="ctz-webhook-template">
-                            <select id="ctz-webhook-template" class="ctz-template-select"><option></option></select>
+                            <select id="ctz-webhook-template" class="ctz-template-select"><option value="" selected></option></select>
                             <p class="description"><?php _e( 'You can choose a template from community to update your header/body settings.', 'cf7-to-zapier' ) ?></p>
                         </label>
                     </p>
