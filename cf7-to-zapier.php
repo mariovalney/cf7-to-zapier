@@ -66,7 +66,8 @@ if ( ! class_exists( 'Cf7_To_Zapier' ) ) {
          * @since    1.0.0
          */
         public function on_activation() {
-            flush_rewrite_rules();
+            // The plugin registers no rewrite rules yet. Flush again only after adding some.
+            // flush_rewrite_rules();
         }
 
         /**
