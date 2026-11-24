@@ -123,7 +123,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             wp_enqueue_script( 'ctz-select2-script', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js', [ 'jquery' ], $version );
             wp_enqueue_script( 'ctz-admin-script', CFTZ_PLUGIN_URL . '/modules/cf7/admin/assets/admin.js', [ 'ctz-select2-script' ], $version );
 
-            // For developers: in your enviroment make "/docs" point to "/cf7-to-webhook-valney-dev"
+            // For developers: in your enviroment make "/ci/website/public" point to "/cf7-to-webhook-valney-dev"
             $templates_url = ctz_is_developing() ? home_url( '/cf7-to-webhook-valney-dev/templates.json' ) : 'https://cf7-to-webhook.valney.dev/templates.json';
             wp_localize_script( 'ctz-admin-script', 'CTZ_ADMIN', array(
                 'templates_url' => $templates_url,

@@ -9,7 +9,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code or committing, and f
 - **Commit messages**: `[Tag] Relevant title`, in English, with tags such as `[Feat]`, `[Fix]`, `[Style]`, `[Refact]`, `[Docs]`, `[Test]` and `[Build]`. Do not use Conventional Commits (`feat:`, `docs:`, `chore:`).
 - **Coding standards**: WordPress Coding Standards, indented with spaces.
 - **Git workflow**: rebase on `master` before merging, and open an issue for each PR.
-- **Webhook templates** in `docs/templates.json`.
+- **Webhook templates** in `ci/website/public/templates.json`, served by the static site in `ci/website`.
 
 ## Never edit README.md
 

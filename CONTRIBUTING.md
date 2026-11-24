@@ -53,7 +53,7 @@ The best way is to use [WP Readme to Markdown](https://github.com/mariovalney/vs
 
 Templates are Header / Body values.
 
-To create new templates, just add ir to `docs/templates.json`:
+To create new templates, just add ir to `ci/website/public/templates.json`:
 
 ```
 {
