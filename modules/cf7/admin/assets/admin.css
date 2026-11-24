@@ -82,6 +82,33 @@
   width: 100% !important;
 }
 
+/* A notice row in a form table, right above the setting it is about. Aligned with the row labels. */
+#webhook-panel .form-table .ctz-row-notice td {
+  padding: 20px 10px 0 0;
+}
+
+/* Destructive action, like the block editor's "Move to trash" (components-button is-secondary is-destructive). */
+#webhook-panel .button.ctz-button-destructive:not(:disabled) {
+  color: #cc1818;
+  border-color: #cc1818;
+  background: transparent;
+}
+
+#webhook-panel .button.ctz-button-destructive:not(:disabled):hover {
+  color: #9e1313;
+  border-color: #9e1313;
+  background: rgba(204, 24, 24, 0.04);
+}
+
+#webhook-panel .button.ctz-button-destructive:not(:disabled):active {
+  background: rgba(204, 24, 24, 0.08);
+}
+
+#webhook-panel .button.ctz-button-destructive:not(:disabled):focus {
+  border-color: #cc1818;
+  box-shadow: 0 0 0 1px #cc1818;
+}
+
 /* The original select hidden by select2: WordPress 7 gives selects a min-height that keeps it 40px tall. */
 #webhook-panel .select2-hidden-accessible {
   min-height: 0 !important;
@@ -183,7 +210,7 @@
 #ctz-webhook-confirmation .ctz-webhook-confirmation-message {
   margin: 0 0 3rem;
   color: #FF4A00;
-  font-size: 2rem;
+  font-size: 1.7rem;
   line-height: 1.4;
   font-weight: 300;
 }

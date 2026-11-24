@@ -111,6 +111,35 @@ jQuery(document).ready(function($) {
     );
   });
 
+  // Delete uploaded files
+  $('#ctz-webhook-delete-uploads').on('click', function(event) {
+    event.preventDefault();
+
+    const button = $(this);
+    const summary = $('#ctz-webhook-uploads-summary');
+
+    Confirm(CTZ_ADMIN.messages.confirm_delete_uploads, function() {
+      button.prop('disabled', true);
+
+      $.post(ajaxurl, {
+        action: 'ctz_delete_uploads',
+        form_id: button.data('form-id'),
+        nonce: button.data('nonce'),
+      }).done(function(response) {
+        if (! response.success) {
+          summary.text(CTZ_ADMIN.messages.delete_uploads_error);
+          return;
+        }
+
+        summary.text(response.data.summary);
+      }).fail(function() {
+        summary.text(CTZ_ADMIN.messages.delete_uploads_error);
+      }).always(function() {
+        button.prop('disabled', false);
+      });
+    });
+  });
+
   // Accordion
   $( '.ctz-accordion-wrapper' ).each(function(index, el) {
     const trigger = $(el).find('.ctz-accordion-trigger');
