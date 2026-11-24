@@ -6,7 +6,7 @@
     <title>Add custom code | CF7 to Webhook</title>
     <meta name="description" content="Where to put the PHP snippets that customize CF7 to Webhook: a small plugin of your own or a snippets plugin.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/add-custom-code">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -24,7 +24,7 @@
 
                 <p>There are two places for this code: a small plugin of your own, which is what WordPress recommends, or a snippets plugin, if you prefer not to edit files.</p>
 
-                <h2>A plugin of your own</h2>
+                <h2 id="a-plugin-of-your-own">A plugin of your own</h2>
 
                 <p>Create the folder <code>wp-content/plugins/cf7-to-webhook-custom/</code> and, inside it, the file <code>cf7-to-webhook-custom.php</code>:</p>
 <pre><code>&lt;?php
@@ -44,11 +44,11 @@ defined( 'ABSPATH' ) || exit;
 
                 <p>The theme's <code>functions.php</code> also runs PHP, but the code goes away when you switch themes or a theme update replaces the file.</p>
 
-                <h2>A snippets plugin</h2>
+                <h2 id="a-snippets-plugin">A snippets plugin</h2>
 
                 <p>A plugin like <a href="https://wordpress.org/plugins/code-snippets/">Code Snippets</a> lets you add PHP from the admin, without editing files. Create a snippet, paste the code without the opening <code>&lt;?php</code> and set it to run everywhere: forms are sent outside the admin, so a snippet limited to the admin area does not run for them.</p>
 
-                <h2>Before you save</h2>
+                <h2 id="before-you-save">Before you save</h2>
 
                 <p>An error in PHP code can take the site down. Test the snippet on a staging copy first. If the site breaks, rename the plugin folder over FTP to deactivate it, or use the safe mode of your snippets plugin.</p>
             </article>

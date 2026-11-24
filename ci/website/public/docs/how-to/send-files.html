@@ -6,7 +6,7 @@
     <title>Send files | CF7 to Webhook</title>
     <meta name="description" content="How uploaded files reach the webhook: as links or as base64 content.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/send-files">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -22,11 +22,11 @@
 
                 <p>Contact Form 7 deletes uploads at the end of the request, so the plugin handles files before that.</p>
 
-                <h2>As links</h2>
+                <h2 id="as-links">As links</h2>
 
                 <p>By default, each file is copied to <code>wp-content/uploads/cf7-to-webhook-uploads/&lt;form ID&gt;/&lt;date&gt;_&lt;random&gt;/</code> and the webhook gets its URL. A field with one file sends a string; several files send an array of URLs.</p>
 
-                <h2>As content</h2>
+                <h2 id="as-content">As content</h2>
 
                 <p>With <strong>Send content</strong> checked, in Files, the webhook gets the file itself, with no copy kept on the site:</p>
 <pre><code>{
@@ -37,7 +37,7 @@
 }</code></pre>
                 <p>The content is base64, so the destination has to decode it. The body grows by about a third of the file size, and many services limit the size of what they receive. Error emails include the request body, with the file content.</p>
 
-                <h2>Keep or delete the files</h2>
+                <h2 id="keep-or-delete-the-files">Keep or delete the files</h2>
 
                 <p>To keep copies in the media library, or to delete files after some days or all at once, see <a href="/docs/features/media-library">Media library</a>.</p>
                 <p>Multiple files per field work with the MultiLine files for Contact Form 7 plugin.</p>

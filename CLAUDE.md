@@ -72,10 +72,12 @@ Never run the SVN commit for the maintainer: the script asks them, and the commi
 | `ci/website/public/` | The site root. Every file here is published as is. |
 | `public/index.html` | Home: what the plugin does, how to start, and the Download, docs and GitHub links. |
 | `public/partials/` | `header.html` (menu with Download and Donate), `footer.html` and `docs-nav.html` (the docs menu), shared by every page. |
-| `public/site.js` | Marks the current page in the menus with `aria-current`. |
+| `public/site.js` | Marks the current page in the menus with `aria-current`, and turns docs headings with an `id` into links that copy the section address. |
 | `public/faq.html` | The FAQ from `readme.txt`, served at `/faq`. |
 | `public/404.html` | Served for any address that does not exist. |
 | `public/style.css` | The only stylesheet, shared by every page, with light and dark colors as CSS variables. |
+
+Cloudflare keeps `style.css` and `site.js` in browsers for 4 hours. When either changes, raise the `?v=` number where pages load them: the `<link>` in every page and the `<script>` in `partials/footer.html`.
 | `public/docs/index.html` | The docs index, grouped by topic (Get started, Form data, Requests, Files, Errors, Templates), with a card per page. |
 | `public/docs/how-to/<slug>.html` | Guides for a task, served at `/docs/how-to/<slug>`. |
 | `public/docs/features/<slug>.html` | One page per plugin feature, served at `/docs/features/<slug>`. |
@@ -104,13 +106,14 @@ With `WP_DEBUG` on (`ctz_is_developing()`) in a repository checkout, the plugin 
 ### Adding a doc page
 
 1. Pick the section: `how-to` for a guide to a task, `features` for what a feature does and how it behaves. Pick a slug in lowercase with hyphens. The page will live at `/docs/<section>/<slug>`.
-2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css">`, the header, docs menu and footer includes, and the breadcrumb to `/docs` followed by the section name.
+2. Create `ci/website/public/docs/<section>/<slug>.html` by copying a page from the same section, such as `features/media-library.html`, and keep its structure: `<title>Page title | CF7 to Webhook</title>`, a meta description, a canonical URL with the full address, `<link rel="stylesheet" href="/style.css?v=N">` with the same `?v=` as the other pages, the header, docs menu and footer includes, and the breadcrumb to `/docs` followed by the section name.
 3. Put styles in `style.css`, never inline. Use the existing variables so the page works in dark mode.
-4. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
-5. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
-6. Add the page to its topic in `partials/docs-nav.html` and as a card in the same topic of `docs/index.html`, with the page's meta description as the card text.
-7. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
-8. Test locally (below) before pushing.
+4. Give every `<h2>` an `id` with its text in lowercase and hyphens, unique on the page: `<h2 id="what-gets-stored">What gets stored</h2>`. Readers share sections as `/docs/<section>/<slug>#<id>`, so keep the `id` when you reword a heading.
+5. Inside `<pre><code>`, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`. PHP's `->` and `=>` are the usual cases.
+6. When the page tells the reader to add PHP code (filters, actions, snippets), link to `/docs/how-to/add-custom-code` there. The same goes for `readme.txt`, with the full URL.
+7. Add the page to its topic in `partials/docs-nav.html` and as a card in the same topic of `docs/index.html`, with the page's meta description as the card text.
+8. If the plugin should point to the page, link it from `readme.txt` (see "Never edit README.md") or from the webhook panel, where links open in a new tab (`target="_blank" rel="noopener"`).
+9. Test locally (below) before pushing.
 
 Write in English, in a technical register: the page states what happens and what the reader can do, with real paths, option names and code. A feature page says which version introduced it ("Since 5.2.0"). The site deploys from `master`, so a page about an unreleased feature goes live with the merge. When the maintainer's `escrita-sem-sotaque` skill is available, pass the prose through it.
 

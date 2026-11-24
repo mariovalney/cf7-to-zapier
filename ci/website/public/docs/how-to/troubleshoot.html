@@ -6,7 +6,7 @@
     <title>Troubleshoot missing data | CF7 to Webhook</title>
     <meta name="description" content="Check why a webhook did not arrive or arrived with empty fields.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/troubleshoot">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -21,7 +21,7 @@
                 <h1>Troubleshoot missing data</h1>
 
 
-                <h2>Nothing arrives</h2>
+                <h2 id="nothing-arrives">Nothing arrives</h2>
 
                 <ul>
                     <li>Check that <strong>Send to Webhook</strong> is on and the URL is saved in <strong>Webhook URL</strong>.</li>
@@ -31,7 +31,7 @@
                     <li>If the webhook failed, the plugin emailed the error to the addresses in <strong>Errors</strong>. See <a href="/docs/how-to/handle-errors">Handle webhook errors</a>.</li>
                 </ul>
 
-                <h2>Fields arrive empty or missing</h2>
+                <h2 id="fields-arrive-empty-or-missing">Fields arrive empty or missing</h2>
 
                 <ul>
                     <li>In a custom body, names are case sensitive and must match the fields, or their new key when renamed with the <code>webhook</code> option.</li>
@@ -39,7 +39,7 @@
                     <li>With Multi-Step Forms, the settings go in the last step. See <a href="/docs/how-to/multi-step-forms">Use with Multi-Step Forms</a>.</li>
                 </ul>
 
-                <h2>See the request</h2>
+                <h2 id="see-the-request">See the request</h2>
 
                 <p>Point the webhook to a request inspector, such as webhook.site, and submit the form: you see exactly what the plugin sends. If you still need help, open a topic in the <a href="https://wordpress.org/support/plugin/cf7-to-zapier/">support forum</a> with the error email, after removing personal data and keys.</p>
             </article>

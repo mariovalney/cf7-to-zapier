@@ -64,6 +64,49 @@ h3 {
     line-height: 1.3;
 }
 
+/* Section links: site.js turns docs headings with an id into links that copy their address. */
+
+.heading-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.heading-link::after {
+    content: "#";
+    margin-left: 8px;
+    color: var(--muted);
+    font-weight: 400;
+    opacity: 0;
+}
+
+.heading-link:hover::after,
+.heading-link:focus-visible::after {
+    opacity: 1;
+}
+
+.heading-link.copied::after {
+    content: "Link copied";
+    font-size: 14px;
+    opacity: 1;
+}
+
+.content h2[id],
+.content h3[id] {
+    scroll-margin-top: 16px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 ol,
 ul {
     padding-left: 24px;

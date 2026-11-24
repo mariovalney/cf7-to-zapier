@@ -6,7 +6,7 @@
     <title>Connect a form to Zapier | CF7 to Webhook</title>
     <meta name="description" content="Send Contact Form 7 submissions to a Zap with Webhooks by Zapier.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/connect-zapier">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -22,14 +22,14 @@
 
                 <p>Zapier receives the form data through a webhook trigger. You need a Zapier account and a form already working in Contact Form 7.</p>
 
-                <h2>Create the trigger in Zapier</h2>
+                <h2 id="create-the-trigger-in-zapier">Create the trigger in Zapier</h2>
 
                 <ol>
                     <li>Create a Zap and choose <strong>Webhooks by Zapier</strong> as the trigger, with the <strong>Catch Hook</strong> event.</li>
                     <li>Copy the webhook URL that Zapier shows. It starts with <code>https://hooks.zapier.com/hooks/catch/</code>.</li>
                 </ol>
 
-                <h2>Connect the form</h2>
+                <h2 id="connect-the-form">Connect the form</h2>
 
                 <ol>
                     <li>In WordPress, edit the form and open the <strong>Webhook</strong> tab.</li>
@@ -38,7 +38,7 @@
                 </ol>
                 <p>While the webhook is on, Contact Form 7 does not send its email for this form. To keep the email, check <strong>Send CF7 mail as usually</strong>.</p>
 
-                <h2>Finish the Zap</h2>
+                <h2 id="finish-the-zap">Finish the Zap</h2>
 
                 <p>Back in Zapier, test the trigger. It shows the submission with one key per field, named after the field: <code>[text* your-name]</code> arrives as <code>your-name</code>. Use those keys in the next steps of the Zap.</p>
                 <p>To send other keys, see <a href="/docs/how-to/rename-fields">Rename the fields sent to the webhook</a>. If nothing arrives, see <a href="/docs/how-to/troubleshoot">Troubleshoot missing data</a>.</p>

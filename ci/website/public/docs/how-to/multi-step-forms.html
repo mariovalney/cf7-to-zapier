@@ -6,7 +6,7 @@
     <title>Use with Multi-Step Forms | CF7 to Webhook</title>
     <meta name="description" content="Send the data of every step of a Contact Form 7 Multi-Step Forms form.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/multi-step-forms">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -23,7 +23,7 @@
                 <p>The plugin supports <a href="https://wordpress.org/plugins/contact-form-7-multi-step-module/">Contact Form 7 Multi-Step Forms</a>. Set the webhook only in the form of the last step: the plugin adds the data of the previous steps, stored by Multi-Step Forms, to the last one. You do not need hidden fields.</p>
                 <p>The data comes from what Multi-Step Forms stores, so the plugin cannot guarantee it. If a step is missing, check that plugin first.</p>
 
-                <h2>Turn it off</h2>
+                <h2 id="turn-it-off">Turn it off</h2>
 
                 <p>To send only the fields of the last step, add this code as explained in <a href="/docs/how-to/add-custom-code">Add custom code</a>:</p>
 <pre><code>add_filter( 'ctz_get_data_from_cf7msm_posted_data', '__return_false' );</code></pre>

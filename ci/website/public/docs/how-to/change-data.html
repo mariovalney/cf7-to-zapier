@@ -6,7 +6,7 @@
     <title>Change the data before sending | CF7 to Webhook</title>
     <meta name="description" content="Add, change or remove fields before the webhook request with a filter.">
     <link rel="canonical" href="https://cf7-to-webhook.valney.dev/docs/how-to/change-data">
-    <link rel="stylesheet" href="/style.css?v=2">
+    <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
     <!--# include virtual="/partials/header.html" -->
@@ -35,7 +35,7 @@
 }, 10, 2 );</code></pre>
                 <p>Special mail tags have their own filter, <code>ctz_get_data_from_special_mail_tags</code>, with the same arguments. To change the final request, with the body already built, use <code>ctz_post_request_args</code>, as in <a href="/docs/how-to/change-webhook-timeout">Change the webhook timeout</a>.</p>
 
-                <h2>Send your own request</h2>
+                <h2 id="send-your-own-request">Send your own request</h2>
 
                 <p>To replace the request of the plugin, return true in <code>ctz_ignore_default_webhook</code> and send yours in the <code>ctz_trigger_webhook</code> action, which receives the data, the webhook URL, the settings and the form:</p>
 <pre><code>add_filter( 'ctz_ignore_default_webhook', '__return_true' );

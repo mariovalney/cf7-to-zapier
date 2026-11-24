@@ -11,3 +11,42 @@
         }
     });
 })();
+
+// Docs headings with an id link to their section, and a click also copies that address.
+(function () {
+    var status = document.createElement('p');
+    status.className = 'visually-hidden';
+    status.setAttribute('aria-live', 'polite');
+    document.body.appendChild(status);
+
+    document.querySelectorAll('.content h2[id], .content h3[id]').forEach(function (heading) {
+        var link = document.createElement('a');
+        var timer;
+
+        link.className = 'heading-link';
+        link.href = '#' + heading.id;
+
+        while (heading.firstChild) {
+            link.appendChild(heading.firstChild);
+        }
+
+        heading.appendChild(link);
+
+        link.addEventListener('click', function () {
+            if (!navigator.clipboard) {
+                return;
+            }
+
+            navigator.clipboard.writeText(window.location.origin + window.location.pathname + '#' + heading.id).then(function () {
+                clearTimeout(timer);
+                link.classList.add('copied');
+                status.textContent = 'Link copied';
+
+                timer = setTimeout(function () {
+                    link.classList.remove('copied');
+                    status.textContent = '';
+                }, 2000);
+            });
+        });
+    });
+})();
