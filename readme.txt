@@ -4,8 +4,8 @@ Contributors: mariovalney
 Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 4.7
-Tested up to: 6.9.1
-Stable tag: 5.1.0
+Tested up to: 7.1.5
+Stable tag: 5.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -165,6 +165,12 @@ Yes! Visit [GitHub repository](https://github.com/mariovalney/cf7-to-zapier) or 
 3. All request methods
 
 == Changelog ==
+
+= 5.1.1 =
+
+* Fixed webhooks not being sent when the submitted data has invalid UTF-8. Invalid sequences are now replaced, as Contact Form 7 does (props to @Zodiac1978).
+* Fixed fields with invalid UTF-8 being sent empty when using a custom body.
+* Fixed a PHP warning ("Undefined variable $data") in error notifications.
 
 = 5.1.0 =
 
@@ -347,6 +353,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.1.1 =
+
+Fixes webhooks not being sent when a submission contains invalid UTF-8.
 
 = 5.1.0 =
 
