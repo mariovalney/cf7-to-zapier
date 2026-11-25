@@ -20,7 +20,7 @@ Thank you!
 
 ---
 
-[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/ "Install it first, of course") is a awesome plugin used by 1+ million WordPress websites.
+[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/ "Install it first, of course") is a awesome plugin used by 10+ million WordPress websites.
 
 Webhooks are endpoint (urls) you can send data!
 
