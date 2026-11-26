@@ -63,7 +63,7 @@ abstract class TestCase extends PHPUnitTestCase {
     /**
      * A form with the given fields.
      *
-     * @param array $fields     Field name => basetype.
+     * @param array $fields     Field name => basetype, or => tag properties (basetype, options, values).
      * @param array $properties Form properties.
      * @param int   $id         Form ID.
      * @return \WPCF7_ContactForm
@@ -71,13 +71,10 @@ abstract class TestCase extends PHPUnitTestCase {
     protected function make_form( array $fields, array $properties = array(), $id = 5 ) {
         $tags = array();
 
-        foreach ( $fields as $name => $basetype ) {
-            $tags[] = new \WPCF7_FormTag(
-                array(
-                    'name'     => $name,
-                    'basetype' => $basetype,
-                )
-            );
+        foreach ( $fields as $name => $tag ) {
+            $tag = is_array( $tag ) ? $tag : array( 'basetype' => $tag );
+
+            $tags[] = new \WPCF7_FormTag( array_merge( $tag, array( 'name' => $name ) ) );
         }
 
         return new \WPCF7_ContactForm( $id, $tags, $properties );
