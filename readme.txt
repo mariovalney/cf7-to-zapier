@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/donate?campaign_id=9AA82JCSNWNFS
 Tags: cf7, contact form, zapier, integration, webhook
 Requires at least: 5.0
 Tested up to: 7.1.5
-Stable tag: 5.3.0
+Stable tag: 5.3.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -120,6 +120,11 @@ See the [FAQ](https://cf7-to-webhook.valney.dev/faq) and the [documentation](htt
 3. All request methods
 
 == Changelog ==
+
+= 5.3.1 =
+
+* Fixed a custom body becoming invalid JSON when a checkbox or multiple select is inside quotes, as in the Slack template. Inside quotes, the options are now sent as text separated by commas (props to @jakhongirikromidinov for the report).
+* The 'ctz_post_request_args' filter now receives the form data as its fifth parameter.
 
 = 5.3.0 =
 
@@ -331,6 +336,10 @@ Props to @shoreline-chrism
 * Ignore or not CF7 mail sent.
 
 == Upgrade Notice ==
+
+= 5.3.1 =
+
+Fixes custom bodies, including the Slack template, being sent as plain text when a checkbox is inside quotes.
 
 = 5.3.0 =
 

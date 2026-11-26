@@ -33,7 +33,20 @@
 
     return $data;
 }, 10, 2 );</code></pre>
-                <p>Special mail tags have their own filter, <code>ctz_get_data_from_special_mail_tags</code>, with the same arguments. To change the final request, with the body already built, use <code>ctz_post_request_args</code>, as in <a href="/docs/how-to/change-webhook-timeout">Change the webhook timeout</a>.</p>
+                <p>Special mail tags have their own filter, <code>ctz_get_data_from_special_mail_tags</code>, with the same arguments. To change the final request, with the body already built, use <code>ctz_post_request_args</code>, as in <a href="/docs/how-to/change-webhook-timeout">Change the webhook timeout</a>. Since 5.3.1, its fifth argument is the form data:</p>
+<pre><code>add_filter( 'ctz_post_request_args', function( $args, $properties, $contact_form, $hook_url, $data ) {
+    // Only for form 123.
+    if ( 123 !== $contact_form-&gt;id() ) {
+        return $args;
+    }
+
+    $args['body'] = wp_json_encode( array(
+        'email'   =&gt; $data['your-email'] ?? '',
+        'options' =&gt; implode( ', ', (array) ( $data['your-checkbox'] ?? array() ) ),
+    ) );
+
+    return $args;
+}, 10, 5 );</code></pre>
 
                 <h2 id="send-your-own-request">Send your own request</h2>
 
