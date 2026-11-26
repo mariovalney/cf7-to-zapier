@@ -229,6 +229,33 @@ class SubmissionTest extends TestCase {
         $this->assertStringNotContainsString( 'secret-key', $message );
     }
 
+    /**
+     * @dataProvider mail_settings
+     */
+    public function test_skips_the_mail_only_when_the_webhook_replaces_it( array $settings, $cf7_skips, $expected ) {
+        $form = $this->make_form( self::FIELDS, array( CFTZ_Module_CF7::METADATA => $settings ) );
+
+        $skip = ( new CFTZ_Module_CF7( new Cf7_To_Zapier() ) )->wpcf7_skip_mail( $cf7_skips, $form );
+
+        $this->assertSame( $expected, $skip );
+    }
+
+    public function mail_settings() {
+        $active = array(
+            'activate' => '1',
+            'hook_url' => array( 'https://example.com/hook' ),
+        );
+
+        return array(
+            '"Send Mail" off'               => array( $active, false, true ),
+            '"Send Mail" on'                => array( array_merge( $active, array( 'send_mail' => '1' ) ), false, false ),
+            'inactive webhook'              => array( array_merge( $active, array( 'activate' => '0' ) ), false, false ),
+            'inactive webhook, CF7 skips'   => array( array_merge( $active, array( 'activate' => '0' ) ), true, true ),
+            'no webhook URL'                => array( array_merge( $active, array( 'hook_url' => array() ) ), false, false ),
+            'form without webhook settings' => array( array(), false, false ),
+        );
+    }
+
     public function test_inactive_webhook_sends_nothing() {
         $this->submit( array( 'your-name' => 'Ana' ), array( 'activate' => '0' ) );
 

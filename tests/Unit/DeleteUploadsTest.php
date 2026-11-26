@@ -1,6 +1,6 @@
 <?php
 /**
- * Deleting uploaded files: "Delete all files" and the daily "Delete after" event.
+ * Deleting uploaded files: the "Delete all files" button and the daily "Delete after" event.
  *
  * Runs on a temporary folder used as the WordPress uploads folder.
  *
@@ -10,6 +10,7 @@
 namespace CFTZ\Tests\Unit;
 
 use Brain\Monkey\Functions;
+use CFTZ\Tests\JsonResponse;
 use CFTZ\Tests\TestCase;
 use CFTZ_Module_CF7;
 use Cf7_To_Zapier;
@@ -77,6 +78,7 @@ class DeleteUploadsTest extends TestCase {
     }
 
     protected function tearDown(): void {
+        $_POST                    = array();
         WPCF7_ContactForm::$forms = array();
         $this->remove( $this->uploads );
 
@@ -182,6 +184,107 @@ class DeleteUploadsTest extends TestCase {
         $this->assertDirectoryExists( $kept );
         $this->assertDirectoryExists( $current );
         $this->assertDirectoryExists( $never );
+    }
+
+    /**
+     * @dataProvider forbidden_requests
+     */
+    public function test_delete_button_needs_an_administrator_and_the_nonce_of_the_form( array $caps, $nonce ) {
+        $submission = $this->submission( 5, '20261120_' . str_repeat( 'a', 32 ) );
+        $this->attachments = array( 11 );
+
+        $response = $this->delete_button( 5, $nonce, $caps );
+
+        $this->assertFalse( $response->success );
+        $this->assertSame( 403, $response->status );
+        $this->assertDirectoryExists( $submission );
+        $this->assertSame( array(), $this->deleted_attachments );
+    }
+
+    public function forbidden_requests() {
+        $admin  = array( 'wpcf7_edit_contact_form', 'manage_options' );
+        $editor = array( 'wpcf7_edit_contact_form' );
+
+        return array(
+            'no nonce'                   => array( $admin, '' ),
+            'nonce of another form'      => array( $admin, 'valid-ctz_delete_uploads_6' ),
+            'editor with the form nonce' => array( $editor, 'valid-ctz_delete_uploads_5' ),
+        );
+    }
+
+    public function test_delete_button_needs_a_form() {
+        $response = $this->delete_button( 99, 'valid-ctz_delete_uploads_99' );
+
+        $this->assertFalse( $response->success );
+        $this->assertSame( 404, $response->status );
+    }
+
+    public function test_delete_button_deletes_the_files_of_the_form() {
+        $this->submission( 5, '20261120_' . str_repeat( 'a', 32 ) );
+        $other = $this->submission( 6, '20261120_' . str_repeat( 'b', 32 ) );
+
+        $response = $this->delete_button( 5, 'valid-ctz_delete_uploads_5' );
+
+        $this->assertTrue( $response->success );
+        $this->assertSame( array( 'summary' => 'No files uploaded with this form.' ), $response->data );
+        $this->assertDirectoryDoesNotExist( $this->form_dir( 5 ) );
+        $this->assertDirectoryExists( $other );
+    }
+
+    /**
+     * Click "Delete all files": run the AJAX handler and return its JSON response.
+     *
+     * A valid nonce is "valid-" followed by its action, as wp_create_nonce() would tie it to the form.
+     *
+     * @param int      $form_id Posted form ID.
+     * @param string   $nonce   Posted nonce.
+     * @param string[] $caps    Capabilities of the current user.
+     * @return JsonResponse
+     */
+    private function delete_button( $form_id, $nonce, array $caps = array( 'wpcf7_edit_contact_form', 'manage_options' ) ) {
+        $_POST = array(
+            'form_id' => (string) $form_id,
+            'nonce'   => $nonce,
+        );
+
+        Functions\when( 'check_ajax_referer' )->alias(
+            function( $action, $query_arg, $stop ) {
+                $this->assertFalse( $stop );
+                return ( $_POST[ $query_arg ] ?? '' ) === 'valid-' . $action;
+            }
+        );
+
+        Functions\when( 'current_user_can' )->alias(
+            function( $cap ) use ( $caps ) {
+                return in_array( $cap, $caps, true );
+            }
+        );
+
+        Functions\when( 'wpcf7_contact_form' )->alias(
+            function( $id ) {
+                return in_array( $id, array( 5, 6 ), true ) ? new WPCF7_ContactForm( $id ) : null;
+            }
+        );
+
+        Functions\when( 'wp_send_json_error' )->alias(
+            function( $data = null, $status = null ) {
+                throw new JsonResponse( false, $data, $status );
+            }
+        );
+
+        Functions\when( 'wp_send_json_success' )->alias(
+            function( $data = null, $status = null ) {
+                throw new JsonResponse( true, $data, $status );
+            }
+        );
+
+        try {
+            ( new CFTZ_Module_CF7( new Cf7_To_Zapier() ) )->wp_ajax_ctz_delete_uploads();
+        } catch ( JsonResponse $response ) {
+            return $response;
+        }
+
+        $this->fail( 'The handler did not send a JSON response.' );
     }
 
     private function form_dir( $form_id ) {
