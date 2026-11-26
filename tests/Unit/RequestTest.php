@@ -7,6 +7,7 @@
 
 namespace CFTZ\Tests\Unit;
 
+use Brain\Monkey\Actions;
 use Brain\Monkey\Filters;
 use CFTZ\Tests\TestCase;
 use CFTZ_Exception;
@@ -99,6 +100,19 @@ class RequestTest extends TestCase {
             $this->assertSame( 'cURL error 28: timed out', $exception->getMessage() );
             $this->assertSame( 'POST', $exception->get_request_method() );
         }
+    }
+
+    public function test_result_action_runs_on_errors() {
+        // Issue #18: it did not run when the webhook failed.
+        $this->response = 500;
+
+        Actions\expectDone( 'ctz_post_request_result' )
+            ->once()
+            ->with( array( 'response' => array( 'code' => 500 ) ), 'https://example.com/hook' );
+
+        $this->expectException( CFTZ_Exception::class );
+
+        $this->trigger( self::DATA );
     }
 
     public function test_ignore_errors_filter_skips_the_error() {
