@@ -85,7 +85,12 @@ class WPCF7_ContactForm {
     }
 
     public function message( $status ) {
-        return 'mail_sent_ng' === $status ? 'There was an error trying to send your message.' : '';
+        $messages = array(
+            'mail_sent_ng'  => 'There was an error trying to send your message.',
+            'upload_failed' => 'There was an unknown error uploading the file.',
+        );
+
+        return $messages[ $status ] ?? '';
     }
 
     public function scan_form_tags() {
@@ -118,12 +123,23 @@ class WPCF7_Submission {
 
     public $response = null;
 
+    /**
+     * Uploaded files: field name => list of paths, as Contact Form 7 keeps them.
+     *
+     * @var array
+     */
+    private $files;
+
+    public function __construct( array $files = array() ) {
+        $this->files = $files;
+    }
+
     public static function get_instance() {
         return self::$instance;
     }
 
     public function uploaded_files() {
-        return array();
+        return $this->files;
     }
 
     public function set_status( $status ) {
