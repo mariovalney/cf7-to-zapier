@@ -41,3 +41,30 @@ jobs:
 
       - name: Test
         run: composer test
+
+  contact-form-7:
+    # The latest Contact Form 7, so a change in it fails here before it reaches the sites.
+    name: Contact Form 7 (latest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Download Contact Form 7
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/contact-form-7.zip" https://downloads.wordpress.org/plugin/contact-form-7.latest-stable.zip
+          unzip -q "$RUNNER_TEMP/contact-form-7.zip" -d "$RUNNER_TEMP"
+
+      - name: Install
+        run: composer install --no-interaction --no-progress
+
+      - name: Test
+        run: composer test:cf7
+        env:
+          CF7_DIR: ${{ runner.temp }}/contact-form-7

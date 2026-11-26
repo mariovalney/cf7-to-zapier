@@ -22,6 +22,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "test:cf7": "phpunit -c phpunit-cf7.xml.dist"
     }
 }

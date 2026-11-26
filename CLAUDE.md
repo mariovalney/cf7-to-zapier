@@ -21,7 +21,16 @@ Unit tests use PHPUnit 9 and Brain Monkey, without WordPress or Contact Form 7. 
 - `composer.json` sets `config.platform.php` to 7.4, so `composer.lock` installs on PHP 7.4. Keep it when updating dependencies.
 - Tests call the plugin through its public methods (for example `pull_the_trigger()` with `wp_safe_remote_request` mocked) and do not make private methods public. `tests/stubs` has the WordPress and Contact Form 7 classes; add to them only what a test needs.
 - When fixing a bug, add a test case that fails without the fix.
-- `tests/`, `vendor/`, `composer.*` and `phpunit.xml.dist` are outside the build allowlist, so they never ship.
+- `tests/`, `vendor/`, `composer.*` and `phpunit*.xml.dist` are outside the build allowlist, so they never ship.
+
+### Contact Form 7 suite
+
+`tests/Cf7` (config `phpunit-cf7.xml.dist`, bootstrap `tests/bootstrap-cf7.php`) loads the form tag code of a real Contact Form 7, still without WordPress. It runs in its own process, because it uses the real `WPCF7_FormTag`, `WPCF7_MailTag` and `WPCF7_Pipes` instead of `tests/stubs/contact-form-7-tags.php`. Forms and submissions still use `tests/stubs/contact-form-7.php`.
+
+- `ContractTest` checks what the plugin expects from Contact Form 7: the hooks it uses exist, the free text field name, the parser behavior it relies on, and that every public method of the stubs exists in Contact Form 7. When it fails on a new Contact Form 7, fix the plugin and the stubs.
+- Locally: `CF7_DIR=../../www/wp-content/plugins/contact-form-7 composer test:cf7`, or in the container, where Contact Form 7 is the sibling folder: `docker exec -w /var/www/html/wp-content/plugins/cf7-to-zapier wordpress_wordpress_1 php vendor/bin/phpunit -c phpunit-cf7.xml.dist`.
+- In CI, the "Contact Form 7 (latest)" job downloads the latest stable Contact Form 7 from WordPress.org on each pull request.
+- To load more of Contact Form 7, add the file to `FILES` or the module to `MODULES` in `tests/Cf7/TestCase.php`. Only files that call WordPress to add hooks (or call the functions mocked there) load without WordPress; forms, submissions and HTML rendering need too much of it.
 
 ## Never edit README.md
 

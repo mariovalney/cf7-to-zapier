@@ -48,6 +48,14 @@ They run on every pull request to `master`, with PHP 7.4 and 8.3. Composer resol
 
 Tests are in `tests/Unit`. Each test mocks the WordPress functions it needs, and `tests/stubs` has small versions of the WordPress and Contact Form 7 classes used by the plugin. When you fix a bug, add a test that fails without the fix.
 
+A second suite, in `tests/Cf7`, loads the form tag code of a real Contact Form 7 (still without WordPress). It checks what the plugin expects from Contact Form 7, like its hooks and the free text field name, and sends a form parsed by Contact Form 7 itself. Point `CF7_DIR` to a Contact Form 7 folder, or keep this plugin next to it in `wp-content/plugins`:
+
+```
+CF7_DIR=/path/to/contact-form-7 composer test:cf7
+```
+
+On pull requests it runs with the latest Contact Form 7 from WordPress.org, so a change in Contact Form 7 can fail a pull request that did not change the plugin. Fix the plugin (and the stubs) for the new version.
+
 ## Git
 
 You should use `git rebase master` before merge.

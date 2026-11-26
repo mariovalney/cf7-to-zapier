@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Contact Form 7 suite: needs Contact Form 7 in CF7_DIR. See tests/bootstrap-cf7.php. -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap-cf7.php"
+         cacheResult="false"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         convertDeprecationsToExceptions="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="contact-form-7">
+            <directory>tests/Cf7</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

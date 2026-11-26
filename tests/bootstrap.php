@@ -19,6 +19,7 @@ require $plugin_dir . '/vendor/autoload.php';
 
 require __DIR__ . '/stubs/wordpress.php';
 require __DIR__ . '/stubs/contact-form-7.php';
+require __DIR__ . '/stubs/contact-form-7-tags.php';
 require __DIR__ . '/stubs/plugin.php';
 
 require $plugin_dir . '/includes/functions-debug.php';
