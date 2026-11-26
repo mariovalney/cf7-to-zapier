@@ -17,6 +17,8 @@ class WPCF7_FormTag {
 
     public $values = array();
 
+    public $pipes = null;
+
     public function __construct( array $tag ) {
         foreach ( $tag as $key => $value ) {
             $this->$key = $value;
@@ -78,6 +80,14 @@ class WPCF7_ContactForm {
         return $this->id;
     }
 
+    public function title() {
+        return 'Contact form ' . $this->id;
+    }
+
+    public function message( $status ) {
+        return 'mail_sent_ng' === $status ? 'There was an error trying to send your message.' : '';
+    }
+
     public function scan_form_tags() {
         return $this->tags;
     }
@@ -92,6 +102,36 @@ class WPCF7_ContactForm {
 
     public function set_properties( $properties ) {
         $this->properties = $properties;
+    }
+}
+
+class WPCF7_Submission {
+
+    /**
+     * The current submission, returned by get_instance().
+     *
+     * @var WPCF7_Submission|null
+     */
+    public static $instance = null;
+
+    public $status = null;
+
+    public $response = null;
+
+    public static function get_instance() {
+        return self::$instance;
+    }
+
+    public function uploaded_files() {
+        return array();
+    }
+
+    public function set_status( $status ) {
+        $this->status = $status;
+    }
+
+    public function set_response( $response ) {
+        $this->response = $response;
     }
 }
 

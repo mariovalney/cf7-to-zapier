@@ -24,6 +24,7 @@ abstract class TestCase extends PHPUnitTestCase {
     protected $options = array(
         'admin_email'  => 'admin@example.com',
         'blog_charset' => 'UTF-8',
+        'blogname'     => 'Example',
     );
 
     /**
@@ -91,6 +92,21 @@ abstract class TestCase extends PHPUnitTestCase {
      * @return array|null The request arguments, or null when nothing was sent.
      */
     protected function trigger( array $data, array $properties = array(), $form = null ) {
+        $this->mock_http();
+
+        $form       = $form ?? $this->make_form( array() );
+        $properties = array_merge( \CFTZ_Module_CF7::get_form_properties(), $properties );
+        $zapier     = new \CFTZ_Module_Zapier( new \Cf7_To_Zapier() );
+
+        $zapier->pull_the_trigger( $data, 'https://example.com/hook', $properties, $form );
+
+        return $this->request;
+    }
+
+    /**
+     * Mock the WordPress HTTP API: requests are captured in $request and get $response.
+     */
+    protected function mock_http() {
         Functions\when( 'wp_safe_remote_request' )->alias(
             function( $url, $args ) {
                 $this->request = $args;
@@ -105,16 +121,16 @@ abstract class TestCase extends PHPUnitTestCase {
 
         Functions\when( 'wp_remote_retrieve_response_code' )->alias(
             function( $response ) {
-                return $response['response']['code'];
+                return is_array( $response ) ? $response['response']['code'] : '';
             }
         );
 
-        $form       = $form ?? $this->make_form( array() );
-        $properties = array_merge( \CFTZ_Module_CF7::get_form_properties(), $properties );
-        $zapier     = new \CFTZ_Module_Zapier( new \Cf7_To_Zapier() );
-
-        $zapier->pull_the_trigger( $data, 'https://example.com/hook', $properties, $form );
-
-        return $this->request;
+        Functions\stubs(
+            array(
+                'wp_remote_retrieve_response_message' => '',
+                'wp_remote_retrieve_headers'          => array(),
+                'wp_remote_retrieve_body'             => '',
+            )
+        );
     }
 }
