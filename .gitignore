@@ -1,3 +1,4 @@
 ci/build/
 ci/.env
 .claude/settings.local.json
+/vendor/
