@@ -10,6 +10,18 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code or committing, and f
 - **Coding standards**: WordPress Coding Standards, indented with spaces.
 - **Git workflow**: rebase on `master` before merging, and open an issue for each PR.
 - **Webhook templates**: the format of each entry in `templates.json`.
+- **Tests**: how to run them and where they live.
+
+## Tests
+
+Unit tests use PHPUnit 9 and Brain Monkey, without WordPress or Contact Form 7. Run `composer install` once, then `composer test`.
+
+- The local PHP is 8.2. To run on 8.3, use the WordPress container, which mounts the plugin: `docker exec -w /var/www/html/wp-content/plugins/cf7-to-zapier wordpress_wordpress_1 php vendor/bin/phpunit`.
+- `.github/workflows/tests.yml` runs on pull requests to `master` only, with PHP 7.4 and 8.3. Besides the tests, it runs `php -l` on every PHP file, which catches syntax newer than PHP 7.4 in files without tests (like the admin templates).
+- `composer.json` sets `config.platform.php` to 7.4, so `composer.lock` installs on PHP 7.4. Keep it when updating dependencies.
+- Tests call the plugin through its public methods (for example `pull_the_trigger()` with `wp_safe_remote_request` mocked) and do not make private methods public. `tests/stubs` has the WordPress and Contact Form 7 classes; add to them only what a test needs.
+- When fixing a bug, add a test case that fails without the fix.
+- `tests/`, `vendor/`, `composer.*` and `phpunit.xml.dist` are outside the build allowlist, so they never ship.
 
 ## Never edit README.md
 

@@ -35,6 +35,19 @@ that can be used by the team in future development.
 
 WordPress Coding Standards, with spaces.
 
+## Tests
+
+Unit tests use PHPUnit and [Brain Monkey](https://github.com/Brain-WP/BrainMonkey), without WordPress or Contact Form 7:
+
+```
+composer install
+composer test
+```
+
+They run on every pull request to `master`, with PHP 7.4 and 8.3. Composer resolves the dependencies for PHP 7.4 (`config.platform` in `composer.json`), the lowest version the plugin supports.
+
+Tests are in `tests/Unit`. Each test mocks the WordPress functions it needs, and `tests/stubs` has small versions of the WordPress and Contact Form 7 classes used by the plugin. When you fix a bug, add a test that fails without the fix.
+
 ## Git
 
 You should use `git rebase master` before merge.
