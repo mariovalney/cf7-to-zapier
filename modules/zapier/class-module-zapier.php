@@ -74,33 +74,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
             $is_json = true;
 
             if ( ! empty( $properties['custom_body'] ) ) {
-                $body = $properties['custom_body'];
-
-                $tags = [];
-                $scanned = $contact_form->scan_form_tags();
-                foreach ( $scanned as $tag ) {
-                    if ( empty( $tag->name ) ) continue;
-
-                    $tags[ $tag->name ] = $tag;
-                }
-
-                foreach ( $data as $key => $value ) {
-                    // Some tags should be replaced when empty values are sent
-                    if ( ! empty( $tags[$key] ) && empty( $value ) ) {
-                        if ( $tags[$key]->basetype === 'acceptance' ) {
-                            $value = 0;
-                        }
-
-                        if ( $tags[$key]->basetype === 'checkbox' ) {
-                            $value = [];
-                        }
-                    }
-
-                    // We should make sure the value is JSON compatible to replace it.
-                    $value = $this->encode_json( $value );
-                    $value = preg_replace( '/^"(.*)"$/', '$1', $value );
-                    $body = str_replace( '[' . $key . ']', $value, $body );
-                }
+                $body = $this->replace_body_placeholders( $properties['custom_body'], $data, $contact_form );
 
                 if ( json_decode( $body ) === null ) {
                     $is_json = false;
@@ -152,8 +126,9 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              * can modify the request args if any service demands a particular header or body.
              *
              * @since    1.1.0
+             * @since    5.3.1    The form data is the fifth parameter.
              */
-            $args = apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form, $hook_url );
+            $args = apply_filters( 'ctz_post_request_args', $args, $properties, $contact_form, $hook_url, $data );
             $result = wp_safe_remote_request( $hook_url, $args );
 
             /**
@@ -225,6 +200,105 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
             }
 
             return $json;
+        }
+
+        /**
+         * Encode a value to JSON without the quotes around a string.
+         *
+         * @since    5.3.1
+         * @param    mixed      $value
+         * @return   string     $json
+         *
+         * @throws   CFTZ_Exception
+         */
+        private function encode_json_fragment( $value ) {
+            return preg_replace( '/^"(.*)"$/', '$1', $this->encode_json( $value ) );
+        }
+
+        /**
+         * Replace the form fields in a custom body.
+         *
+         * Inside a JSON string a field goes in as text, so an array (checkbox,
+         * multiple select) is joined with ", " as in Contact Form 7 mails.
+         * Outside a string it goes in as JSON, and an array stays an array.
+         * See issue #34.
+         *
+         * @since    5.3.1
+         * @param    string                 $body           The custom body
+         * @param    array                  $data           Form data
+         * @param    WPCF7_ContactForm      $contact_form   The form
+         * @return   string                 $body
+         *
+         * @throws   CFTZ_Exception
+         */
+        private function replace_body_placeholders( $body, array $data, $contact_form ) {
+            $tags = [];
+            foreach ( $contact_form->scan_form_tags() as $tag ) {
+                if ( empty( $tag->name ) ) continue;
+
+                $tags[ $tag->name ] = $tag;
+            }
+
+            $as_json = [];
+            $as_text = [];
+            foreach ( $data as $key => $value ) {
+                // Some tags should be replaced when empty values are sent
+                if ( ! empty( $tags[ $key ] ) && empty( $value ) ) {
+                    if ( $tags[ $key ]->basetype === 'acceptance' ) {
+                        $value = 0;
+                    }
+
+                    if ( $tags[ $key ]->basetype === 'checkbox' ) {
+                        $value = [];
+                    }
+                }
+
+                $placeholder = '[' . $key . ']';
+
+                $as_json[ $placeholder ] = $this->encode_json_fragment( $value );
+                $as_text[ $placeholder ] = $this->encode_json_fragment( $this->value_to_text( $value ) );
+            }
+
+            // Split the strings ("...") from the rest of the body before any value goes in: strings are the odd items.
+            $parts = preg_split( '/("[^"\\\\]*+(?:\\\\.[^"\\\\]*+)*+")/s', $body, -1, PREG_SPLIT_DELIM_CAPTURE );
+            if ( false === $parts ) {
+                $parts = [ $body ];
+            }
+
+            // strtr() replaces every field in one pass, so a value typed in the form is not replaced again.
+            foreach ( $parts as $index => $part ) {
+                $parts[ $index ] = strtr( $part, ( $index % 2 ) ? $as_text : $as_json );
+            }
+
+            return implode( '', $parts );
+        }
+
+        /**
+         * Get the text of a value, to use inside a JSON string.
+         *
+         * @since    5.3.1
+         * @param    mixed      $value
+         * @return   mixed      $value
+         *
+         * @throws   CFTZ_Exception
+         */
+        private function value_to_text( $value ) {
+            if ( ! is_array( $value ) ) {
+                return $value;
+            }
+
+            // Lists of options are joined. Other arrays (like files sent as content) keep their JSON.
+            if ( array_values( $value ) !== $value ) {
+                return $this->encode_json( $value );
+            }
+
+            foreach ( $value as $item ) {
+                if ( is_array( $item ) || is_object( $item ) ) {
+                    return $this->encode_json( $value );
+                }
+            }
+
+            return implode( ', ', $value );
         }
 
         /**

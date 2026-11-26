@@ -32,6 +32,7 @@
     "radio-field": "[your-choice]"
 }</code></pre>
                 <p>The plugin escapes the values for JSON, so quotes or line breaks typed in the form do not break the body. An empty checkbox becomes <code>[]</code> and an unchecked acceptance becomes <code>0</code>.</p>
+                <p>Inside quotes, a checkbox or multiple select becomes text, with the options separated by commas as in a Contact Form 7 mail. Since 5.3.1, <code>"Found us by: [your-checkbox]"</code> sends <code>"Found us by: Google, Friend"</code>. Before that version, it made the body invalid JSON.</p>
                 <p>Fields renamed with the <code>webhook</code> option are used by their new key. A name that matches no field stays in the body as written.</p>
 
                 <h2 id="check-the-result">Check the result</h2>
