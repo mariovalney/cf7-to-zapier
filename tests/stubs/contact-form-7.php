@@ -1,55 +1,9 @@
 <?php
 /**
- * Contact Form 7 classes used by the plugin, reduced to what the tests need.
+ * Contact Form 7 form and submission classes, reduced to what the tests need.
  *
  * @package Cf7_To_Zapier
  */
-
-class WPCF7_FormTag {
-
-    public $type = '';
-
-    public $basetype = '';
-
-    public $name = '';
-
-    public $options = array();
-
-    public $values = array();
-
-    public $pipes = null;
-
-    public function __construct( array $tag ) {
-        foreach ( $tag as $key => $value ) {
-            $this->$key = $value;
-        }
-
-        if ( empty( $this->type ) ) {
-            $this->type = $this->basetype;
-        }
-    }
-
-    public function has_option( $name ) {
-        return false !== $this->get_option( $name );
-    }
-
-    public function get_option( $name ) {
-        $values = array();
-
-        foreach ( $this->options as $option ) {
-            if ( $option === $name ) {
-                $values[] = '';
-                continue;
-            }
-
-            if ( 0 === strpos( $option, $name . ':' ) ) {
-                $values[] = substr( $option, strlen( $name ) + 1 );
-            }
-        }
-
-        return empty( $values ) ? false : $values;
-    }
-}
 
 class WPCF7_ContactForm {
 
@@ -148,20 +102,5 @@ class WPCF7_Submission {
 
     public function set_response( $response ) {
         $this->response = $response;
-    }
-}
-
-class WPCF7_MailTag {
-
-    public $tag;
-
-    public $tagname;
-
-    public $values;
-
-    public function __construct( $tag, $tagname, $values ) {
-        $this->tag     = $tag;
-        $this->tagname = $tagname;
-        $this->values  = $values;
     }
 }
